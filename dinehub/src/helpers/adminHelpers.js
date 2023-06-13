@@ -2,6 +2,8 @@ import { Auth } from "../Api/axiosAuthinstance"
 
 export const getAllOwners=async()=>{
 
+
+    
  try {
     const  response= await  Auth.get('/admin/getowners')
           return response.data

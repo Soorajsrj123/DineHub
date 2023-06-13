@@ -19,6 +19,7 @@ export const getRestaurants=async()=>{
         const response=await Auth.get('/admin/restaurants')
         return response.data
     } catch (error) {
+        console.log(error);
         throw error
     }
 

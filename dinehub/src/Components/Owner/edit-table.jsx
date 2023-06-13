@@ -44,6 +44,7 @@ function EditTable() {
                 toast.error(response.message)
             }
           }).catch((err)=>{
+            console.log(err,"err");
             toast.error(err)
           })
        }

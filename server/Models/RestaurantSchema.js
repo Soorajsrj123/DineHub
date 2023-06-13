@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 
 const RestaurantSchema = mongoose.Schema({
-  owner: {
-    type: Object,
-  },
+
   ownerName: {
     type: String,
   },

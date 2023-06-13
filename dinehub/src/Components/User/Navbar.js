@@ -1,16 +1,21 @@
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
+import {FaUser} from 'react-icons/fa'
 export default function NavBar() {
     const [navbar, setNavbar] = useState(false);
 
+
+
     return (
+     
+
         <nav className="w-full bg-slate-200 shadow">
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
                 <div>
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                        <a href="/">
-                            <h2 className="text-2xl font-bold text-black">LOGO</h2>
-                        </a>
+                        <Link to='/home'>
+                            <h2 className="text-2xl font-bold text-black">DINEHUB</h2>
+                        </Link>
                         <div className="md:hidden">
                             <button
                                 className="p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
@@ -57,16 +62,16 @@ export default function NavBar() {
                     >
                         <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
                             <li className="text-black hover:text-indigo-200">
-                                <a href="/home">Home</a>
+                                <Link to="/home">Home</Link>
                             </li>
                             <li className="text-black hover:text-indigo-200">
-                                <a href="/">Blog</a>
+                                <Link to="/">Blog</Link>
                             </li>
                             <li className="text-black hover:text-indigo-200">
-                                <a href="/">About US</a>
+                                <Link to="/orders">Orders</Link>
                             </li>
                             <li className="text-black hover:text-indigo-200">
-                                <a href="/">Contact US</a>
+                                <Link to="/">Contact US</Link>
                             </li>
                         </ul>
 
@@ -87,20 +92,27 @@ export default function NavBar() {
                     </div>
                 </div>
                 <div className="hidden space-x-2 md:inline-block">
-                    <a
+                    {/* <a
                         href="/"
                         className="px-4 py-2 text-white bg-gray-600 rounded-md shadow hover:bg-gray-800"
                     >
                         Sign in
-                    </a>
-                    <a
+                    </a> */}
+                    {/* <a
                         href="/"
                         className="px-4 py-2 text-gray-800 bg-white rounded-md shadow hover:bg-gray-100"
                     >
                         Sign up
-                    </a>
+                    </a> */}
+             
+
                 </div>
+                <button  >
+                <FaUser color="blue"  />
+
+                </button>
             </div>
         </nav>
+                        
     );
 }

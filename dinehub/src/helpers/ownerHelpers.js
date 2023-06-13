@@ -21,9 +21,9 @@ export async function OwnerSignUp(values){
 export async function OwnerLogin(values)
 {
        return new Promise((resolve, reject) => {
-          Auth.post('/owner/login',values).then((data)=>{
+          Auth.post('/owner/login',values).then((response)=>{
           
-           resolve(data)
+           resolve(response.data.owner)
           
         }).catch((err)=>{
           reject(err)
@@ -31,10 +31,10 @@ export async function OwnerLogin(values)
        })
 }
 
-export const RestaurantForm=async(values,owner)=>{
+export const RestaurantForm=async(values)=>{
           try {
-            const ownerId=owner.owner
-             const response=await Auth.post(`/owner/add-restaurant/${ownerId}`,values)
+            
+             const response=await Auth.post('/owner/add-restaurant',values)
              console.log(response,"rseeeeeeeeeeeeeeeeee");
              return response.data
           } catch (error) {
@@ -43,10 +43,10 @@ export const RestaurantForm=async(values,owner)=>{
           }
 }
 
-export const getdata=async(ownerid)=>{
+export const getdata=async(restaurantId)=>{
   try {
     console.log("called resssssssss");
-    const response=await Auth.get(`/owner/restaurants/${ownerid}`)
+    const response=await Auth.get(`/owner/restaurants/${restaurantId}`)
    return response.data
   } catch (error) {
     throw(error)
@@ -112,9 +112,9 @@ export const getDishes =async(ownerId)=>{
   }
 }
 
-export const deleteDish=async(resId,ownerId)=>{
+export const deleteDish=async(resId,restaurantId)=>{
 try {
-  const response=await Auth.delete(`/owner/delete-dish/${resId}/${ownerId}`)
+  const response=await Auth.delete(`/owner/delete-dish/${resId}/${restaurantId}`)
   return response.data
 } catch (error) {
   throw error
@@ -184,6 +184,28 @@ export const singleTableDetails=async(ownerId)=>{
 export const editTable=async(tableDetails,tableId)=>{
   try {
     const response=await Auth.patch(`/owner/edit-table${tableId}`,tableDetails)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const isExistingNumber=async(phoneNumber)=>{
+  const number=parseInt(phoneNumber)
+  try {
+   const response=await Auth.post('/owner/get-phone',{phoneNumber:number})
+   return response.data
+  } catch (error) {
+    console.log(error);
+   return error.response.data
+  }
+
+}
+
+export const updatePassword=async(datas)=>{
+  try {
+    console.log(datas,'helper data');
+    const response=await Auth.patch('/owner/update-password',datas)
     return response.data
   } catch (error) {
     throw error

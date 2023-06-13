@@ -13,7 +13,7 @@ export default function SignUp() {
   const navigate = useNavigate();
 const [email,setEmail]=useState('')
   const validate = (values) => {
-    console.log(values,"valida value");
+   
     return signUpValidate(values);
   };
 
@@ -37,7 +37,7 @@ const [email,setEmail]=useState('')
         initialValues: {
           password: "",
           currentPassword:"",
-          phone:""
+          
     },
     validate,
 

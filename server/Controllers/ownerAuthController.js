@@ -44,7 +44,7 @@ export const OwnerRegistration = async (req, res, next) => {
               RestaurantName: RegistrationDetails.restaurantName,
               phone,
               owner: RegistrationDetails.ownerName,
-              RestaurantId: id,
+              RestaurantId: RegistrationDetails._id,
             });
             newOwner.save().then((data) => {
               res

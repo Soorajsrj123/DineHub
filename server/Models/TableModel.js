@@ -1,18 +1,15 @@
 import mongoose from "mongoose";
 
 const TableSchema = mongoose.Schema({
-  owner: {
+  restaurantId: {
     type: Object,
   },
   tableNumber: {
     type: Number,
   },
-  capacity: {
-    type: Number,
-  },
-  isAvailable: {
+  isBooked: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 

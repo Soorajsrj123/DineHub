@@ -16,7 +16,7 @@ function AddTableForm() {
   const formik = useFormik({
     initialValues: {
       tableNumber: "",
-      capacity: "",
+      // capacity: "",
       isAvailable: true,
     },
     validationSchema: AddtableValidation,
@@ -29,6 +29,7 @@ function AddTableForm() {
      
       details
         .then((response) => {
+          console.log(response,"ress");
           if (response.status) navigate("/owner/tables");
           else {
             toast.error(response.message);
@@ -63,7 +64,7 @@ function AddTableForm() {
             {formik.errors.tableNumber}
           </p>
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label htmlFor="capacity" className="text-sm pr-4 font-medium">
             Capacity:
           </label>
@@ -77,7 +78,7 @@ function AddTableForm() {
             className="w-full md:w-64 bg-slate-200 border-gray-300 rounded-md p-2"
           />
           <p className="text-red-600 mt-1 md:ml-20">{formik.errors.capacity}</p>
-        </div>
+        </div> */}
 
         <button
           type="submit"

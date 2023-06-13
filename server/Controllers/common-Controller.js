@@ -8,6 +8,7 @@ export const getAllRestaurants=async(req,res)=>{
         return res.status(200).json({message:"success",Details,status:true})
       
     } catch (error) {
+        console.log(error);
         return res.status(500).json({message:error,status:false})
     }
 }

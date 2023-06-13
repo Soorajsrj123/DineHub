@@ -2,7 +2,8 @@ import cloudinary from "../utils/cloudinary.js";
 import Restaurant from "../Models/RestaurantSchema.js";
 import Dish from "../Models/dishModel.js";
 import Table from "../Models/TableModel.js";
-
+import Owner from "../Models/OwnerModel.js";
+import bcrypt from "bcrypt";
 export const AddRestaurant = async (req, res) => {
   try {
     // console.log(req.body);
@@ -22,21 +23,25 @@ export const AddRestaurant = async (req, res) => {
       startTime,
       endTime,
     } = req.body;
-    console.log(req.params.id);
-    const ownerId = req.params.id;
 
     const result = await cloudinary.uploader.upload(image, {
       folder: "restorants",
     });
     //  console.log(result,"cloudinaryyyyyyyyyyyyy");
-
-    const isEmailExist=await Restaurant.find({email:email})
+    // checking if the restaurant is already exist
+    const isEmailExist = await Owner.find({ email: email });
     // email already exist
-    if(isEmailExist.length!==0)return res.status(409).json({message:"This email is already registered",status:false})
-    const phoneNumberExist=await Restaurant.find({phone:phone})
+    if (isEmailExist.length !== 0)
+      return res
+        .status(409)
+        .json({ message: "This email is already registered", status: false });
+    const phoneNumberExist = await Restaurant.find({ phone: phone });
     // PhoneNo already exist
-    if(phoneNumberExist.length!==0) return res.status(409).json({message:"PhoneNumber already exist",status:false})
-    
+    if (phoneNumberExist.length !== 0)
+      return res
+        .status(409)
+        .json({ message: "PhoneNumber already exist", status: false });
+
     const restaurant = new Restaurant({
       restaurantName,
       address,
@@ -51,7 +56,6 @@ export const AddRestaurant = async (req, res) => {
       wifi,
       parking,
       aircondition,
-      owner: ownerId,
       image: {
         public_id: result.public_id,
         url: result.secure_url,
@@ -69,13 +73,14 @@ export const AddRestaurant = async (req, res) => {
 
 export const getOwnerRestaurant = async (req, res) => {
   try {
-    const ownerId = req.params.id;
+    const restaurantId = req.params.id;
 
-    const restaurants = await Restaurant.find({ owner: ownerId });
-
-    if (!restaurants) return res.status(200).json({ message: "no data found" });
-    return res.status(200).json({ message: "success", restaurants });
+    const restaurant = await Restaurant.findOne({ _id: restaurantId });
+    // console.log(restaurant,"kjhg");
+    if (!restaurant) return res.status(200).json({ message: "no data found" });
+    return res.status(200).json({ message: "success", restaurant });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error });
   }
 };
@@ -146,7 +151,15 @@ export const editRestaurant = async (req, res) => {
 };
 
 export const AddDishDetails = async (req, res) => {
-  const { dishName, description, price, category, image, owner } = req.body;
+  const {
+    dishName,
+    description,
+    price,
+    category,
+    image,
+    owner,
+    classification,
+  } = req.body;
 
   const result = await cloudinary.uploader.upload(image, {
     folder: "Dishes",
@@ -158,7 +171,8 @@ export const AddDishDetails = async (req, res) => {
       description,
       category,
       price,
-      owner,
+      restaurantId: owner,
+      classification,
       image: {
         public_id: result.public_id,
         url: result.url,
@@ -181,7 +195,7 @@ export const getAllDishes = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const allDishes = await Dish.find({ owner: id });
+    const allDishes = await Dish.find({ restaurantId: id });
     if (allDishes)
       return res.status(200).json({ message: "success", allDishes });
     return res.status(201).json({ message: "data not found" });
@@ -193,14 +207,14 @@ export const getAllDishes = async (req, res) => {
 
 export const deleteDish = async (req, res) => {
   try {
-    const { id, ownerid } = req.params;
-    console.log(id, "id");
+    const { id, resId } = req.params;
+    console.log(id, resId, "id>>>>>>>");
     const dbresponse = await Dish.findByIdAndDelete({ _id: id });
     console.log(dbresponse);
     if (!dbresponse)
       return res.status(200).json({ message: "data is not deleted" });
     else {
-      const allDishes = await Dish.find({ owner: ownerid });
+      const allDishes = await Dish.find({ restaurantId: resId });
       if (allDishes) return res.status(200).json({ allDishes });
     }
   } catch (error) {
@@ -212,6 +226,7 @@ export const deleteDish = async (req, res) => {
 export const updateDish = async (req, res) => {
   try {
     const { dishName, description, price, category, image } = req.body;
+
     const id = req.params.id;
     const result = await cloudinary.uploader.upload(image, {
       folder: "Dishes",
@@ -244,17 +259,17 @@ export const updateDish = async (req, res) => {
 
 export const AddTable = async (req, res) => {
   try {
-    const { tableNumber, capacity, isAvailable, owner } = req.body;
-    const oldTable = await Table.findOne({ tableNumber });
+    const { tableNumber, isAvailable, owner } = req.body;
+    console.log(tableNumber, "tt");
+    const oldTable = await Table.findOne({restaurantId:owner, tableNumber });
     if (oldTable)
       return res
         .status(409)
         .json({ message: "Table already exist", status: false });
     const table = new Table({
       tableNumber,
-      capacity,
       isAvailable,
-      owner,
+      restaurantId: owner,
     });
     table.save().then((data) => {
       return res.status(200).json({ message: "success", status: true });
@@ -266,9 +281,9 @@ export const AddTable = async (req, res) => {
 
 export const getAllTables = async (req, res) => {
   try {
-    const ownerId = req.params.id;
+    const restaurantId = req.params.id;
 
-    const allDatas = await Table.find({ owner: ownerId });
+    const allDatas = await Table.find({ restaurantId });
 
     if (allDatas.length <= 0)
       return res.status(404).json({ message: "data not found" });
@@ -287,7 +302,7 @@ export const deleteTable = async (req, res) => {
     if (!dbresponse)
       return res.status(201).json({ message: "data is not deleted" });
     else {
-      const allTables = await Table.find({ owner: ownerid });
+      const allTables = await Table.find({ restaurantId: ownerid });
       if (allTables) return res.status(200).json({ allTables });
     }
   } catch (error) {
@@ -311,13 +326,13 @@ export const oneTableData = async (req, res) => {
 export const editTable = async (req, res) => {
   try {
     const tableId = req.params.id;
-    const { tableNumber, capacity, isAvailable } = req.body;
+    const { tableNumber, isAvailable } = req.body;
+
     const dbresponse = await Table.updateOne(
       { _id: tableId },
       {
         $set: {
           tableNumber,
-          capacity,
           isAvailable,
         },
       }
@@ -329,3 +344,100 @@ export const editTable = async (req, res) => {
     return res.status(500).json({ message: error.response, status: false });
   }
 };
+
+export const getOneRestaurant = async (req, res) => {
+  try {
+
+   
+    const restaurantId = req.params.id;
+            console.log(restaurantId,"kk");
+    const restaurant = await Restaurant.findOne({ _id: restaurantId });
+    console.log(restaurant, "dd gggd ");
+    if (!restaurant)
+      return res.status(404).json({ message: "data not found", status: false });
+    return res
+      .status(200)
+      .json({ message: "succuss", restaurant, status: true });
+  } catch (error) {
+    console.log(error, "dd");
+    return res.status(500).json({ message: error, status: false });
+  }
+};
+
+export const getTables = async (req, res) => {
+  try {
+    console.log("called bbb");
+    const { id } = req.params;
+    console.log(id,"id");
+    const dbresponse = await Table.find({ restaurantId: id });
+    // console.log(dbresponse,"res >>>>>>");
+    if (!dbresponse)
+      return res.status(404).json({ message: "data not found", status: false });
+    return res
+      .status(200)
+      .json({ message: "success", status: true, tables: dbresponse });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error, status: false });
+  }
+};
+
+export const getPhone = async (req, res) => {
+  try {
+    console.log(req.body, "body phone");
+    const phone = req.body.phoneNumber;
+    const owner = await Owner.findOne({ phone });
+    console.log(owner, "owner>>>");
+    if (!owner)
+      return res
+        .status(404)
+        .json({ message: "Number is not registered", status: false });
+    return res.status(200).json({ message: "success", status: true, owner });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updatePassword = async (req, res) => {
+  try {
+    const { password, id } = req.body;
+
+    const owner = await Owner.findOne({ _id: id });
+
+    if (!owner)
+      return res.status(404).json({ message: "password not changed" });
+    else {
+      bcrypt.hash(password, 10, async function (err, hash) {
+        if (err) {
+          return res.status(500).json({ message: "internal server error" });
+        }
+        const updatedData = await Owner.findByIdAndUpdate(
+          { _id: id },
+          { password: hash }
+        );
+        if (updatedData)
+          return res
+            .status(200)
+            .json({ message: "success", user: updatedData });
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "server error" });
+  }
+};
+
+export const fetchRestaurantData=async(req,res)=>{
+  try {
+    console.log("here");
+    const restaurantId=req.params.id
+
+    const data=await Restaurant.findOne({_id:restaurantId})
+        console.log(data,"finded data from order");
+    if(data) return res.status(200).json({message:"success",restaurantDetails:data})
+    return res.status(404).json({message:"data not found"})
+  } catch (error) {
+    return res.status(500).json({message:error})
+  }
+}

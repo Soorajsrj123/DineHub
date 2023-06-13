@@ -17,8 +17,7 @@ export async function UserRegistration(credentials) {
   });
 }
 
-export async function 
-UserLogin(credentials) {
+export async function UserLogin(credentials) {
   console.log(credentials, "cred");
   return new Promise((resolve, reject) => {
     Auth.post("/login", credentials)
@@ -93,5 +92,99 @@ export const updatePassword=async(details)=>{
 
 }
 
+export const getRestaurantDishes=async(resId)=>{
 
+  try {
+     const response=await Auth.get(`/restaurant/get-dishes/${resId}`)
+     return response.data
+  } catch (error) {
+    throw error
+  }
+
+}
+
+export const getRestaurant=async(resId)=>{
+  try {
+    console.log(resId,"hh");
+     const response=await Auth.get(`/restaurant/get-one-restaurant/${resId}`)
+     return response.data
+  } catch (error) {
+     throw error
+  }
+}
+
+export const getRestaurantTables=async(resId)=>{
+ try {
+  const response=await Auth.get(`/restautant/get-tables/${resId}`)
+  return response.data
+ } catch (error) {
+  throw error
+ }
+}
+
+export const getRestaurants=async()=>{
+
+  try {
+
+      const response=await Auth.get('/restaurants/get-all-restaurants')
+      return response.data
+  } catch (error) {
+      console.log(error);
+      throw error
+  }
+
+}
+
+export const bookedOrders=async(userId,date,time)=>{
+  try {
+      
+    const response=await Auth.get(`/restaurant/get-booked-orders?id=${userId}&&date=${date}&&time=${time}`,)
+    return response.data
+    
+  } catch (error) {
+
+     console.log(error,"err");
+     throw error
+  }
+}
+
+export const checkOutData=async(orderDetails)=>{
+ try {
+   
+  const response=await Auth.post('/restaurant/checkout',orderDetails)
+
+  return response.data
+ } catch (error) {
+  throw error
+ }
+}
+
+export const paymentDetails=async(datas,bookingAddress)=>{
+  try {
+    console.log(datas,"datas ");
+    const response=await Auth.post('/restaurant/confirm-payment',{datas,bookingAddress})
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const UserOrderDetails=async(userId)=>{
+try {
+   const response=await Auth.get(`/restaurant/get-order-details/${userId}`)
+   return response.data
+} catch (error) {
+  throw error
+}
+}
+
+export const getRestaurantDetails=async(restaurantId)=>{
+  try {
+    
+    const response=await Auth.get(`/restaurant/get-res-details/${restaurantId}`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
 

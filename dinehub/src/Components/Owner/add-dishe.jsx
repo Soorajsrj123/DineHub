@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 function AddDish() {
   const [image, setImage] = useState("");
   const data = useSelector((state) => state.owner.owner);
+ 
   const { owner } = data;
   const navigate = useNavigate();
 
@@ -40,14 +41,15 @@ function AddDish() {
       description: "",
       category: "",
       price: "",
+      classification: "",
     },
     validate,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: (values) => {
       const img = { image: image };
-      const id = { owner: owner };
-      const allData = Object.assign({}, values, img, id);
+      const restaurantId = { owner: owner };
+      const allData = Object.assign({}, values, img, restaurantId);
 
       const response = AddDishes(allData);
 
@@ -123,6 +125,35 @@ function AddDish() {
                 type="number"
                 placeholder="Price"
                 value={formik.values.price}
+                onChange={formik.handleChange}
+                className="w-full border-black rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-evenly">
+            <div>
+              <label htmlFor="price" className="text-gray-700">
+                VEG
+              </label>
+              <input
+                name="classification"
+                type="radio"
+                checked={formik.values.classification === "veg"}
+                value={"veg"}
+                onChange={formik.handleChange}
+                className="w-full border-black rounded-lg"
+              />
+            </div>
+            <div>
+              <label htmlFor="price" className="text-gray-700">
+                NON-VEG
+              </label>
+              <input
+                name="classification"
+                type="radio"
+                checked={formik.values.classification === "non-veg"}
+                value={"non-veg"}
                 onChange={formik.handleChange}
                 className="w-full border-black rounded-lg"
               />

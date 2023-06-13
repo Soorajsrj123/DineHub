@@ -9,7 +9,6 @@ function AccessPermisionComponent() {
     const response = getPendingRequests();
     response
       .then((data) => {
-        console.log(data, "dda");
         if (data.status) {
           setRecords(data.AllRestaurants);
         }

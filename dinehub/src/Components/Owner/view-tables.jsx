@@ -66,7 +66,7 @@ const DiningTable = () => {
             <h3 className="text-lg font-medium mb-2">
               Table {table.tableNumber}
             </h3>
-            <p className="mb-1">Capacity: {table.capacity}</p>
+            {/* <p className="mb-1">Capacity: {table.capacity}</p> */}
             <p
               className={
                 table.isAvailable

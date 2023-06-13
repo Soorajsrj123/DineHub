@@ -13,7 +13,7 @@ function DeclinedList() {
     const response = getDeclineRequests();
     response
       .then((data) => {
-        console.log(data, "dda");
+      
         if (data.status) {
           setRecords(data.DeclinedRestaurant);
         }

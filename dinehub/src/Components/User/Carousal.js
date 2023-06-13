@@ -80,11 +80,8 @@ import { Carousel } from "@material-tailwind/react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import styled from "styled-components";
 
-export default function Example() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-
-  const StyledHeading = styled.h3`
+const StyledHeading = styled.h3`
   color: white;
   font-weight: bold;
   font-family: "Helvetica", sans-serif;
@@ -106,6 +103,22 @@ export default function Example() {
     "WE ENSURE YOUR PRIVACY"
   ]
 
+export default function Example() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+
+  
+
+  const backgroundImageStyle = {
+    width: '100%',
+    height: '100%',
+    backgroundImage: 'linear-gradient(rgba(0, 0, 0,-0.3), rgba(0, 0, 0, -0.3)), url("https://cdn.pixabay.com/photo/2017/07/31/11/22/man-2557408_1280.jpg")',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundBlendMode: 'multiply',
+  };
+
+
   const previousImage = () => {
     setCurrentImageIndex((prevIndex) => prevIndex - 1);
   };
@@ -115,38 +128,41 @@ export default function Example() {
   };
 
   return (
-    <div className="mt-2" >
-      <Carousel className="rounded-lg">
-      <div
-      style={{
-        backgroundImage: `url(${images[currentImageIndex]})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        width: '100%',
-        height: '600px',
-      }}
+    <section class="bg-gray-900  text-white" style={backgroundImageStyle} >
+    <div
+      class="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center"
     >
-     <div className="pt-40  " >
-     <StyledHeading>
-      {title[currentImageIndex]}
-    </StyledHeading>
-
-     </div>
+      <div class="mx-auto max-w-3xl text-center">
+        <h1
+          class="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent sm:text-5xl"
+        >
+          Understand User Flow.
+  
+          <span class="sm:block"> Increase Conversion. </span>
+        </h1>
+  
+        <p class="mx-auto mt-4 max-w-xl sm:text-xl/relaxed">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt illo
+          tenetur fuga ducimus numquam ea!
+        </p>
+  
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a
+            class="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
+            href="/get-started"
+          >
+            Get Started
+          </a>
+  
+          <a
+            class="block w-full rounded border border-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
+            href="/about"
+          >
+            Learn More
+          </a>
+        </div>
       </div>
-      </Carousel>
-      <button
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
-          onClick={previousImage}
-        >
-          <FiChevronLeft size={24} />
-        </button>
-        <button
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
-          onClick={nextImage}
-        >
-          <FiChevronRight size={24} />
-        </button>
     </div>
+  </section>
   );
 }

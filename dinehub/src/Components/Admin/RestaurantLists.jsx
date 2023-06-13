@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import {getRestaurants} from '../../helpers/commonHelper'
-
+import UserListPagination from '../Pagination/AdminSidePagination'
 function RestaurantLists() {
     const [reconrds, setRecords] = useState([]);
 
@@ -10,7 +10,6 @@ function RestaurantLists() {
       const response = getRestaurants();
       response
         .then((data) => {
-          console.log(data, "dda");
           if (data.status) {
             setRecords(data.Details);
           }
@@ -22,6 +21,14 @@ function RestaurantLists() {
     }, []);
   
   
+   const [curretPage,setCurrentPage]=useState(1)
+   const [postPerPage,setPostPerPage]=useState(1)
+ 
+
+   const lastPostIndex=curretPage*postPerPage
+   const firstPostIndex=lastPostIndex-postPerPage
+   const currentPost=reconrds.slice(firstPostIndex,lastPostIndex)
+
   
     return (
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
@@ -41,7 +48,7 @@ function RestaurantLists() {
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-              {reconrds.map((res, index) => {
+              {currentPost.map((res, index) => {
                 return (
                   <tr key={index}>
                     <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
@@ -85,6 +92,7 @@ function RestaurantLists() {
             </tbody>
           </table>
         </div>
+        <UserListPagination  curretPage={curretPage}  totalPosts={reconrds.length}  postsPerPage={postPerPage} setCurrentPage={setCurrentPage}      />
       </div>
     )
 }

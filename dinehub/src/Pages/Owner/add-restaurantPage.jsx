@@ -1,5 +1,5 @@
 import React from 'react'
-import {NavbarOne} from '../../Components/Owner/Navbar'
+// import {NavbarOne} from '../../Components/Owner/Navbar'
 // import AddRestaurantComponent from '../../Components/Owner/add-restaurant'
 import AddRestaurantComponent from '../../Components/Owner/addres-sample'
 

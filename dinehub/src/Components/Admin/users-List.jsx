@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers } from "../../helpers/adminHelpers";
+import UserListPagination from '../Pagination/AdminSidePagination'
+
 function UserList() {
   const [Users, setUsers] = useState([]);
 
@@ -12,6 +14,15 @@ function UserList() {
     };
     fetchData();
   }, []);
+
+
+  const [curretPage,setCurrentPage]=useState(1)
+     const [postPerPage,setPostPerPage]=useState(1)
+   
+
+     const lastPostIndex=curretPage*postPerPage
+     const firstPostIndex=lastPostIndex-postPerPage
+     const currentPost=Users.slice(firstPostIndex,lastPostIndex)
 
   return (
     <div className="rounded-sm border border-gray-400 border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -38,7 +49,7 @@ function UserList() {
           <button className="font-medium">Status</button>
         </div>
       </div>
-      {Users.map((user, index) => {
+      {currentPost.map((user, index) => {
         return (
           <div
             key={index}
@@ -81,6 +92,7 @@ function UserList() {
           </div>
         );
       })}
+      <UserListPagination  curretPage={curretPage}  totalPosts={Users.length}  postsPerPage={postPerPage} setCurrentPage={setCurrentPage}   />
     </div>
   );
 }

@@ -107,12 +107,12 @@ export const NavbarOne = () => {
             </svg>
           </li>
           <li>
-            <Link
+            <NavLink
              to='/owner/tables' className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
              
             >
               Tables
-            </Link>
+            </NavLink>
           </li>
           <li className="text-gray-300">
             <svg
@@ -131,12 +131,12 @@ export const NavbarOne = () => {
             </svg>
           </li>
           <li>
-            <Link
+            <NavLink
               className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
-           
+               to='/owner/banner'
             >
-              Contact
-            </Link>
+              Banner
+            </NavLink>
           </li>
         </ul>
         <div className="space-x-2 hidden lg:block">

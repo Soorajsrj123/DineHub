@@ -30,7 +30,18 @@ import UserOtpPage  from './Components/OtpLogin/UserOtp/OTPInput'
 import NewPasswordPage from './Pages/User/NewPassword'
 import DeclinedRequestList from './Pages/Admin/Restaurant/Declined-Requests'
 import ViewRestaurantPage from './Pages/Admin/Restaurant/ViewRestaurantPage';
+import DishListsPage from './Pages/User/ListDishes'
+import CheckOutComponent from './Pages/User/CheckoutPage';
+import TimeSlots from './Components/User/TimeSlots';
+import OwnerForgotPassOtpPage from './Components/Owner/ForgotPassword/ForgotPassword'
+import OwnerForgotPass from './Components/Owner/ForgotPassword/NewPasswordField'
+import PaymentPage from './Pages/User/PaymentPage/PaymentPage';
+import BannerPage from './Pages/Owner/Banner/BannerPage';
+import OrderDetailsPage from './Pages/User/OrderDetailsPage/OrderDetailsPage';
 function App() {
+
+
+  
  
   return (
     <div className="App">
@@ -38,13 +49,17 @@ function App() {
       <Routes>
 
         {/* USER */}
+        <Route path='/' element={<TimeSlots/>}  />
        <Route  path="/home" element={<Home/>}  />  
        <Route path="/login" element={<Login/>}  />
        <Route path="/signup" element={<SignUp/>}  />
        <Route path='/otp/forgot-password' element={<UserOtpPage/>}  />
        <Route path='/forgot-password/:id' element={<NewPasswordPage />} />
        <Route path='/otp' element={<OtpPage/>}/>
-
+        <Route path='/restaurant/list-dishes/:id' element={<DishListsPage/>} />
+        <Route path='/checkout' element={<CheckOutComponent/>}/>
+        <Route path='/payment' element={<PaymentPage/>}  />
+        <Route path='/orders' element={<OrderDetailsPage/> } />
 
 {/* ADMIN */}
        <Route path='/admin'  element={<Dashboad/>}/>
@@ -74,6 +89,10 @@ function App() {
        <Route path='/owner/edit-table/:id'  element= {<EditTablePage/>} />
        <Route path='/owner/registration-success' element={<RegistrationSuccessComponent/>}/>
        <Route  path='/owner/signup-otp' element={<OwnerOtpComponent/>}  />
+        <Route path='/owner/forgot-pass/otp' element={<OwnerForgotPassOtpPage/>}/>
+       <Route path='/owner/new-password/:id' element={<OwnerForgotPass/>}/>
+       <Route path='/owner/banner' element={<BannerPage/>}  />
+
       </Routes>
     </BrowserRouter>
     </div>

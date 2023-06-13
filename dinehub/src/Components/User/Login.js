@@ -57,9 +57,12 @@ export default function Login() {
       });
       Loginuser.then((data) => {
         if (data) {
+          // storing token in localstorage
+          localStorage.setItem('token',data.data.token)
+          const userId=data.data.user._id
           dispatch(
             logIn({
-              user: data.data.user._id,
+              user: userId,
             })
           );
           navigate("/home");

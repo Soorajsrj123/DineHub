@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import PhoneInput from "react-phone-number-input";
 import { useSelector } from "react-redux";
@@ -6,16 +6,22 @@ import { useNavigate } from "react-router-dom";
 import { isExistingNumber } from "../../../helpers/userHelpers";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../../Config/config";
-import {getUserData} from '../../../helpers/userHelpers'
+import { getUserData } from "../../../helpers/userHelpers";
 function OTPInputComponent() {
   const [phoneNumber, setPhoneNumber] = useState("");
+  // const [countdown, setCountdown] = useState(60);
 
   const navigate = useNavigate();
   const [myotp, setMyOtp] = useState("");
 
+  // const [resendOTP, setResendOTP] = useState(false);
   const [confirmObj, setConfirmObj] = useState(""); //user for saving the response from firebase
   const [flag, setFlag] = useState(false); //to switch the phone and otp pages
 
+ 
+  
+
+  // console.log(countdown, "count");
   const onCaptchaVerify = (phoneNumber) => {
     const recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
@@ -50,7 +56,8 @@ function OTPInputComponent() {
           const response = await onCaptchaVerify(phoneNumber);
 
           setConfirmObj(response);
-          setFlag(true); // Show the second form
+          console.log(response);
+          setFlag(true);
         } else {
           toast.error(valid.message);
         }
@@ -68,7 +75,7 @@ function OTPInputComponent() {
       } else {
         // other errors
         toast.error(
-          "The verification code has expired. Please request a new code"
+          "Your Limit exceeded please try again later"
         );
       }
     }
@@ -86,16 +93,16 @@ function OTPInputComponent() {
           // User signed in successfully.
           // const user = result.user; //the user variable contains some data
           // console.log(user.phoneNumber,"firebase response");
-           
-          const details= getUserData(phoneNumber)
-          details.then(async(data)=>{
-      console.log(data.userId,">>>>>>>id");
-       await navigate(`/forgot-password/${data.userId}`);
-          })
+
+          const details = getUserData(phoneNumber);
+          details.then(async (data) => {
+            console.log(data.userId, ">>>>>>>id");
+            await navigate(`/forgot-password/${data.userId}`);
+          });
         });
       }
     } catch (error) {
-      console.log(error,"cccc");
+      console.log(error, "cccc");
     }
   };
 
@@ -148,13 +155,16 @@ function OTPInputComponent() {
               className="w-full px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm border border-gray-300 outline-none focus:outline-none focus:ring focus:ring-indigo-200"
             />
           </div>
+     
           <div className="flex justify-center">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200"
-            >
-              Submit
-            </button>
+          
+              <button
+                type="submit"
+                
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200"
+              >
+                submit
+              </button>
           </div>
         </form>
       </div>

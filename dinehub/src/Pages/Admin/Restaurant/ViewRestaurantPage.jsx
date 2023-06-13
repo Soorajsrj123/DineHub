@@ -1,5 +1,5 @@
 import React from 'react'
-import Sidebar from '../../../Components/Admin/Sidebar'
+// import Sidebar from '../../../Components/Admin/Sidebar'
 import ViewRestaurantComponent from '../../../Components/Admin/ViewRestaurant'
 import styled from 'styled-components';
 

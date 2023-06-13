@@ -26,7 +26,8 @@ function EditDish() {
       setDescription(data.description);
       setCategory(data.category);
       setPrice(data.price);
-      setImage(data.image.url);
+      setImage(data.image.url);    
+      
     });
   }, [id]);
 
@@ -75,7 +76,7 @@ function EditDish() {
 
       const img = { image: image };
       const datas = { dishName, price, category, description };
-
+     
       const allDetails = Object.assign({}, img, datas);
       const response = await editDish(allDetails, id);
       if (response.message == "success") {
@@ -86,7 +87,6 @@ function EditDish() {
     },
   });
 
- 
 
   return (
     <div className="p-10">
@@ -141,6 +141,7 @@ function EditDish() {
           min="1"
           id="price"
         />
+       
       
         <div className="py-5">
           <input

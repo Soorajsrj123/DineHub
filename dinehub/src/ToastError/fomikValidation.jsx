@@ -9,6 +9,7 @@ export const DishValidation=(values)=>{
     else if(values.description.length<minlength)error.description=toast.error("description must be valid one")
     else if(!values.category)error.category=toast.error("category required")
     else if(!values.price)error.category=toast.error("price required")
+    else if(!values.classification)error.classification=toast.error("Please select the classification (veg or non-veg) for the dish")
     return error
 }
 

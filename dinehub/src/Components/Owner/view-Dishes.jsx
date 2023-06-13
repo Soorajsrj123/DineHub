@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+// import  NonvegImg from '../../assets/icons8-non-veg-48.png'
+// import vegImg from '../../assets/icons8-veg-48.png'
 import {
   Button,
   Card,
@@ -17,7 +19,7 @@ function ViewDishes() {
   const { owner } = data;
   const [allDishes, setDishes] = useState([]);
 
-  const hadleDelete=async(resId)=>{
+  const hadleDelete=async(itemId)=>{
 
     Swal.fire({
         title: 'Are you sure?',
@@ -29,7 +31,7 @@ function ViewDishes() {
         confirmButtonText: 'Yes, delete it!'
       }).then(async(result) => {
         if (result.isConfirmed) {
-            const response= await deleteDish(resId,owner)
+            const response= await deleteDish(itemId,owner)
           
             setDishes(response.allDishes)
           Swal.fire(
@@ -69,10 +71,11 @@ function ViewDishes() {
                 alt="img-blur-shadow"
                 className="object-cover w-full h-full"
               />
+        
             </CardHeader>
             <CardBody >
               <Typography variant="h5" color="blue-gray" className="mb-2">
-                {items.dishName}
+                {items.dishName.toUpperCase()}
               </Typography>
               <Typography variant="h5" >
                 Price: {items.price} 
@@ -81,6 +84,11 @@ function ViewDishes() {
                 Category: {items.category} 
               </Typography>
               <Typography>{items.description}</Typography>
+              <div className="flex justify-evenly "  >
+             
+            
+
+              </div>
             </CardBody>
             <CardFooter className="pt-0">
           <Link to= {`/owner/edit-dish/${items._id}` }><Button className="mr-3 px-8 py-3">EDIT</Button></Link>   

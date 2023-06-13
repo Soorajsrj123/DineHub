@@ -1,6 +1,8 @@
 import User from "../Models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Dish from "../Models/dishModel.js";
+import Order from "../Models/Orders.js";
 // import { token } from 'morgan'
 
 // SIGNUP USER
@@ -88,10 +90,11 @@ export const LoginUser = async (req, res) => {
       if (validUser) {
         //   CREATING A TOKEN
         const token = jwt.sign({ user_id: user._id, email }, "my secret key", {
-          expiresIn: "2h",
+          expiresIn: "1d",
         });
 
         console.log("GENERATED TOKENN=", token);
+
         //   checking if the cookis already has data then clear it
         // if(req.cookies[`${user._id}`])
         // {
@@ -309,3 +312,48 @@ export const updateForgotPass = async (req, res) => {
     return res.status(500).json({ message: "server error" });
   }
 };
+
+export const getRestaurantDishes = async (req, res) => {
+  try {
+  
+    const { id } = req.params;
+    const dishDetails = await Dish.find({ restaurantId: id });
+    if (!dishDetails)
+      return res.status(404).json({ message: "data not found", status: false });
+    return res
+      .status(200)
+      .json({ message: "success", status: true, dishDetails });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const checkOut=async(req,res)=>{
+  try {
+console.log(req.body,"body");
+    const{userId,date,time,button,selectedValue,filteredDishes}=req.body
+
+    console.log(req.body,"nn");
+         
+    const orderDetails=  new Order({
+      orderDetails:filteredDishes,
+      tableNo:button,
+     orderType:selectedValue,
+     userId,
+     date,
+     time
+    })
+
+    orderDetails.save().then((response)=>{
+      console.log(response,"response in  db");
+      if(response){
+        return res.status(200).json({message:"success",data:response})
+      }else{
+        return res.status(500).json({message:"something went wrong"})
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({message:error})
+  }
+}

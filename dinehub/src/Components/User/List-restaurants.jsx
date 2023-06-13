@@ -1,42 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getRestaurants } from "../../helpers/commonHelper";
+import { Link, useNavigate } from "react-router-dom";
+import { getRestaurants } from "../../helpers/userHelpers";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setDishes } from "../../Slices/dishSlice";
 function ListRestaurants() {
   const [records, setRecords] = useState([]);
+ const navigate=useNavigate()
+ const dispatch=useDispatch()
 
   useEffect(() => {
+
+
+    dispatch(
+      setDishes({
+        dishDetails: null,
+      })
+      );
+
     const restaurantDataResponse = getRestaurants();
     restaurantDataResponse
       .then((data) => {
         if (data.status) {
-          setRecords(data.Details);
+
+            setRecords(data.Details);
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err,"eeeeeeeeeeeeee");
+            // Token not availabel
+           if(err.response.status===401){
+            navigate('/login')
+           }
         toast.error(err.response.data.message);
       });
   }, []);
 
   return (
+    
     <div>
+    
+  
       <div>
-       
-            <div  className="min-h-screen flex justify-center items-center py-20">
-              <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
-              {records.map((restaurant,index) => {
-          return (
-                <div className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">
+        <div className="min-h-screen flex justify-center items-center py-2">
+          <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
+            {records.map((restaurant, index) => {
+              return (
+                <div
+                  key={index}
+                  className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500"
+                >
                   <div className="relative">
                     <img
                       className="w-full h-64 rounded-xl"
-                      src={restaurant?.image?.url}
+                      src={restaurant?.image.url}
                       alt="Colors"
                     />
                   </div>
                   <h3 className="m-2 text-xl font-bold text-indigo-600">
-                  {restaurant.restaurantName}
+                    {restaurant.restaurantName.toUpperCase()}
                   </h3>
                   <h5 className="m-2 text-gray-800 text-lg font-bold cursor-pointer">
                     {restaurant.address}
@@ -57,7 +79,7 @@ function ListRestaurants() {
                           />
                         </svg>
                       </span>
-                      <b>Tables</b>
+                      <b>{restaurant.tables}</b>
                     </div>
                     <div className="flex space-x-1 items-center">
                       <span>
@@ -77,19 +99,38 @@ function ListRestaurants() {
                       </span>
                       <b>{restaurant.phone}</b>
                     </div>
+                    <div className="flex space-x-1 items-center ml-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        height={"16"}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                      </svg>
+                      <span className="font-medium">
+                        {" "}
+                        {restaurant.startTime.slice(1)} to {restaurant.endTime.slice(1)}{" "}
+                      </span>
+                    </div>
 
-                    <Link t>
+                    <Link to={`/restaurant/list-dishes/${restaurant._id}`}>
                       <button className="mt-4 text-xl w-full text-white bg-indigo-600 py-2 rounded-xl shadow-lg">
                         Book Now
                       </button>
                     </Link>
+
                   </div>
                 </div>
-                 );
-                })}
-              </div>
-            </div>
-         
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

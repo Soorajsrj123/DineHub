@@ -4,10 +4,10 @@ import NavBar from '../../Components/User/Navbar'
 import ListRestaurants from '../../Components/User/List-restaurants'
 function HomePage() {
   return (
-<div>
+<div className='bg-gray-300' >
   <NavBar/>
    <Carousel/>
-<ListRestaurants/>
+  <ListRestaurants/>
 </div>
   )
 }

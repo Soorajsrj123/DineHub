@@ -16,18 +16,20 @@ import {getAllTables} from '../Controllers/ownerController.js'
 import {deleteTable} from '../Controllers/ownerController.js'
 import {oneTableData} from '../Controllers/ownerController.js'
 import {editTable} from '../Controllers/ownerController.js'
+import {getPhone} from '../Controllers/ownerController.js'
+import {updatePassword} from '../Controllers/ownerController.js'
 const router=Router()
 
 router.post('/signup',OwnerRegistration)
 router.post('/login',OwnerLogin)
-router.post('/add-restaurant/:id',AddRestaurant)
+router.post('/add-restaurant',AddRestaurant)
 router.get('/restaurants/:id',getOwnerRestaurant)
 router.get('/delete-restaurant/:id',deleteRestaurant)
 router.get('/get-one-res/:id',singleRes)
 router.patch('/edit-restaurant',editRestaurant)
 router.post('/add-dish-details',AddDishDetails)
 router.get('/dishes/:id',getAllDishes)
-router.delete('/delete-dish/:id/:ownerid',deleteDish)
+router.delete('/delete-dish/:id/:resId',deleteDish)
 router.get('/get-one-dish/:id',singleDish)
 router.patch('/edit-dish/:id',updateDish)
 router.post('/add-table',AddTable)
@@ -35,5 +37,7 @@ router.get('/tables/:id',getAllTables)
 router.delete('/delete-table/:id/:ownerid',deleteTable)
 router.get('/get-one-table/:id',oneTableData)
 router.patch('/edit-table:id',editTable)
+router.post('/get-phone',getPhone)
+router.patch('/update-password',updatePassword)
 
 export default router

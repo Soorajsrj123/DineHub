@@ -3,15 +3,13 @@ import { useFormik } from "formik";
 import { RestaurantFormSchema } from "../../YupSchema/RestaurantSchema";
 import { Toaster, toast } from "react-hot-toast";
 import { RestaurantForm } from "../../helpers/ownerHelpers";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Addrestaurant() {
   const [image, setImage] = useState("");
   const navigate=useNavigate()
 
-  const data = useSelector((state) => state.owner);
-  const { owner } = data;
+ 
 
 
 
@@ -56,7 +54,7 @@ function Addrestaurant() {
       // ASSIGNING IMAGE VALUE TO THE FORMIK VALUES
       const imgcopy = Object.assign({}, values, img);
 
-      const details = RestaurantForm(imgcopy,owner);
+      const details = RestaurantForm(imgcopy);
 
       details
         .then((data) => {

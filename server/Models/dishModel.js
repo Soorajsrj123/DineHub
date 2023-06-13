@@ -15,6 +15,9 @@ const DishShema=mongoose.Schema({
     price:{
         type:Number
     },
+    classification:{
+     type:String,
+    },
     image:{
         public_id: {
             type: String,
@@ -23,7 +26,7 @@ const DishShema=mongoose.Schema({
             type: String,
           },
     },
-    owner:{
+    restaurantId:{
         type:Object
     }
 
