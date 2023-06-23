@@ -56,10 +56,10 @@ export async function loginGoogle(userdata){
             })
 }
 
-export const isExistingNumber=async(phoneNumber,userId)=>{
+export const isExistingNumber=async(phoneNumber)=>{
      const number=parseInt(phoneNumber)
      try {
-      const response=await Auth.post(`/get-phone/${userId}`,{phoneNumber:number})
+      const response=await Auth.post(`/get-phone`,{phoneNumber:number})
       return response.data
      } catch (error) {
       return error.response.data
@@ -188,3 +188,29 @@ export const getRestaurantDetails=async(restaurantId)=>{
   }
 }
 
+export const AddRating=async(details)=>{
+  try {
+    const response=await Auth.post('/restaurant/add-rating',details)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const updateUserProfile=async(credentials)=>{
+ try {
+  const response=await Auth.patch('/update-user-profile',credentials)
+   return response.data
+ } catch (error) {
+   throw error
+ }
+}
+
+export const deleteUserReview=async(bannerId)=>{
+  try {
+    const response=await Auth.delete(`/delete-user-review/${bannerId}`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}

@@ -5,13 +5,8 @@ const BannerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  message: {
+   imageURL: {
     type: String,
-    required: true,
-  },
-  imageURL: {
-    type: String,
-    required: true,
   },
   createdAt: {
     type: Date,

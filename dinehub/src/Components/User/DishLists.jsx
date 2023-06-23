@@ -18,13 +18,13 @@ function DishLists() {
   const dispatch = useDispatch();
  
   const {id}=useParams()
-  const storedDishData = useSelector(
-    (state) => state.dishes.dishes.dishDetails
-  );
-console.log(storedDishData,"st");
+  const storedDishData = useSelector((state) => state.dishes.dishes.dishDetails);
+
+// console.log(storedDishData,"st");
   useEffect(() => {
+
     if (storedDishData) {
-      console.log(dishDatas,"called if");
+      // console.log(dishDatas,"called if");
       setDishDatas(storedDishData);
     } else {
       getRestaurantDishes(id).then((data) => {
@@ -34,7 +34,7 @@ console.log(storedDishData,"st");
           total: 0,
         }))
         // fetch all dish of  restaurant
-        console.log(dishDatas,"called else");
+        // console.log(dishDatas,"called else");
         
         // Dispatching the details and storing the details in localstorage
         dispatch(
@@ -45,7 +45,6 @@ console.log(storedDishData,"st");
           setDishDatas(updatedDishData);
       }).catch((err)=>{
         if(err.response.status===401){
-          
           navigate('/login')
         }
           toast.error(err.response.data.message)
@@ -53,7 +52,7 @@ console.log(storedDishData,"st");
     }
 
     // console.log(owner,"owww");
-  }, [id,storedDishData,dishDatas]);
+  }, [id,storedDishData,dishDatas,selected]);
 
   //   FUNCTION FOR HANDLING COUNT PLUS
   const handleIncrement = (dishId) => {
@@ -96,6 +95,8 @@ console.log(storedDishData,"st");
       // checking the updated dish contains in state
       if (item._id === dishId) {
         const newCount = item.count - 1;
+        console.log(newCount,"new count");
+
         const updatedItem = {
           ...item,
           count: newCount >= 0 ? newCount : 0,
@@ -117,6 +118,7 @@ console.log(storedDishData,"st");
 
     // UPDATING THE STATE WITH NEW UPDATED DATA
     setDishDatas(updatedDishData);
+      
     // for showing the selected dish
     // STORING IN REDUX
     dispatch(
@@ -126,12 +128,14 @@ console.log(storedDishData,"st");
     );
   };
 
+  console.log(dishDatas,"dishdatas");
+
   return (
     <>
       <div className="h-screen w-full flex bg-white-800">
         <main className="w-full overflow-y-auto">
-          <div className="px-10 mt-5 mx-5 ">
-            <span className="uppercase font-bold text-2xl text-white">
+          <div className="px-10 mt-5 mx-5 my-3">
+            <span className="uppercase font-bold text-2xl text-black ">
               special food
             </span>
           </div>
@@ -211,6 +215,7 @@ console.log(storedDishData,"st");
 
         <article className="rounded-lg border w-96 bg-gray-200  mt-10 me-6 p-4">
           {dishDatas.map((dish) => {
+            // console.log(dishDatas,"dish datas in map");
             return (
               <div key={dish._id} className="flex items-center justify-between mt-5 ">
                 {dish.count ? (
@@ -222,7 +227,7 @@ console.log(storedDishData,"st");
                     </p>
                   </div>
                 ) : (
-                  ""
+                   ""
                 )}
                 {dish.count ? (
                   <span className="rounded-md p-4 text-blue-600">
@@ -240,7 +245,7 @@ console.log(storedDishData,"st");
           })}
 
           <div className="text-center mt-5">
-            {selected &&(
+            {selected ?(
               <Link
                 to={"/checkout"}
                 type="button"
@@ -248,7 +253,18 @@ console.log(storedDishData,"st");
               >
                 Next
               </Link>
-            ) 
+            ) :(
+              // HEADER FOR NO DISH SELECTED
+              <h1 style={{
+                color: '#333',
+                fontFamily: 'Arial, sans-serif',
+                textAlign: 'center',
+                padding: '10px 0',
+                backgroundColor: 'orange',
+                borderBottom: '1px solid #ccc',
+                marginBottom: '20px'
+              }} >Select Your Dishes</h1>
+            )
         }
           </div>
         </article>

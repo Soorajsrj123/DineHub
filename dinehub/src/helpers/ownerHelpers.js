@@ -211,3 +211,41 @@ export const updatePassword=async(datas)=>{
     throw error
   }
 }
+
+export const SetRestaurantBanners=async(allDatas)=>{
+ 
+  try {
+    const response=await Auth.post('/owner/restaurant/add-banner',allDatas)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getAllRestaurantBanners=async(restaurantId)=>{
+  try {
+    const response=await Auth.get(`/owner/restaurant/banner/${restaurantId}`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getUserReview=async(restaurantId,userId)=>{
+  try {
+    const response=await Auth.get(`/owner/restaurant?resId=${restaurantId}&userId=${userId}`)
+    return response.data
+  } catch (error) {
+     throw error
+  }
+
+}
+export const deleteRestaurantBanner=async(bannerId)=>{
+  try {
+     const response=await Auth.delete(`/owner/restaurant/delete-banner/${bannerId}`)
+     return response.data
+  } catch (error) {
+     throw error
+  }
+}
+

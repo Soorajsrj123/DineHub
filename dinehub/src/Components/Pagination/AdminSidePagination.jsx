@@ -1,7 +1,7 @@
 import React from "react";
 
 function OwnerList({ curretPage, totalPosts, postsPerPage, setCurrentPage }) {
-  console.log(totalPosts, postsPerPage, "kkk");
+ 
   const pages = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {

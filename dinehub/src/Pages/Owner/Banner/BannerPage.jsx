@@ -1,12 +1,12 @@
 import React from 'react'
 import { NavbarOne } from '../../../Components/Owner/Navbar'
-import BannerComponent from '../../../Components/Owner/Banner/Banner'
+import RestaurantBanner from '../../../Components/Owner/Banner/RestaurantBanner'
 
 function BannerPage() {
   return (
     <>
     <NavbarOne/>
-<BannerComponent/>
+<RestaurantBanner/>
     </>
   )
 }

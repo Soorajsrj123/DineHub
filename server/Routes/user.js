@@ -18,6 +18,10 @@ import {checkOut } from '../Controllers/user.js'
 import {ConfirmPayment} from '../Controllers/order-controllers.js'
 import {UserOrderDetails} from '../Controllers/order-controllers.js'
 import {fetchRestaurantData} from '../Controllers/ownerController.js'
+import {addRating} from '../Controllers/rating-controller.js'
+import {getUserDataById} from '../Controllers/common-Controller.js'
+import {editUserProfile} from '../Controllers/user.js'
+import {deleteUserReview} from '../Controllers/rating-controller.js'
 const router=express.Router()
 
 
@@ -28,7 +32,7 @@ const router=express.Router()
  router.get('/home',getUser)
  router.get('/refresh',refreshToken,getUser)
  router.post('/logout',Logout)
- router.post('/get-phone/:id',getPhone)
+ router.post('/get-phone',getPhone)
  router.post('/get-user',getOneUser)
  router.patch('/update-password',updateForgotPass)
  router.get('/restaurant/get-dishes/:id',getRestaurantDishes)
@@ -40,4 +44,8 @@ const router=express.Router()
  router.post('/restaurant/confirm-payment',ConfirmPayment)
  router.get('/restaurant/get-order-details/:id',UserOrderDetails)
  router.get('/restaurant/get-res-details/:id',fetchRestaurantData)
+ router.post('/restaurant/add-rating',addRating)
+ router.get('/get-one-user/:id',getUserDataById)
+ router.patch('/update-user-profile',editUserProfile)
+ router.delete('/delete-user-review/:id',deleteUserReview)
 export default router

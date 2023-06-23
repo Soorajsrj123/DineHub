@@ -29,7 +29,7 @@ app.use(cors({
     origin:["http://localhost:3000"],credentials:true,origin:true
 }))
 
-app.use(morgan('combined'))
+app.use(morgan('tiny'))
 
 // MONGODB CONNECTION
 mongoose.connect("mongodb://localhost:27017/DineOut",{

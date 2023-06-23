@@ -1,8 +1,10 @@
 import User from "../Models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Dish from "../Models/dishModel.js";
+import Dish from "../Models/DishModel.js";
 import Order from "../Models/Orders.js";
+import cloudinary from "../utils/cloudinary.js";
+import Rating from "../Models/Rating.js";
 // import { token } from 'morgan'
 
 // SIGNUP USER
@@ -255,10 +257,10 @@ export const getPhone = async (req, res) => {
   console.log(req.body);
   const PhoneNumber = req.body.phoneNumber;
 
-  const { id } = req.params;
+  // const { id } = req.params;
 
   try {
-    const isFound = await User.findOne({ _id: id, PhoneNumber });
+    const isFound = await User.findOne({ PhoneNumber });
     console.log(isFound);
     if (!isFound)
       return res
@@ -274,7 +276,6 @@ export const getPhone = async (req, res) => {
 
 export const getOneUser = async (req, res) => {
   try {
-    console.log("called here", req.body);
     const phone = req.body.phoneNumber;
     const updatedPhone = phone.slice(3);
     console.log(updatedPhone, "sliced num");
@@ -315,7 +316,6 @@ export const updateForgotPass = async (req, res) => {
 
 export const getRestaurantDishes = async (req, res) => {
   try {
-  
     const { id } = req.params;
     const dishDetails = await Dish.find({ restaurantId: id });
     if (!dishDetails)
@@ -328,32 +328,82 @@ export const getRestaurantDishes = async (req, res) => {
   }
 };
 
-export const checkOut=async(req,res)=>{
+export const checkOut = async (req, res) => {
   try {
-console.log(req.body,"body");
-    const{userId,date,time,button,selectedValue,filteredDishes}=req.body
+    console.log(req.body, "body");
+    const { userId, date, time, button, selectedValue, filteredDishes } =
+      req.body;
 
-    console.log(req.body,"nn");
-         
-    const orderDetails=  new Order({
-      orderDetails:filteredDishes,
-      tableNo:button,
-     orderType:selectedValue,
-     userId,
-     date,
-     time
-    })
+    console.log(req.body, "nn");
 
-    orderDetails.save().then((response)=>{
-      console.log(response,"response in  db");
-      if(response){
-        return res.status(200).json({message:"success",data:response})
-      }else{
-        return res.status(500).json({message:"something went wrong"})
+    const orderDetails = new Order({
+      orderDetails: filteredDishes,
+      tableNo: button,
+      orderType: selectedValue,
+      userId,
+      date,
+      time,
+    });
+
+    orderDetails.save().then((response) => {
+      console.log(response, "response in  db");
+      if (response) {
+        return res.status(200).json({ message: "success", data: response });
+      } else {
+        return res.status(500).json({ message: "something went wrong" });
       }
-    })
+    });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({message:error})
+    return res.status(500).json({ message: error });
   }
-}
+};
+
+export const editUserProfile = async (req, res) => {
+  try {
+    const { name, email, PhoneNumber, userId, image } = req.body;
+
+    const { id } = userId;
+    let updatedValue;
+
+    if (image !== "") {
+  
+      const result = await cloudinary.uploader.upload(image, {
+        folder: "Users",
+      });
+
+      updatedValue = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          name,
+          email,
+          PhoneNumber,
+          imageURL: {
+            public_id: result.public_id,
+            url: result.url,
+          },
+        }
+      );
+    } else {
+    
+      updatedValue = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          name,
+          email,
+          PhoneNumber,
+        }
+      );
+    }
+
+    console.log(updatedValue, "here user updated values");
+    if (updatedValue)
+      return res.status(200).json({ message: "success", status: true });
+    return res
+      .status(200)
+      .json({ message: "profile not updated", status: false });
+  } catch (error) {
+    console.log(error, "err");
+    return res.status(500).json({ message: error, status: false });
+  }
+};

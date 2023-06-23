@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 function Payment() {
   const [orderDishes, setOrderDishes] = useState([]);
 
+
+  
+
 const navigate=useNavigate()
   // Getting order details from localstorage
   const data = localStorage.getItem('OrderDetails');
@@ -42,13 +45,12 @@ const navigate=useNavigate()
 
   // for storing the total value
   let sum = 0;
+
   const formik = useFormik({
     initialValues: {
-      firstName: "",
+      name: "",
       email: "",
       mobile: "",
-      address: "",
-      additionalInfo: "",
     },
     validationSchema: PaymentFormValidation,
     validateOnChange: true,
@@ -92,13 +94,16 @@ const navigate=useNavigate()
     // RazorPayHandler(values)
   });
 
-  const dishes = useSelector((state) => state?.dishes?.dishes.dishDetails);
+  // const dishes = useSelector((state) => state?.dishes?.dishes.dishDetails);
 
-  
+  const dishdata= localStorage.getItem("OrderDetails")
+  const parsedData=JSON.parse(dishdata)
+  console.log(parsedData,"paarse data");
+  const dishes=parsedData.orderDetails
 
   useEffect(() => {
     setOrderDishes(dishes);
-  }, [dishes]);
+  }, []);
 
   // const handlePayment = (sum) => {
   //   if (sum) {
@@ -156,20 +161,20 @@ const navigate=useNavigate()
                       htmlFor="firstName"
                       className="block mb-3 text-sm font-semibold text-gray-500"
                     >
-                      First Name
+                       Name
                     </label>
                     <input
-                      name="firstName"
+                      name="name"
                       type="text"
-                      placeholder="First Name"
+                      placeholder=" Name"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      value={formik.values.firstName}
+                      value={formik.values.name}
                       className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-blue-600"
                     />
-                    {formik.touched.firstName && formik.errors.firstName && (
+                    {formik.touched.name && formik.errors.name && (
                       <p className="text-red-500 my-2">
-                        {formik.errors.firstName}
+                        {formik.errors.name}
                       </p>
                     )}
                   </div>
@@ -213,7 +218,7 @@ const navigate=useNavigate()
                 <div className="space-x-0 flex justify-center lg:flex lg:space-x-4">
                   
 
-                <div className="w-full lg:w-1/2 ">
+                <div className="w-full lg:w-1/2 mt-4 ">
                     <label
                       htmlFor="mobile"
                       className="block mb-3 text-sm font-semibold text-gray-500"
@@ -241,7 +246,7 @@ const navigate=useNavigate()
 
                 </div>
 
-                <div className="relative pt-3 xl:pt-6">
+                {/* <div className="relative pt-3 xl:pt-6">
                   <label
                     htmlFor="note"
                     className="block mb-3 text-sm font-semibold text-gray-500"
@@ -257,7 +262,7 @@ const navigate=useNavigate()
                     rows="4"
                     placeholder="eg:dish recipies or party information"
                   ></textarea>
-                </div>
+                </div> */}
                 <div className="mt-4">
                   <button
                     className="w-full px-6 py-2 text-blue-200 bg-blue-600 hover:bg-blue-900"
@@ -272,7 +277,7 @@ const navigate=useNavigate()
           </div>
           <div className="flex flex-col w-full ml-0 lg:ml-12 lg:w-2/5">
             <div className="pt-12 md:pt-0 2xl:ps-4">
-              <h2 className="text-xl font-bold">Order Summary</h2>keLinejoin
+              <h2 className="text-xl font-bold">Order Summary</h2>
               <div className="mt-8">
                 <div className="flex flex-col space-y-4">
                   {/* CARD OPEN */}

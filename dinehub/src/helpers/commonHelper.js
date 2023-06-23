@@ -24,3 +24,12 @@ export const getRestaurants=async()=>{
     }
 
 }
+
+export const getUserDetailsById=async(userId)=>{
+    try {
+       const response=await Auth.get(`/get-one-user/${userId}`)
+       return response.data
+    } catch (error) {
+      throw error
+    }
+  }

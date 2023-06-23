@@ -98,3 +98,40 @@ export const getRestaurantDetailById=async(restaurantId)=>{
     }
 }
 
+export const SetBanner=async(datas)=>{
+    try {
+        const response=await Auth.post('/admin/restaurant/add-banner',datas)
+        console.log(response.data)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const getAllBanners=async()=>{
+try {
+    console.log("comes here");
+    const response=await Auth.get('/admin/restaurant/get-all-banners')
+      return response.data
+} catch (error) {
+     throw error
+}
+}
+
+export const adminYearlyData=async()=>{
+    try {
+        const response=await Auth.get('/admin/restaurant/yearly-datas')
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const adminDailyData=async()=>{
+    try {
+         const response=await Auth.get('/admin/restaurant/daily-datas')
+         return response.data
+    } catch (error) {
+        throw error
+    }
+}

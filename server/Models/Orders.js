@@ -11,7 +11,7 @@ const OrderShema=mongoose.Schema({
        orderType:{
         type:String
        },
-       orderAddress:{
+       bookingAddress:{
          type:Array
        },
        userId:{

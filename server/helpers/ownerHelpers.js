@@ -1,5 +1,5 @@
 import Restaurant from "../Models/RestaurantSchema.js";
-import Dish from '../Models/dishModel.js'
+import Dish from '../Models/DishModel.js'
 
 export const singleRes = async (req, res) => {
   const resId = req.params.id;

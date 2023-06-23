@@ -20,7 +20,7 @@ const Home = () => {
     { name: "Requests", link: "/admin/access-control", icon: IoMdNotificationsOutline },
     { name: "Users", link: "/admin/users", icon: TbUsers, margin: true },
     { name: "Rejected Restaurants", link: "/admin/restaurant/declined-list", icon: MdBlock },
-    { name: "Cart", link: "/", icon: FiShoppingCart },
+    { name: "Banners", link: "/admin/restaurant/banner", icon: FiShoppingCart },
     { name: "Saved", link: "/", icon: AiOutlineHeart, margin: true },
     { name: "Setting", link: "/", icon: RiSettings4Line },
     { name: "Setting", link: "/", icon: RiSettings4Line },

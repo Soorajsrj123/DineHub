@@ -3,6 +3,7 @@ import RejectedRestaurants from "../Models/RejectedRestaurants.js";
 import nodemailer from "nodemailer";
 
 export const selectRequest = async (req, res) => {
+
   try {
     const AllRestaurants = await Restaurant.find({ status: "pending" });
     if (!AllRestaurants)

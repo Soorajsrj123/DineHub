@@ -1,7 +1,9 @@
 import React from 'react'
 import Sidebar from "../../Components/Admin/Sidebar";
 import styled from "styled-components";
-import Dashboard from "../../Components/Admin/dashboard";
+// import Dashboard from "../../Components/Admin/dashboard";
+import Chart from '../../Components/Admin/Dashboard/Chart';
+import Graph from '../../Components/Admin/Dashboard/Graph';
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -20,7 +22,8 @@ function Dashboad() {
       <Container>
         <Sidebar />
         <OwnerListWrapper>
-         <Dashboard/>
+         <Chart/>
+         <Graph/>
         </OwnerListWrapper>
       </Container>
     </div>

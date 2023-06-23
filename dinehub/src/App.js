@@ -38,6 +38,11 @@ import OwnerForgotPass from './Components/Owner/ForgotPassword/NewPasswordField'
 import PaymentPage from './Pages/User/PaymentPage/PaymentPage';
 import BannerPage from './Pages/Owner/Banner/BannerPage';
 import OrderDetailsPage from './Pages/User/OrderDetailsPage/OrderDetailsPage';
+import Banner from './Pages/Admin/Banner/BannerPage';
+import AddBanner from './Components/Admin/Banner/AddBanner';
+import Profile from './Components/User/Profile/Profile';
+import EditProfile from './Components/User/Profile/EditProfile';
+import AddRestaurantBanner from './Components/Owner/Banner/AddBanner'
 function App() {
 
 
@@ -60,6 +65,8 @@ function App() {
         <Route path='/checkout' element={<CheckOutComponent/>}/>
         <Route path='/payment' element={<PaymentPage/>}  />
         <Route path='/orders' element={<OrderDetailsPage/> } />
+        <Route path='/profile/:id' element={<Profile/>}/>
+        <Route path='/edit-profile/:id' element={<EditProfile/>}/>
 
 {/* ADMIN */}
        <Route path='/admin'  element={<Dashboad/>}/>
@@ -72,6 +79,8 @@ function App() {
        <Route path='/admin/access-control' element={<AccessControlPage/>}   />
        <Route  path='/admin/view-request/:id' element={<ViewRequestPage/>} />
          <Route path='/admin/restaurant/view-restaurant/:id'  element={<ViewRestaurantPage/>} />
+         <Route path='/admin/restaurant/banner' element={<Banner/>} />
+       <Route path='/admin/restaurant/add-banner' element={<AddBanner/>}  />
 
         {/* OWNER */}
 
@@ -92,6 +101,8 @@ function App() {
         <Route path='/owner/forgot-pass/otp' element={<OwnerForgotPassOtpPage/>}/>
        <Route path='/owner/new-password/:id' element={<OwnerForgotPass/>}/>
        <Route path='/owner/banner' element={<BannerPage/>}  />
+       <Route path='/owner/add-restaurant-banner' element={<AddRestaurantBanner/>}/>
+
 
       </Routes>
     </BrowserRouter>

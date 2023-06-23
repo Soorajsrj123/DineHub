@@ -18,6 +18,11 @@ import {oneTableData} from '../Controllers/ownerController.js'
 import {editTable} from '../Controllers/ownerController.js'
 import {getPhone} from '../Controllers/ownerController.js'
 import {updatePassword} from '../Controllers/ownerController.js'
+import {addRestaurantBanner} from '../Controllers/banner-controller.js'
+import {getRestaurantBanner} from '../Controllers/banner-controller.js'
+import {getUserReview} from '../Controllers/rating-controller.js'
+
+import {deleteRestaurantBanner} from '../Controllers/banner-controller.js'
 const router=Router()
 
 router.post('/signup',OwnerRegistration)
@@ -39,5 +44,9 @@ router.get('/get-one-table/:id',oneTableData)
 router.patch('/edit-table:id',editTable)
 router.post('/get-phone',getPhone)
 router.patch('/update-password',updatePassword)
+router.post('/restaurant/add-banner',addRestaurantBanner)
+router.get('/restaurant/banner/:id',getRestaurantBanner)
+router.get('/restaurant',getUserReview)
+router.delete('/restaurant/delete-banner/:id',deleteRestaurantBanner)
 
 export default router

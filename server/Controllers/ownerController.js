@@ -1,6 +1,6 @@
 import cloudinary from "../utils/cloudinary.js";
 import Restaurant from "../Models/RestaurantSchema.js";
-import Dish from "../Models/dishModel.js";
+import Dish from "../Models/DishModel.js";
 import Table from "../Models/TableModel.js";
 import Owner from "../Models/OwnerModel.js";
 import bcrypt from "bcrypt";
@@ -441,3 +441,4 @@ export const fetchRestaurantData=async(req,res)=>{
     return res.status(500).json({message:error})
   }
 }
+

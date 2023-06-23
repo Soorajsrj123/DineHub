@@ -11,6 +11,11 @@ import {RejectRestaurant} from '../Controllers/admin-controller.js'
 import {getDeclinedRequest} from '../Controllers/admin-controller.js'
 import {getAllRestaurants} from '../Controllers/common-Controller.js'
 import {getOneRestaurant} from '../Controllers/admin-controller.js'
+import {addBanner} from '../Controllers/banner-controller.js'
+import {getAllBanners} from '../Controllers/banner-controller.js'
+import {adminYearlyData} from '../Controllers/order-controllers.js'
+import {adminDailyData} from '../Controllers/order-controllers.js'
+
 const router = express.Router();
 
 router.post("/login", AdminSignUp);
@@ -25,4 +30,8 @@ router.patch('/reject-restaurant/:id',RejectRestaurant)
 router.get('/restaurant/declined-requests',getDeclinedRequest)
 router.get('/restaurants',getAllRestaurants)
 router.get('/restaurant/get-one-restaurant/:id',getOneRestaurant)
+router.post('/restaurant/add-banner',addBanner)
+router.get('/restaurant/get-all-banners',getAllBanners)
+router.get('/restaurant/yearly-datas',adminYearlyData)
+router.get('/restaurant/daily-datas',adminDailyData)
 export default router;
