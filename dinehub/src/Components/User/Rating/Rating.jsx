@@ -86,11 +86,11 @@ const StarRating = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [status,userReview]);
+  }, [status]);
   console.log(!userReview, "final last rating");
   return (
     <>
-      {!userReview&&status ? (
+      {!userReview && status ? (
         <div className="flex flex-col items-center">
           <p>Rate:</p>
           <div className="star-rating">{renderStars()}</div>
@@ -130,16 +130,30 @@ const StarRating = () => {
                 </div>
               </div>
               <div className="flex flex-col justify-center pl-3 py-2 sm:py-0">
-                <p className="text-sm font-bold text-white pb-1">{}</p>
+                {/* <p className="text-sm font-bold text-white pb-1">{}</p> */}
+                <div class="flex justify-center items-center bg-white px-8 shadow-lg rounded-lg w-10 space-x-1 lg:space-x-2">
+                  <button class="mr-1">
+                    <svg
+                      class="text-rose-400 w-5 h-auto fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 576 512"
+                    >
+                      <path d="M381.2 150.3L524.9 171.5C536.8 173.2 546.8 181.6 550.6 193.1C554.4 204.7 551.3 217.3 542.7 225.9L438.5 328.1L463.1 474.7C465.1 486.7 460.2 498.9 450.2 506C440.3 513.1 427.2 514 416.5 508.3L288.1 439.8L159.8 508.3C149 514 135.9 513.1 126 506C116.1 498.9 111.1 486.7 113.2 474.7L137.8 328.1L33.58 225.9C24.97 217.3 21.91 204.7 25.69 193.1C29.46 181.6 39.43 173.2 51.42 171.5L195 150.3L259.4 17.97C264.7 6.954 275.9-.0391 288.1-.0391C300.4-.0391 311.6 6.954 316.9 17.97L381.2 150.3z" />
+                    </svg>
+                  </button>
+
+                  <span class="text-slate-400 font-medium">{userReview?.rating}</span>
+                </div>
+
                 <div className="flex flex-col sm:flex-row items-start sm:items-center">
                   <b>
                     {" "}
                     <p className="text-xm text-slate-300 leading-5">
-                      {userReview.userName} :{" "}
+                      {userReview?.userName} :{" "}
                     </p>
                   </b>
                   <p className="text-xs text-white mt-1 ml-2 leading-5">
-                    {userReview.review}
+                    {userReview?.review}
                   </p>
                 </div>
               </div>
@@ -180,7 +194,7 @@ const StarRating = () => {
                       </button>
                       <button
                         className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                        onClick={() => handleReviewDelete(userReview._id)}
+                        onClick={() => handleReviewDelete(userReview?._id)}
                       >
                         Delete
                       </button>

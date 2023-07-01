@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { toast ,Toaster} from "react-hot-toast";
 import { RestaurantForm } from "../../helpers/ownerHelpers";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 function Sample() {
 
+
+  const searchInput=useRef(null)
     const [starthour,setStartHour]=useState('09')
     const [startminute,setStartMinute]=useState('00')
     const[startmeridiem,setStartMeridiem]=useState('AM')
@@ -20,6 +23,25 @@ function Sample() {
 
     const [startTime, setStartTime] = useState("08:00 AM");
     const [endTime, setEndTime] = useState("06:00 PM");
+    const [suggessions,setSuggessions]=useState(false)
+    const [place,setPlace]=useState([])
+    const [address,setAddress]=useState({})
+
+    const getPlace = async (e) => {
+      console.log(searchInput.current.value);
+      const places = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${searchInput.current.value}.json?proximity=ip&access_token=pk.eyJ1Ijoic29vcmFqc3VyZXNoIiwiYSI6ImNsamR0d3BpNDBhcGkzbGt5czVxdTBnNWIifQ.2I9XXAAd5ML7BcBl82ERbQ`)
+      console.log(places);
+      setPlace(places.data.features)
+      setSuggessions(true)
+    }
+  
+  
+    const assignValue = (index) => {
+      setAddress(place[index])
+      searchInput.current.value = place[index].place_name
+      setSuggessions(false)
+    }
+  
 
     const[image,setImage]=useState('')
     const navigete=useNavigate()
@@ -65,7 +87,7 @@ function Sample() {
       ownerName: "",
       email: "",
       phone: "",
-      address: "",
+      // address: "",
       tables: "",
       fssc:"",
       wifi: false,
@@ -78,25 +100,29 @@ validateOnBlur:false,
 validateOnChange:false,
 onSubmit:(values)=>{
         const img={image:image,startTime:startTime,endTime:endTime}
-        const allData=Object.assign({},img,values)
+        const restaurantAddress={address:address}
+        const allData=Object.assign({},img,restaurantAddress,values)
 console.log(allData);
         const response= RestaurantForm(allData,owner)
 
         toast.loading("Creating")
        response.then((data)=>{
-        console.log(toast,"ressssssssssss");
+     
          if(data.status){
           toast.dismiss()
             navigete("/owner/registration-success")
          }
        }).catch((err)=>{
         toast.dismiss()
-        console.log(err,"lase err cstch");
+ 
         toast.error(err.message)
        })
 }
   });
   
+
+ 
+
   return (
     <div >
       <main className="py-14  ">
@@ -159,7 +185,51 @@ console.log(allData);
                   />
                 </div>
               </div>
-              <div>
+
+
+              <div className='xl:ml-8 xl:mt-8 flex flex-col xl:me-8 rounded-xl xl:flex justify-between items-center'>
+            <div>
+              <label htmlFor=""> Address</label>
+            </div>
+
+            <div className='xl:w-80 w-full bg-white text-black rounded-md border-black'>
+
+              <div className='mt-3 xl:mt-0 w-full xl:w-full h-11 border border-black rounded-lg flex justify-between items-center'>
+                <input ref={searchInput} onKeyUp={getPlace} type="text" name='address' className="w-11/12 outline-none h-full  p-2 bg-white text-black text-sm rounded-lg  dark:text-white" placeholder={`Type the address here......  `} required />
+                {/* <FontAwesomeIcon icon="location" className='w-4 h-4 me-3' /> */}
+              </div>
+
+            </div>
+          </div>
+
+
+          <div className='w-full justify-end flex mt-1'>
+            {
+              suggessions &&
+              <div className='xl:w-80 w-full h-auto bg-white text-black rounded-bl-md rounded-br-md border-2 border-gray-800 z-50  justify-center xl:me-8'>
+                <div className='space-y-3 w-auto h-auto m-3'>
+                  {
+                    place.map((value, index) => (
+                      <div key={index} onClick={() => assignValue(index)} className='flex items-center space-x-2 hover:bg-gray-100 cursor-pointer'>
+                        {/* <FontAwesomeIcon icon="location" className='w-3 h-3 pl-2' /> */}
+                        <p >{value?.place_name}</p>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+
+
+
+
+
+
+
+
+              {/* <div>
                 <label className="font-medium">Address</label>
                 <input
                   type="text"
@@ -169,7 +239,7 @@ console.log(allData);
                     value={formik.values.address}
                   className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                 />
-              </div>
+              </div> */}
               <div className="flex flex-col items-center gap-y-5 gap-x-6 [&>*]:w-full sm:flex-row">
                 <div>
                   <label className="font-medium">Tables</label>

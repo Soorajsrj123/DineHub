@@ -135,3 +135,12 @@ export const adminDailyData=async()=>{
         throw error
     }
 }
+
+export const adminMonthlyData=async()=>{
+    try {
+        const response=await Auth.get('/admin/restaurant/monthly-datas')
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}

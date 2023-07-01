@@ -21,6 +21,7 @@ const OTPLogin = () => {
 
 
   const onCaptchaVerify = (phoneNumber) => {
+    
     const recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
       {

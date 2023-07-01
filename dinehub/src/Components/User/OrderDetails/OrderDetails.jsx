@@ -16,6 +16,8 @@ function OrderDetails() {
 
   const { user } = userData;
 
+  console.log(user,"user");
+
   let sum = 0;
 
   useEffect(() => {
@@ -33,6 +35,7 @@ function OrderDetails() {
       })
       .catch((err) => console.log(err));
   }, []);
+  console.log(restaurant.address,"adddressssss");
 
   useEffect(() => {
     getRestaurantDetails(resId)
@@ -228,7 +231,7 @@ console.log(orders,"orders");
                             Address
                           </p>
                           <p className="w-48 lg:w-full xl:w-48 text-center md:text-left text-sm leading-5 text-gray-600">
-                            {restaurant.address}
+                            {restaurant?.address?.place_name}
                           </p>
                         </div>
                       </div>

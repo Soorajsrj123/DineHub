@@ -1,10 +1,19 @@
 import React from "react";
-import {Link,NavLink} from 'react-router-dom'
+import {Link,NavLink, useNavigate} from 'react-router-dom'
 import '../Owner/Navbar.css'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {ownerLogout} from '../../Slices/ownerSlice'
 export const NavbarOne = () => {
 
     const user=useSelector((state)=>state.owner)
+    const dispatch=useDispatch()
+ const navigate=useNavigate()
+    const hadleLogout=()=>{
+      console.log("here");
+      dispatch(ownerLogout())
+      navigate('/owner/login')
+
+    }
    
   return (
     <div className="py-4">
@@ -130,6 +139,33 @@ export const NavbarOne = () => {
               />
             </svg>
           </li>
+
+
+          <li>
+            <NavLink
+             to='/owner/user-orders' className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
+             
+            >
+              Orders
+            </NavLink>
+          </li>
+          <li className="text-gray-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              stroke="currentColor"
+              className="w-4 h-4 current-fill"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </li>
+
           <li>
             <NavLink
               className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
@@ -140,7 +176,7 @@ export const NavbarOne = () => {
           </li>
         </ul>
         <div className="space-x-2 hidden lg:block">
-          <button className="rounded-md border border-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-indigo-500 ">
+          <button onClick={()=>hadleLogout()} className="rounded-md border border-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-indigo-500 ">
             {user?"Logout":"Login"}
           </button>
        { !user&& <button className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500 ">

@@ -175,7 +175,7 @@ function ViewRequestComponent() {
                 <label className="font-medium">Address</label>
                 <input
                   type="text"
-                  value={restaurantData.address}
+                  value={restaurantData?.address?.place_name}
                   disabled
                   required
                   name="address"

@@ -249,3 +249,47 @@ export const deleteRestaurantBanner=async(bannerId)=>{
   }
 }
 
+export const ownerYearlyReport=async(restaurantId)=>{
+  try {
+    const response=await Auth.get(`/owner/restaurant/yearly-datas/${restaurantId}`)
+    return response.data
+  } catch (error) {
+    
+  }
+}
+
+export const ownerMonthlyReport=async(restaurantId)=>{
+  try {
+    const response=await Auth.get(`/owner/restaurant/monthly-data/${restaurantId}`)
+    return response.data
+  } catch (error) {
+    
+  }
+}
+
+// not Used YET
+export const averageRating=async(restaurantId)=>{
+ try {
+  const {data} =await Auth.get(`/owner/restaurant/average-rating/${restaurantId}`)
+  return data
+ } catch (error) {
+  throw error
+ }
+}
+
+export const userOrderDetails=async(restarantId)=>{
+  try {
+    const response=await Auth.get(  `/owner/users/all-orders/${restarantId}`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+export const ownerDailyReport=async(restarantId)=>{
+  try {
+    const response=await Auth.get(`/owner/restaurant/daily-data/${restarantId}`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}

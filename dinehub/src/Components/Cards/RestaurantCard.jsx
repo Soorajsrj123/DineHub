@@ -74,7 +74,7 @@ function RestaurantCard() {
     <img class="lg:w-3/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded" alt="hero" src={restaurant?.image?.url}/>
     <div class="w-full md:w-2/3 flex flex-col mb-16 items-center text-center">
       <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">{restaurant.restaurantName}</h1>
-      <h1 class="mb-8 font-semibold ">{restaurant?.address?.toUpperCase()}</h1>
+      {/* <h1 class="mb-8 font-semibold ">{restaurant?.address.}</h1> */}
       <div class="flex w-full justify-center items-end">
         {/* <div class="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
           <label for="hero-field" class="leading-7 text-sm text-gray-600">Placeholder</label>

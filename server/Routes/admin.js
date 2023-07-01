@@ -15,7 +15,7 @@ import {addBanner} from '../Controllers/banner-controller.js'
 import {getAllBanners} from '../Controllers/banner-controller.js'
 import {adminYearlyData} from '../Controllers/order-controllers.js'
 import {adminDailyData} from '../Controllers/order-controllers.js'
-
+import {adminMonthlyData} from '../Controllers/order-controllers.js'
 const router = express.Router();
 
 router.post("/login", AdminSignUp);
@@ -34,4 +34,11 @@ router.post('/restaurant/add-banner',addBanner)
 router.get('/restaurant/get-all-banners',getAllBanners)
 router.get('/restaurant/yearly-datas',adminYearlyData)
 router.get('/restaurant/daily-datas',adminDailyData)
+router.get('/restaurant/monthly-datas',adminMonthlyData)
+
+
+
+
+
+
 export default router;

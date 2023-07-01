@@ -54,7 +54,7 @@ function RestaurantLists() {
                     <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
                       <img
                         className="w-10 h-10 rounded-full"
-                        src={res.image.url}
+                        src={res?.image?.url}
                         alt="restaurant"
                       />
                       <div>

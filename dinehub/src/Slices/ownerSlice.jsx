@@ -10,11 +10,15 @@ const OwnerSlice=createSlice({
     reducers:{
         setOwner(state,action){
           state.owner=action.payload
+        },
+        ownerLogout(state,acion){
+            state.owner=null
         }
+
     }
 
 })
 
-export const {setOwner} =OwnerSlice.actions
+export const {setOwner,ownerLogout} =OwnerSlice.actions
 
 export default OwnerSlice.reducer

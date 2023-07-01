@@ -4,47 +4,48 @@ import { getRestaurants } from "../../helpers/userHelpers";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setDishes } from "../../Slices/dishSlice";
+import RestaurantListPagination from "../Pagination/RestaurantListPagination";
 function ListRestaurants() {
   const [records, setRecords] = useState([]);
- const navigate=useNavigate()
- const dispatch=useDispatch()
+  const [postPerPage,setPostPerPage]=useState(2)
+  const [currentPage,setCurrentPage]=useState(1)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-
-
     dispatch(
       setDishes({
         dishDetails: null,
       })
-      );
+    );
 
     const restaurantDataResponse = getRestaurants();
     restaurantDataResponse
       .then((data) => {
         if (data.status) {
-
-            setRecords(data.Details);
+          setRecords(data?.Details);
         }
       })
       .catch((err) => {
-        console.log(err,"eeeeeeeeeeeeee");
-            // Token not availabel
-           if(err.response.status===401){
-            navigate('/login')
-           }
+        console.log(err, "eeeeeeeeeeeeee");
+        // Token not availabel
+        if (err.response.status === 401) {
+          navigate("/login");
+        }
         toast.error(err.response.data.message);
       });
   }, []);
 
+  const lastPostIndex=currentPage * postPerPage
+  const firstPostIndex=lastPostIndex-postPerPage
+  const currentPost=records.slice(firstPostIndex,lastPostIndex)
+console.log(records,"records");
   return (
-    
     <div>
-    
-  
       <div>
         <div className="min-h-screen flex justify-center items-center py-2">
           <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
-            {records.map((restaurant, index) => {
+            {currentPost?.map((restaurant, index) => {
               return (
                 <div
                   key={index}
@@ -58,10 +59,10 @@ function ListRestaurants() {
                     />
                   </div>
                   <h3 className="m-2 text-xl font-bold text-indigo-600">
-                    {restaurant.restaurantName.toUpperCase()}
+                    {restaurant?.restaurantName.toUpperCase()}
                   </h3>
                   <h5 className="m-2 text-gray-800 text-lg font-bold cursor-pointer">
-                    {restaurant.address}
+                    {restaurant?.address?.place_name}
                   </h5>
                   <div className="my-4">
                     <div className="flex space-x-1 items-center">
@@ -115,7 +116,8 @@ function ListRestaurants() {
                       </svg>
                       <span className="font-medium">
                         {" "}
-                        {restaurant.startTime.slice(1)} to {restaurant.endTime.slice(1)}{" "}
+                        {restaurant?.startTime.slice()} to{" "}
+                        {restaurant?.endTime}{" "}
                       </span>
                     </div>
 
@@ -124,13 +126,16 @@ function ListRestaurants() {
                         Book Now
                       </button>
                     </Link>
-
                   </div>
                 </div>
               );
             })}
           </div>
         </div>
+            <div className="m-3"> 
+
+            <RestaurantListPagination  currentPage={currentPage}  totalPosts={records.length} postPerPage={postPerPage}  setCurrentPage={setCurrentPage}    />
+            </div>
       </div>
     </div>
   );

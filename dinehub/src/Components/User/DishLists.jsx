@@ -9,9 +9,11 @@ import { setDishes } from "../../Slices/dishSlice";
 import nonVegImg from '../../assets/icons8-non-veg-48.png'
 import vegImg from '../../assets/icons8-veg-48.png'
 import { Toaster, toast } from "react-hot-toast";
+import RestaurantListPagination from "../Pagination/RestaurantListPagination";
 function DishLists() {
   const [dishDatas, setDishDatas] = useState([]);
-
+   const [postPerPage,setPostPerPage]=useState(3)
+  const [currentPage,setCurrentPage]=useState(1)
   const [selected, setSelected] = useState(false);
   const navigate=useNavigate()
 
@@ -19,7 +21,9 @@ function DishLists() {
  
   const {id}=useParams()
   const storedDishData = useSelector((state) => state.dishes.dishes.dishDetails);
-
+   const lastPostIndex=currentPage * postPerPage
+  const firstPostIndex=lastPostIndex-postPerPage
+  const currentPost=dishDatas.slice(firstPostIndex,lastPostIndex)
 // console.log(storedDishData,"st");
   useEffect(() => {
 
@@ -143,7 +147,7 @@ function DishLists() {
 
           <div className="px-10 grid grid-cols-3 gap-4 ">
             {/* mapping dishes */}
-            {dishDatas?.map((dish, index) => {
+            {currentPost?.map((dish, index) => {
               return (
                 <div
                   key={index}
@@ -210,6 +214,11 @@ function DishLists() {
                 </div>
               );
             })}
+
+          </div>
+          <div className="m-5" >
+
+                        <RestaurantListPagination  currentPage={currentPage}  totalPosts={dishDatas.length} postPerPage={postPerPage}  setCurrentPage={setCurrentPage}    />
           </div>
         </main>
 

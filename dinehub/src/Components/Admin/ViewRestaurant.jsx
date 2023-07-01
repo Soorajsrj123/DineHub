@@ -43,7 +43,7 @@ console.log(record,"recorddd");
         </div>
         <div className='flex flex-col mt-5 ' >
             <h3 className='font-bold text-2xl text-black' >ADDRESS</h3>
-        <h2 class="text-sm leading-relaxed title-font pt-4 text-gray-500 tracking-widest">{record.address}</h2>
+        <h2 class="text-sm leading-relaxed title-font pt-4 text-gray-500 tracking-widest">{record?.address?.place_name}</h2>
         </div>
         <div class="flex mt-8 items-center  pb-5 border-b-2 border-gray-100 mb-5">
          

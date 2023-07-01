@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Apexcharts from "react-apexcharts";
 import { adminYearlyData } from "../../../helpers/adminHelpers";
 import {adminDailyData} from "../../../helpers/adminHelpers"
-function Graph({title}) {
+import {adminMonthlyData} from '../../../helpers/adminHelpers'
+function Graph() {
   const [data, setData] = useState([]);
  const [daily,setDaily]=useState([])
+ const [monthly,setMonthly]=useState([])
  
   const curentYear=new Date().getFullYear()
 
@@ -57,30 +59,65 @@ function Graph({title}) {
       });
   }, []);
 
-  const options2 = {
-    chart: {
-    id: "basic-bar"
+  const MonthlyDays=daily.map((item)=>item.day)
+  const DailySales=daily.map((item)=>item.totalSales)
+  console.log(MonthlyDays,"monthly days");
+  console.log(DailySales,"daily sales");
+  const dailyChart = {
+    options: {
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: MonthlyDays,
+        tickPlacement: "between",
+      },
     },
-    xaxis: {
-    categories: ['Today']
-    }
-    };
+    series: [
+      {
+        name: "series-1",
+        data: DailySales,
+      },
+    ],
+  };
+
     
-    const series2 = [
-    {
-    name: "daily report",
-    data: [daily]
-    }
-    ];
 
   useEffect(()=>{
     adminDailyData().then((res)=>{
-       console.log(res,"final response");
-      const re= res.dailySales.reduce((accum,obj)=>accum+obj)
-console.log(re,"re");
-       setDaily(re)
+        if(res){
+          setDaily(res.data)
+        }
     })
   },[])
+
+  console.log(daily,"daily data");
+
+  useEffect(()=>{
+    adminMonthlyData().then((res)=>{
+       if(res){
+        setMonthly(res.data)
+       }
+    })
+  },[])
+
+  const monthlyChart = {
+    options: {
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: monthly?.map((item)=>item?.month),
+        tickPlacement: "between",
+      },
+    },
+    series: [
+      {
+        name: "series-1",
+        data: monthly?.map((item)=>item.totalSales),
+      },
+    ],
+  };
 
   return (
     <>
@@ -105,29 +142,29 @@ console.log(re,"re");
           <div className="row">
             <div className="mixed-chart">
               <Apexcharts
-                options={options2}
-                series={series2}
+                options={dailyChart?.options}
+                series={dailyChart?.series}
                 type="bar"
-                width="500"
+                width="600"
               />
             </div>
           </div>
         </div>
 
 
-        {/* <div className="app mt-4">
+        <div className="app mt-4">
           <h2 className="text-2xl font-bold text-black">MONTHLY DATA</h2>
           <div className="row">
             <div className="mixed-chart">
               <Apexcharts
-                options={options}
-                series={series}
+                options={monthlyChart?.options}
+                series={monthlyChart?.series}
                 type="bar"
                 width="500"
               />
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );

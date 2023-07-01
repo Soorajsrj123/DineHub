@@ -27,8 +27,8 @@ export const getUserReview = async (req, res) => {
   const { resId, userId } = req.query;
   try {
     const review = await Rating.findOne({ restaurantId: resId, userId });
-    if (review) return res.status(200).json({ message: "success", review });
-    throw "data not found";
+    if (!review) return res.status(204).json({ message: "data not found" });
+    return res.status(200).json({ message: "success", review });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });
@@ -42,11 +42,25 @@ export const deleteUserReview = async (req, res) => {
 
     const updatedData = await Rating.findByIdAndDelete({ _id: id });
     console.log(updatedData, "updaed data");
-    if (updatedData) return res.status(200).json({ message: "success", updatedData });
+    if (updatedData)
+      return res.status(200).json({ message: "success", updatedData });
     // return res.status(404).json({message:"data not found"})
-        // throw "data not found"
+    // throw "data not found"
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });
   }
 };
+
+export const getAverageRating=async(req,res)=>{
+try {
+  const {id}=req.params
+   const aggregatedData=await Rating.aggregate([
+    {
+      $match
+    }
+   ])
+} catch (error) {
+  console.log(error);
+}
+}

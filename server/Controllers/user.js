@@ -41,13 +41,12 @@ export const register = async (req, res) => {
         resolve();
       });
     });
-    console.log(UserName, UserEmail, "AFTER DATA");
+   
     Promise.all([UserName, UserEmail, UserPhone])
       .then(() => {
         if (password) {
           bcrypt.hash(password, 10, function (err, hash) {
             if (err) {
-              console.log("here");
               res.status(500).json({ err: err });
             }
             const newUser = new User({
@@ -57,7 +56,6 @@ export const register = async (req, res) => {
               PhoneNumber,
             });
             newUser.save().then((user) => {
-              console.log(user, "saved user");
               res.status(200).json({ success: "Registered Successfully" });
             });
           });
@@ -77,14 +75,14 @@ export const register = async (req, res) => {
 
 export const LoginUser = async (req, res) => {
   try {
-    console.log(req.body);
+  
     let { email, password } = req.body;
-    console.log("pass", password, "pass");
+  
 
     //checking if the email is exist or not
 
     let user = await User.findOne({ email: email });
-    console.log(user, "user");
+    
 
     if (user) {
       let validUser = await bcrypt.compare(password, user.password);
@@ -92,7 +90,7 @@ export const LoginUser = async (req, res) => {
       if (validUser) {
         //   CREATING A TOKEN
         const token = jwt.sign({ user_id: user._id, email }, "my secret key", {
-          expiresIn: "1d",
+          expiresIn: "10d",
         });
 
         console.log("GENERATED TOKENN=", token);
@@ -330,18 +328,17 @@ export const getRestaurantDishes = async (req, res) => {
 
 export const checkOut = async (req, res) => {
   try {
-    console.log(req.body, "body");
-    const { userId, date, time, button, selectedValue, filteredDishes } =
-      req.body;
+    const { userId,startDateString , time, button, selectedValue, filteredDishes } =req.body;
 
-    console.log(req.body, "nn");
-
+     
+   
+    console.log(startDateString, "date");
     const orderDetails = new Order({
       orderDetails: filteredDishes,
       tableNo: button,
       orderType: selectedValue,
       userId,
-      date,
+      date: startDateString,
       time,
     });
 
@@ -367,7 +364,6 @@ export const editUserProfile = async (req, res) => {
     let updatedValue;
 
     if (image !== "") {
-  
       const result = await cloudinary.uploader.upload(image, {
         folder: "Users",
       });
@@ -385,7 +381,6 @@ export const editUserProfile = async (req, res) => {
         }
       );
     } else {
-    
       updatedValue = await User.findByIdAndUpdate(
         { _id: id },
         {

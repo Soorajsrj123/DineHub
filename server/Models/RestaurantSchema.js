@@ -12,7 +12,7 @@ const RestaurantSchema = mongoose.Schema({
 type:String
   },
   address: {
-    type: String,
+    type: Object,
   },
   tables: {
     type: Number,

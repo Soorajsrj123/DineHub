@@ -59,7 +59,7 @@ const [email,setEmail]=useState('')
         
           res.then((data) => {
                 if (data) {
-                    navigate("/owner/signup-otp/")
+                    navigate("/owner/login")
                   }
           })
           .catch((err) => console.log(err, "the bi onr"));

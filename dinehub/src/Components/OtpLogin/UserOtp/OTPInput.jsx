@@ -22,9 +22,10 @@ function OTPInputComponent() {
   const onCaptchaVerify = (phoneNumber) => {
     const recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
-      {size:'invisible'},
+      { size: "invisible" },
       auth
     );
+
     recaptchaVerifier.render();
     return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
   };
@@ -36,52 +37,61 @@ function OTPInputComponent() {
     const timerfn = () => {
       setTimeout(() => {
         if (countdown <= 0) {
-          setReSendOtpBtn(true)
+          setReSendOtpBtn(true);
           return;
         }
         setCountdown(countdown - 1);
       }, 500);
     };
-    console.log(flag,"flag in useEffect");
+    console.log(flag, "flag in useEffect");
     if (flag) {
       timerfn();
     }
-  }, [countdown,flag]);
+  }, [countdown, flag]);
 
   // useEffect(() => {
   //   console.log("page rendered");
   // }, []);
 
   const getOtp = async (e) => {
+    console.log("getotp called");
     e.preventDefault();
 
-    try {
-      const extractedNumber = phoneNumber.slice(3);
-      //    phoneNumber validation
-      if (
-        extractedNumber.length === 0 ||
-        extractedNumber.length < 10 ||
-        extractedNumber.length > 10
-      ) {
-        toast.error("enter a valid phone number");
-        return;
-      } else {
-        //checking phone No is registered or not
-        const valid = await isExistingNumber(extractedNumber);
+    if (resendBtn) {
+      const response = await onCaptchaVerify(phoneNumber);
 
-        if (valid.status) {
-          //response from firebase
-          const response = await onCaptchaVerify(phoneNumber);
-
-          setConfirmObj(response);
-          console.log(response);
-          setFlag(true);
+      setConfirmObj(response);
+      setReSendOtpBtn(false);
+    } else {
+      console.log("outside getotp else");
+      try {
+        const extractedNumber = phoneNumber.slice(3);
+        //    phoneNumber validation
+        if (
+          extractedNumber.length === 0 ||
+          extractedNumber.length < 10 ||
+          extractedNumber.length > 10
+        ) {
+          toast.error("enter a valid phone number");
+          return;
         } else {
-          toast.error(valid.message);
+          //checking phone No is registered or not
+          const valid = await isExistingNumber(extractedNumber);
+
+          if (valid.status) {
+            //response from firebase
+            const response = await onCaptchaVerify(phoneNumber);
+
+            setConfirmObj(response);
+            console.log(response);
+            setFlag(true);
+          } else {
+            toast.error(valid.message);
+          }
         }
+      } catch (error) {
+        console.log(error, "error");
       }
-    } catch (error) {
-      console.log(error,"error");
     }
   };
 
@@ -106,7 +116,7 @@ function OTPInputComponent() {
         });
       }
     } catch (error) {
-       // User signup failed
+      // User signup failed
       console.log(error, "kjhg");
 
       //   error for invalid otp
@@ -171,13 +181,17 @@ function OTPInputComponent() {
               className="w-full px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm border border-gray-300 outline-none focus:outline-none focus:ring focus:ring-indigo-200"
             />
             <div>
-              <p className="text-red-700">{countdown>0?countdown:"OTP Expired"}</p>
+              <p className="text-red-700">
+                {countdown > 0 ? countdown : "OTP Expired"}
+              </p>
             </div>
           </div>
 
           <div className="flex justify-center">
             {resendBtn ? (
-              <button className="bg-blue-400 p-3 rounded-lg" onClick={getOtp}  >Resend Otp</button>
+              <button className="bg-blue-400 p-3 rounded-lg" onClick={getOtp}>
+                Resend Otp
+              </button>
             ) : (
               <button
                 type="submit"

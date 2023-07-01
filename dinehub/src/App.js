@@ -3,7 +3,7 @@ import './App.css';
 import Home from './Pages/User/Home';
 import AdminLogin from './Components/Admin/adminLogin';
 import SignUp from './Pages/User/Signuppage';
-import OwnerDashboard from './Pages/Owner/dashBoard'
+import OwnerDashboard from './Pages/Owner/DashBoard/dashBoard'
 import Login from './Pages/User/Loginpage';
 import Dashboad from './Pages/Admin/Dashboard.js';
 import OwnerSignUp from './Pages/Owner/signupPage'
@@ -43,6 +43,9 @@ import AddBanner from './Components/Admin/Banner/AddBanner';
 import Profile from './Components/User/Profile/Profile';
 import EditProfile from './Components/User/Profile/EditProfile';
 import AddRestaurantBanner from './Components/Owner/Banner/AddBanner'
+import NotFoundPage from './Pages/404Page';
+import UserOrderDetails from './Pages/Owner/OrderDetails/OrderDetails'
+// import Map from './Components/User/Map/Map'
 function App() {
 
 
@@ -54,7 +57,7 @@ function App() {
       <Routes>
 
         {/* USER */}
-        <Route path='/' element={<TimeSlots/>}  />
+        {/* <Route path='/' element={<Map/>}  /> */}
        <Route  path="/home" element={<Home/>}  />  
        <Route path="/login" element={<Login/>}  />
        <Route path="/signup" element={<SignUp/>}  />
@@ -67,6 +70,7 @@ function App() {
         <Route path='/orders' element={<OrderDetailsPage/> } />
         <Route path='/profile/:id' element={<Profile/>}/>
         <Route path='/edit-profile/:id' element={<EditProfile/>}/>
+        <Route path='*' element={<NotFoundPage/>}/>
 
 {/* ADMIN */}
        <Route path='/admin'  element={<Dashboad/>}/>
@@ -102,6 +106,7 @@ function App() {
        <Route path='/owner/new-password/:id' element={<OwnerForgotPass/>}/>
        <Route path='/owner/banner' element={<BannerPage/>}  />
        <Route path='/owner/add-restaurant-banner' element={<AddRestaurantBanner/>}/>
+       <Route path='/owner/user-orders' element={< UserOrderDetails />}  />
 
 
       </Routes>

@@ -105,7 +105,7 @@ export const getRestaurantDishes=async(resId)=>{
 
 export const getRestaurant=async(resId)=>{
   try {
-    console.log(resId,"hh");
+   
      const response=await Auth.get(`/restaurant/get-one-restaurant/${resId}`)
      return response.data
   } catch (error) {

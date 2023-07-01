@@ -6,7 +6,7 @@ import Owner from "../Models/OwnerModel.js";
 import bcrypt from "bcrypt";
 export const AddRestaurant = async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log(req.body,"this is req body of add res");
     const {
       restaurantName,
       ownerName,

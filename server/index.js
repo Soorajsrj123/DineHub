@@ -8,7 +8,7 @@ import user from './Routes/user.js'
 import owner from './Routes/owner.js'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-
+import colors from 'colors'
 const app=express()
 
 // Setting payload 10mb
@@ -18,8 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 dontenv.config()
 
-app.listen(4000,()=>{
-    console.log("server starts at port 4000");
+app.listen(process.env.PORT||4001,()=>{
+    console.log(`server starts at port ${process.env.PORT}`.bgGreen.bold);
 })
 
 app.use(cookieParser())
@@ -35,7 +35,7 @@ app.use(morgan('tiny'))
 mongoose.connect("mongodb://localhost:27017/DineOut",{
  
 }).then(()=>{
-    console.log("DB Connection Successfull");
+    console.log("DB Connection Successfull".cyan.bold.bgGreen);
 }).catch(err=>{
     console.log(err.message);
 })
