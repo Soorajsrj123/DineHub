@@ -1,6 +1,6 @@
-import React from 'react'
-import Sidebar from '../../Components/Admin/Sidebar'
-import Owners from '../../Components/Admin/Owners'
+import React from "react";
+import Sidebar from "../../Components/Admin/Sidebar";
+import Owners from "../../Components/Admin/Owners";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,7 +21,7 @@ function Dashboad() {
       <Container>
         <Sidebar />
         <OwnerListWrapper>
-         <Owners/>
+          <Owners />
         </OwnerListWrapper>
       </Container>
     </div>

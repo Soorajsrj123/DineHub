@@ -13,16 +13,14 @@ function ViewRequestComponent() {
   useEffect(() => {
     getRestaurantsRequest(id)
       .then((data) => {
-        setRestaurantData(data.restaurantData);
+        setRestaurantData(data?.restaurantData);
       })
       .catch((err) => console.log(err));
   }, [id]);
-  console.log(restaurantData, "final data");
+
 
 //   function for accept request
   const AcceptRequestHandler=async()=>{
-
-
     Swal.fire({
         title: 'Are you sure?',
         text: "Are you sure for Approving this Request!",
@@ -32,7 +30,7 @@ function ViewRequestComponent() {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, approve!'
     }).then((result) => {
-        if(result.isConfirmed){
+        if(result?.isConfirmed){
             const approve= RestaurantApprove(id)   
             //    console.log(id,"res id here >>>>");
              toast.promise(approve, {
@@ -66,47 +64,6 @@ function ViewRequestComponent() {
     return setModal(false)
   }
 
-  // const RejectRequestHandler=()=>{
-  //   Swal.fire({
-  //       title: 'Are you sure?',
-  //       text: "Are you sure for Reject this Request!",
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#3085d6',
-  //       cancelButtonColor: '#d33',
-  //       confirmButtonText: 'Yes, confirm!'
-  //   }).then((result) => {
-  //       if(result.isConfirmed){
-  //           const reject= RejectRestaurant(id)   
-  //           //    console.log(id,"res id here >>>>");
-  //            toast.promise(reject, {
-  //               loading: 'Loading ',
-  //               success: <b>Registration Rejected  successfully</b>,
-  //               error: <b>Error: Unable Reject the Form</b>
-  //           })
-
-  //          reject.then((data)=>{
-  //                    if(data){
-  //                       // toast.success("Restaurant resgitered success")
-  //                       navigate('/admin/access-control')
-  //                    }
-                     
-  //           }).catch((err)=>{
-  //               toast.error("registration failed")
-  //               console.log("here is the error:",err);
-  //           })
-  //           Swal.fire(
-  //               'Rejected!',
-  //               'Restaurant request Rejected',
-  //               'success'
-  //           )
-  //       }
-
-  //   })
-  // }
-
- 
-  
 
   return (
     <div>
@@ -117,9 +74,9 @@ function ViewRequestComponent() {
           <div className="max-w-lg mx-auto space-y-3 sm:text-center">
             <h3 className="text-indigo-600 font-semibold">DineHub</h3>
             <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-              Registration
+              Registration Details
             </p>
-            <p>We’d love to hear from you! Please fill out the form bellow.</p>
+      
           </div>
           <div className="mt-12 w-2/4 max-w-lg mx-auto  ">
             <form className="space-y-5 ">
@@ -154,7 +111,7 @@ function ViewRequestComponent() {
                 <input
                   type="email"
                   name="email"
-                  value={restaurantData.email}
+                  value={restaurantData?.email}
                   className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                 />
               </div>
@@ -164,7 +121,7 @@ function ViewRequestComponent() {
                   <input
                     type="number"
                     name="phone"
-                    value={restaurantData.phone}
+                    value={restaurantData?.phone}
                     disabled
                     required
                     className="w-full pl-[4.5rem] pr-3 py-2 appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
@@ -187,7 +144,7 @@ function ViewRequestComponent() {
                   <label className="font-medium">Tables</label>
                   <input
                     type="number"
-                    value={restaurantData.tables}
+                    value={restaurantData?.tables}
                     disabled
                     name="tables"
                     required
@@ -198,7 +155,7 @@ function ViewRequestComponent() {
                   <label className="font-medium">FSSC</label>
                   <input
                     type="text"
-                    value={restaurantData.fssc}
+                    value={restaurantData?.fssc}
                     disabled
                     name="fssc"
                     required
@@ -216,7 +173,7 @@ function ViewRequestComponent() {
                     <input
                       name="wifi"
                       id="vue-checkbox-list"
-                      checked={restaurantData.wifi}
+                      checked={restaurantData?.wifi}
                       disabled
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
@@ -235,7 +192,7 @@ function ViewRequestComponent() {
                       name="parking"
                       disabled
                       id="react-checkbox-list"
-                      checked={restaurantData.parking}
+                      checked={restaurantData?.parking}
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
@@ -252,7 +209,7 @@ function ViewRequestComponent() {
                     <input
                       name="aircondition"
                       id="angular-checkbox-list"
-                      value={restaurantData.aircondition}
+                      value={restaurantData?.aircondition}
                       disabled
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
@@ -302,15 +259,15 @@ function ViewRequestComponent() {
                   type="text"
                   name="description"
                   disabled
-                  value={restaurantData.description}
+                  value={restaurantData?.description}
                   className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                 >
-                  {restaurantData.description}
+                  {restaurantData?.description}
                 </textarea>
               </div>
 
               <div className="py-5  flex justify-center ">
-                {restaurantData.image && (
+                {restaurantData?.image && (
                   <img
                     src={restaurantData?.image.url}
                     alt="Preview"

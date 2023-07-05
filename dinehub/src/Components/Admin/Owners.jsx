@@ -9,7 +9,6 @@ import { useEffect } from "react";
 const TableTwo = () => {
   const [allOwnersData, setAllOwners] = useState([]);
 
-
   // UNBLOCK OWNER
   const handleUnBlock = (ownerId) => {
     const response = UnBlockOwner(ownerId);
@@ -37,16 +36,13 @@ const TableTwo = () => {
     });
   }, []);
 
-  // PAGINATION 
+  // PAGINATION
   const [curretPage, setCurrentPage] = useState(1);
   const [postPerPage, setPostPerPage] = useState(2);
 
   const lastPostIndex = curretPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
-  const currentPost = allOwnersData.slice(firstPostIndex, lastPostIndex);
-
-
-    
+  const currentPost = allOwnersData?.slice(firstPostIndex, lastPostIndex);
 
   return (
     <>
@@ -91,36 +87,36 @@ const TableTwo = () => {
                     />
                   </div>
                   <p className="text-sm text-black dark:text-white">
-                    {owner.RestaurantName}
+                    {owner?.RestaurantName}
                   </p>
                 </div>
               </div>
               <div className="col-span-2 hidden items-center sm:flex">
                 <p className="text-sm text-black dark:text-white">
-                  {owner.email}
+                  {owner?.email}
                 </p>
               </div>
               <div className="col-span-1 flex items-center">
                 <p className="text-sm text-black dark:text-white">
-                  {owner.phone}
+                  {owner?.phone}
                 </p>
               </div>
               <div className="col-span-1 flex items-center">
                 <p className="text-sm text-black dark:text-white">
-                  {owner.owner}
+                  {owner?.owner}
                 </p>
               </div>
               <div className="col-span-1 my-5 flex px-10 items-center">
-                {owner.isBlocked ? (
+                {owner?.isBlocked ? (
                   <button
-                    onClick={() => handleUnBlock(owner._id)}
+                    onClick={() => handleUnBlock(owner?._id)}
                     className="rounded-md bg-red-600 px-3 py-1.5 text-base font-semibold leading-7 text-white hover:bg-red-500 "
                   >
                     Unblock
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleBlock(owner._id)}
+                    onClick={() => handleBlock(owner?._id)}
                     className="rounded-md bg-green-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-green-500 "
                   >
                     Block
@@ -136,7 +132,7 @@ const TableTwo = () => {
       <div>
         <OwnerListPagination
           curretPage={curretPage}
-          totalPosts={allOwnersData.length}
+          totalPosts={allOwnersData?.length}
           postsPerPage={postPerPage}
           setCurrentPage={setCurrentPage}
         />

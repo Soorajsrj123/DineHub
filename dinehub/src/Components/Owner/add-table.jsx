@@ -9,7 +9,7 @@ function AddTableForm() {
   const navigate = useNavigate();
 
 
-  const data = useSelector((state) => state.owner.owner);
+  const data = useSelector((state) => state?.owner?.owner);
   const { owner } = data;
 
 
@@ -29,8 +29,8 @@ function AddTableForm() {
      
       details
         .then((response) => {
-          console.log(response,"ress");
-          if (response.status) navigate("/owner/tables");
+       
+          if (response?.status) navigate("/owner/tables");
           else {
             toast.error(response.message);
           }

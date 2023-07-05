@@ -18,12 +18,12 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         const result = await Auth.post("/admin/login", values);
-        if (result.data.status) {
+        if (result?.data?.status) {
           toast.success(result.data.message)
             navigate('/admin')
         }
       }catch (error) {
-        toast.error(error.response.data.message)
+        toast.error(error?.response?.data?.message)
       }
     },
   });

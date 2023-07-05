@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 // import {NavbarOne} from '../../Components/Owner/Navbar'
 // import AddRestaurantComponent from '../../Components/Owner/add-restaurant'
-import AddRestaurantComponent from '../../Components/Owner/addres-sample'
+import AddRestaurantComponent from "../../Components/Owner/addres-sample";
 
 function addrestaurantPage() {
   return (
     <div>
-        {/* <NavbarOne/> */}
-        <AddRestaurantComponent/>
+      {/* <NavbarOne/> */}
+      <AddRestaurantComponent />
     </div>
-  )
+  );
 }
 
-export default addrestaurantPage
+export default addrestaurantPage;

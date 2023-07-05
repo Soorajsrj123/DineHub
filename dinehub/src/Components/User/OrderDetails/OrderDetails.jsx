@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { UserOrderDetails } from "../../../helpers/userHelpers";
 import { Toaster, toast } from "react-hot-toast";
-import { getRestaurantDetails } from "../../../helpers/userHelpers";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import "./Alert.css";
+import {
+  getRestaurantDetails,
+  cancelBooking,
+} from "../../../helpers/userHelpers";
 // import './OrderDetails.css'
 function OrderDetails() {
   // STORING ORDER DETAILS
@@ -16,57 +22,90 @@ function OrderDetails() {
 
   const { user } = userData;
 
-  console.log(user,"user");
-
   let sum = 0;
 
   useEffect(() => {
     UserOrderDetails(user)
       .then((data) => {
         if (data) {
-         
           // SET OWNERID IN IN STATE
-          setResId(data.UserOrders[0].orderDetails[0].restaurantId);
+          setResId(data?.UserOrders[0]?.orderDetails[0]?.restaurantId);
           // SET ORDERS IN STATE
-          setOrders(data.UserOrders);
+          setOrders(data?.UserOrders);
         } else {
           toast.error("sorry page not found");
         }
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(restaurant.address,"adddressssss");
+
+  const bookingCancelConfirm = (orderId, userId) => {
+    confirmAlert({
+      title: "Cancel Booking Confirmation",
+      message: "Are you sure you want to cancel the booking?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            const response = cancelBooking(orderId, userId);
+            response
+              .then((res) => {
+                if (res) {
+                  toast.success("Booking Canceled");
+                  setOrders(res?.newOrderDetails);
+                } else {
+                  toast.error("Something went wrong");
+                }
+              })
+              .catch((err) => {
+                toast.error(err.message);
+              });
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            // Handle the negative action (e.g., cancel operation)
+            console.log("You clicked No");
+          },
+        },
+      ],
+    });
+  };
 
   useEffect(() => {
     getRestaurantDetails(resId)
       .then((res) => {
         if (res) {
-          setRestaurant(res.restaurantDetails);
+          setRestaurant(res?.restaurantDetails);
         } else {
-          toast.error(res.message);
+          toast.error(res?.message);
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err, "error in order details");
       });
   }, [resId]);
-console.log(orders,"orders");
+
+  const handleCancel = async (orderId, userId) => {
+    bookingCancelConfirm(orderId, userId);
+  };
   return (
     <>
       <div>
-        {orders?.reverse().map((item, index) => {
-          const timestamp = item.updatedAt;
+        {orders?.map((item, index) => {
+          const timestamp = item?.updatedAt;
           const date = new Date(timestamp);
 
           // Extracting date components
-          const year = date.getFullYear();
-          const month = date.getMonth() + 1; // Months are zero-indexed, so we add 1
-          const day = date.getDate();
+          const year = date?.getFullYear();
+          const month = date?.getMonth() + 1; // Months are zero-indexed, so we add 1
+          const day = date?.getDate();
 
           // Extracting time components
-          const hours = date.getHours();
-          const minutes = date.getMinutes();
-          const seconds = date.getSeconds();
+          const hours = date?.getHours();
+          const minutes = date?.getMinutes();
+          const seconds = date?.getSeconds();
 
           return (
             <div
@@ -88,10 +127,10 @@ console.log(orders,"orders");
                 <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
                   <div className="flex flex-col justify-start items-start bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
                     <p className="text-lg md:text-xl font-semibold leading-6 xl:leading-5 text-gray-800">
-                      Table NO:{item.tableNo}
+                      Table NO:{item?.tableNo}
                     </p>
                     {item?.orderDetails?.map((dish, index) => {
-                      sum = sum + dish.total;
+                      sum = sum + dish?.total;
 
                       return (
                         <div
@@ -122,20 +161,54 @@ console.log(orders,"orders");
                                   <span className="text-gray-600">price: </span>{" "}
                                   {dish?.price}
                                 </p>
+                                {item?.isCancelled ? (
+                                  <p className="text-sm leading-none text-red-800">
+                                    <span className="text-gray-300">
+                                      status:{" "}
+                                    </span>{" "}
+                                    Cancelled
+                                  </p>
+                                ) : (
+                                  <p className="text-sm leading-none text-green-800">
+                                    <span className="text-gray-300">
+                                      status:{" "}
+                                    </span>{" "}
+                                    Placed
+                                  </p>
+                                )}
                               </div>
                             </div>
                             <div className="flex justify-between space-x-8 items-start w-full">
                               <p className="text-base xl:text-lg leading-6">
                                 <span className="text-red-500 ">
-                                  price :{dish?.price}
+                                  Total :{dish?.total}
                                 </span>
                               </p>
                               <p className="text-base xl:text-lg leading-6 text-gray-800">
                                 {dish?.count}
                               </p>
                               <p className="text-base xl:text-lg font-semibold leading-6 text-gray-800">
-                                {dish?.total}
+                                {item?.orderType}
                               </p>
+                              <div>
+                                {item?.isCancelled ? (
+                                  <button
+                                    disabled
+                                    className="bg-red-100 hover:bg-red-100 text-white font-bold py-2 px-4 rounded-full"
+                                  >
+                                    Cancel
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => {
+                                      handleCancel(item?._id, user);
+                                    }}
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+                                  >
+                                    Cancel
+                                  </button>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>

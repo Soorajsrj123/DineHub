@@ -1,13 +1,13 @@
-import React from 'react'
-import {NavbarOne} from '../../Components/Owner/Navbar'
-import ViewTablesComponent from '../../Components/Owner/view-tables'
+import React from "react";
+import { NavbarOne } from "../../Components/Owner/Navbar";
+import ViewTablesComponent from "../../Components/Owner/view-tables";
 function TablePage() {
   return (
     <div>
-        <NavbarOne/>
-        <ViewTablesComponent/>
+      <NavbarOne />
+      <ViewTablesComponent />
     </div>
-  )
+  );
 }
 
-export default TablePage
+export default TablePage;

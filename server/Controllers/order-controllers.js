@@ -1,34 +1,37 @@
 import Order from "../Models/Orders.js";
 import moment from "moment/moment.js";
 import { ObjectId } from "mongodb";
+import { isValidObjectId } from "mongoose";
+import User from "../Models/UserModel.js";
+import { getTotalAmount } from "../helpers/orderHelpers.js";
 
 export const getBookedOrders = async (req, res) => {
   try {
     const { id, date, time } = req.query;
 
-    console.log(date, "date");
+
     const formattedDate = moment(date, "M/D/YYYY").format(
       "YYYY-MM-DDTHH:mm:ss.SSSZ"
     );
 
     // problem here
-    console.log(formattedDate, "converted data");
+ 
 
     if (date) {
-      console.log("<<<<INSIDE>>>>");
+   
       // NEED TO CHANGE TO FIND WITHOUT ANYTHING
       let orders = await Order.find({ userId: new ObjectId(id) });
       // console.log(orders, "oo");
       if (orders.length != 0) {
-        console.log("order");
+   
         let bookedOrders = await Order.find({
           time: time,
           date: formattedDate,
           isBooked: true,
         });
-        console.log(bookedOrders, "oooo");
+      
         if (bookedOrders.length != 0) {
-          console.log("booked");
+    
           res.status(200).send({ data: bookedOrders });
         } else {
           res.status(404).send({ msg: "no data" });
@@ -48,7 +51,7 @@ export const getBookedOrders = async (req, res) => {
 export const ConfirmPayment = async (req, res) => {
   try {
     const { datas, bookingAddress } = req.body;
-    console.log(datas.id);
+
     const data = await Order.findByIdAndUpdate(datas.id, {
       $set: {
         isBooked: true,
@@ -58,7 +61,6 @@ export const ConfirmPayment = async (req, res) => {
       },
     });
 
-    console.log(data, "from confirm payment");
     if (data) {
       res.status(200).json({ message: "success", data });
     } else {
@@ -72,9 +74,9 @@ export const ConfirmPayment = async (req, res) => {
 export const UserOrderDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id, "id");
-    const UserOrders = await Order.find({ userId: id });
-    console.log(UserOrders.length, "userorder");
+
+    const UserOrders = await Order.find({ userId: id }).sort({createdAt:-1})
+ 
     if (UserOrders.length != 0) {
       return res.status(200).json({ message: "success", UserOrders });
     }
@@ -87,7 +89,7 @@ export const UserOrderDetails = async (req, res) => {
 
 export const adminYearlyData = async (req, res) => {
   try {
-    console.log("api called");
+   
     const result = await Order.aggregate([
       {
         $unwind: "$orderDetails",
@@ -127,7 +129,7 @@ export const adminDailyData = async (req, res) => {
     currentMonth + 1,
     0
   ).getDate();
-  console.log(typeof daysInMonth, "days in month");
+  
 
   // Generate an array of days for the current month
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -217,7 +219,7 @@ export const adminMonthlyData = async (req, res) => {
       },
     ]);
 
-    console.log(monthlyData, "monthly data");
+  
 
     const formattedData = months.map((item, index) => {
       const month = monthlyData.find((obj) => obj._id === index + 1);
@@ -263,8 +265,8 @@ export const getRestaurantYearlySales = async (req, res) => {
     // console.log(restaurantYearlyData, "restauratn yearly Data");
     res.status(200).json({ message: "success", data: restaurantYearlyData });
   } catch (error) {
-    return res.status(500).json({ message: error });
     console.log("error in restaurantYearly sales Report", error);
+    return res.status(500).json({ message: error });
   }
 };
 
@@ -314,6 +316,7 @@ export const getRestaurantMonthlySales = async (req, res) => {
     return res.status(200).json({ message: "success", data: formattedData });
   } catch (error) {
     console.log("error in restarant Montly data", error);
+    res.status(500).json({message:"internal server error"})
   }
 };
 
@@ -343,7 +346,7 @@ export const getRestaurantDailySales = async (req, res) => {
       0
     ).getDate();
 
-    console.log(typeof daysInMonth, "days in month");
+    
 
     // Generate an array of days for the current month
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -384,10 +387,52 @@ export const getRestaurantDailySales = async (req, res) => {
       return { day: item, totalSales: totalSales };
     });
 
-    console.log(formattedData, "formated data");
+   
     if (formattedData)
       return res.status(200).json({ message: "success", formattedData });
     return res.status(404).json({ message: "data not found" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error });
+  }
+};
+
+export const cancelBooking = async (req, res) => {
+  try {
+    const { id, userId } = req.params;
+    if (isValidObjectId(id) && isValidObjectId(userId)) {
+    
+      const data = await Order.findByIdAndUpdate(
+        { _id: id, userId },
+        {
+          $set: {
+            isCancelled: true,
+          },
+        }
+      );
+
+      if (data) {
+        const details = await getTotalAmount(id, userId);
+        const totalAmout = details[0].totalSales;
+        const walletUpdate = await User.findOneAndUpdate(
+          { _id: userId },
+          {
+            $push: {
+              wallet: totalAmout,
+            },
+          }
+        );
+       
+        if (walletUpdate) {
+          const newOrderDetails = await Order.find({}).sort({createdAt:-1})
+         
+          return res.status(201).json({ message: "success", newOrderDetails });
+        }
+        return res.status(404).json({ message: "data not found" });
+      }
+    } else {
+      return res.status(400).json({ message: "Bad request" });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });

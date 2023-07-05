@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
-import {SetRestaurantBanners} from '../../../helpers/ownerHelpers'
+import { SetRestaurantBanners } from "../../../helpers/ownerHelpers";
 
 import { useFormik } from "formik";
 import { Input } from "@material-tailwind/react";
@@ -10,30 +10,32 @@ import { useSelector } from "react-redux";
 function AddBanner() {
   const [image, setImage] = useState("");
   const navigate = useNavigate();
-  const restaurantId=useSelector((state)=>state.owner.owner)
- 
-  const {owner}=restaurantId
+  const restaurantId = useSelector((state) => state?.owner?.owner);
+
+  const { owner } = restaurantId;
 
   const formik = useFormik({
     initialValues: {
       title: "",
-      subTitle:"",
+      subTitle: "",
     },
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: (values) => {
       const Img = { image: image };
-     const ownerId={ownerId:owner}
-      const allData = Object.assign({}, values, Img,ownerId);
+      const ownerId = { ownerId: owner };
+      const allData = Object.assign({}, values, Img, ownerId);
 
       const details = SetRestaurantBanners(allData);
-      details.then((res) => {
-        if (res) {
-          navigate("/owner/banner");
-        }
-      }).catch((err)=>{
-        console.log(err);
-      })
+      details
+        .then((res) => {
+          if (res) {
+            navigate("/owner/banner");
+          }
+        })
+        .catch((err) => {
+          console.log(err, "error in add banner owner");
+        });
     },
   });
 

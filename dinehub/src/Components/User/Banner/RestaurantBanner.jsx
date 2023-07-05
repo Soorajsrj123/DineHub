@@ -7,19 +7,19 @@ function RestaurantBanner() {
 
   const [banner,setBanner]=useState("")
   
-  const resId = useSelector( (state) => state.dishes.dishes.dishDetails[0].restaurantId);
+  const resId = useSelector( (state) => state?.dishes?.dishes?.dishDetails[0].restaurantId);
   
   useEffect(()=>{
          
     getAllRestaurantBanners(resId).then((response)=>{
           if(response){
-            setBanner(response.result)
+            setBanner(response?.result)
           }
     })
 
   },[])
 
-  console.log(banner,"banner");
+
   return (
     <>
     {
@@ -51,7 +51,7 @@ function RestaurantBanner() {
           </a>
           <h5 className="mb-4 text-4xl font-extrabold leading-none">
 
-            {banner.title}
+            {banner?.title}
             {/* The quick, brown fox
             <br className="hidden md:block" />
             jumps over{' '}
@@ -60,7 +60,7 @@ function RestaurantBanner() {
             </span> */}
           </h5>
           <p className="mb-6 text-gray-900">
-            {banner.subTitle}
+            {banner?.subTitle}
           </p>
           <hr className="mb-5 border-gray-300" />
           <div className="flex items-center space-x-4">
@@ -102,7 +102,7 @@ function RestaurantBanner() {
         <div>
           <img
             className="object-cover w-full h-56 rounded shadow-lg sm:h-96"
-            src={banner?banner.imageURL:""}
+            src={banner?banner?.imageURL:""}
             alt="restaurant Banner"
           />
         </div>

@@ -19,7 +19,7 @@ function CheckOutComponent() {
 
   //  USERID FROM PERSISTED DATA
   const userData = useSelector((state) => state?.user?.user);
-  const userId = userData.user;
+  const userId = userData?.user;
   // console.log(userId, "userId");
   //  USER SELECTED DATE STATE
   const [date, setDate] = useState(new Date());
@@ -27,14 +27,15 @@ function CheckOutComponent() {
   const [time, setTime] = useState(new Date());
   const [button, setButton] = useState(false);
   const [preOrder, setPreOrder] = useState([]);
+  const [coordinate,setCordinates]=useState('')
 
-  const allDishData = useSelector((state) => state?.dishes.dishes.dishDetails);
+  const allDishData = useSelector((state) => state?.dishes?.dishes?.dishDetails);
 
-  const filteredDishes = allDishData.filter((item) => item.count > 0);
+  const filteredDishes = allDishData?.filter((item) => item?.count > 0);
 
   //  NEED TO CHANGE THIS METHOD HERE FINDING THE RES ID FROM PERSISTED DATA ITS NOT GOOD WAY
   const resId = useSelector(
-    (state) => state.dishes.dishes.dishDetails[0].restaurantId
+    (state) => state?.dishes?.dishes?.dishDetails[0]?.restaurantId
   );
 
   const startTime = restaurantData?.startTime;
@@ -50,22 +51,22 @@ function CheckOutComponent() {
   // console.log(currentTime, "curent time");
   while (currentTime <= endDate) {
     // Get the current hour and minutes
-    const hours = currentTime.getHours();
+    const hours = currentTime?.getHours();
     // console.log(hours, "hours");
-    const minutes = currentTime.getMinutes();
+    const minutes = currentTime?.getMinutes();
     // console.log(minutes, "minutes");
 
     // formating in to 09:00 PM format
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    const formattedTime = `${hours?.toString().padStart(2, "0")}:${minutes
       .toString()
       .padStart(2, "0")} ${hours >= 12 ? "PM" : "AM"}`;
 
     // console.log(formattedTime, "formated time");
     // PUSU TIME TO THE TIMELIST
-    timeList.push(formattedTime);
+    timeList?.push(formattedTime);
 
     // Adding 1 Hour with start time to get the new current time
-    currentTime = new Date(currentTime.getTime() + 60 * 60 * 1000);
+    currentTime = new Date(currentTime?.getTime() + 60 * 60 * 1000);
     // console.log(currentTime, "current Time");
   }
 
@@ -74,26 +75,23 @@ function CheckOutComponent() {
     getRestaurant(resId)
       .then((data) => {
         // console.log(data);
-        if (data.status) {
-          setRestaurantData(data.restaurant);
+        if (data?.status) {
+          setCordinates(data?.restaurant?.address)
+          setRestaurantData(data?.restaurant);
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err,"Error in Checkout componet");
         toast.error(err.message);
       });
 
     getRestaurantTables(resId).then((data) => {
-      if (data.status) {
-        setTable(data.tables);
+      if (data?.status) {
+        setTable(data?.tables);
       }
     });
 
-    // dispatch(
-    //   setDishes({
-    //     dishDetails: filteredDishes,
-    //   })
-    // )
+  
   }, []);
 
   // FOR GETTING THE USER SELECTED DATE
@@ -121,8 +119,8 @@ function CheckOutComponent() {
       return;
     }
     const startDate = new Date(date);
-    const startDateString = startDate.toLocaleDateString();
-    console.log(startDateString, "in date string");
+    const startDateString = startDate?.toLocaleDateString();
+
     const allData = {
       filteredDishes,
       button,
@@ -134,13 +132,13 @@ function CheckOutComponent() {
 
     checkOutData(allData)
       .then((res) => {
-        const order = res.data;
+        const order = res?.data;
 
         localStorage.setItem("OrderDetails", JSON.stringify(order));
         navigate("/payment");
       })
       .catch((err) => {
-        console.log(err, "errr");
+        console.log(err, "errr in Checkout Data");
       });
   };
 
@@ -161,15 +159,15 @@ function CheckOutComponent() {
 
   useEffect(() => {
     const startDate = new Date(date);
-    const startDateString = startDate.toLocaleDateString();
-    console.log(startDateString, "in date string");
+    const startDateString = startDate?.toLocaleDateString();
+ 
     bookedOrders(userId, startDateString, time).then((data) => {
       setPreOrder(data?.data);
     });
     // IT CALLS ONLY WHEN DATE OR TIME CHANGES SO THEN IF FETCH ORDER DATA .FROM THAT DATA I AM DISPLAYING THE TABLE WHICH IS NOT BOOKED
   }, [date, time]);
 
-  const tableNumbers = preOrder?.map((obj) => obj.tableNo);
+  const tableNumbers = preOrder?.map((obj) => obj?.tableNo);
 
   const filteredData = table?.filter((obj) => !tableNumbers?.includes(obj?.tableNumber)
   );
@@ -180,7 +178,7 @@ function CheckOutComponent() {
 
   //   const avgRating= averageRating()
   // },[])
-console.log(restaurantData.address,"addresss reesssttt");
+
   return (
     <div>
       <div className="h-screen w-full flex bg-white-800">
@@ -262,7 +260,13 @@ console.log(restaurantData.address,"addresss reesssttt");
 
           {/*  */}
 
-          {/* <MapComponent latitude={restaurantData?.address?.geometry?.coordinates[1]?restaurantData?.address?.geometry?.coordinates[1]:17} longitude={restaurantData?.address?.geometry?.coordinates[0]?restaurantData?.address?.geometry?.coordinates[0]:35} /> */}
+          {coordinate?.geometry?.coordinates[1] && coordinate?.geometry?.coordinates[0] && (
+  <MapComponent
+    latitude={coordinate?.geometry?.coordinates[1]}
+    longitude={coordinate?.geometry?.coordinates[0]}
+  />
+)}
+
           {/*  */}
 
           {/* ending restaurant details */}
@@ -304,7 +308,7 @@ console.log(restaurantData.address,"addresss reesssttt");
 
             {/* select time */}
             <div className=" grid grid-cols-6 gap-x-20 gap-y-3 my-2   overflow-auto mx-4">
-              {timeList.map((items, index) => {
+              {timeList?.map((items, index) => {
                 return (
                   <div key={index} className=" ">
                     <button
@@ -324,17 +328,17 @@ console.log(restaurantData.address,"addresss reesssttt");
             <div>
               {button ? (
                 <div className="grid grid-cols-3 gap-3 m-5 pt-4">
-                  {filteredData.map((table, index) => {
+                  {filteredData?.map((table, index) => {
                     return (
                       <div key={index}>
                         <button
                           disabled
                           onClick={handleClick}
-                          value={table.tableNumber}
+                          value={table?.tableNumber}
                           type="button"
                           className="rounded-md bg-green-600 hover:text-gre-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black-600/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                         >
-                          Table {table.tableNumber}
+                          Table {table?.tableNumber}
                         </button>
                       </div>
                     );
@@ -342,17 +346,17 @@ console.log(restaurantData.address,"addresss reesssttt");
                 </div>
               ) : (
                 <div className="grid grid-cols-3 gap-3 m-5 pt-4">
-                  {filteredData.map((table, index) => {
+                  {filteredData?.map((table, index) => {
                     return (
                       <div key={index}>
                         <button
                           onClick={handleClick}
-                          value={table.tableNumber}
+                          value={table?.tableNumber}
                           type="button"
                           style={{ backgroundColor: " #8458B3" }}
                           className="rounded-md bg-violet-700 hover:text-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
                         >
-                          Table {table.tableNumber}
+                          Table {table?.tableNumber}
                         </button>
                       </div>
                     );

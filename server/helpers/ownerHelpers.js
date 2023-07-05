@@ -3,7 +3,7 @@ import Dish from '../Models/DishModel.js'
 
 export const singleRes = async (req, res) => {
   const resId = req.params.id;
-  console.log(resId,"resss");
+  
   try {
     const dbresponse = await Restaurant.findOne({ _id: resId });
     
@@ -22,7 +22,7 @@ export const singleDish=async(req,res)=>{
     const id=req.params.id
   
           const singleDish=await Dish.findById({_id:id})
-          console.log(singleDish,"dish");
+         
           if(singleDish) return res.status(200).json({message:'success',singleDish})
           return res.status(201).json({message:"data not found"})
   } catch (error) {

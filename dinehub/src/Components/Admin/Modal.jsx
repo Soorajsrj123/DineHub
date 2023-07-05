@@ -24,7 +24,7 @@ const MyModal = ({ CloseModal, restaurantId }) => {
         error: <b>Error: Unable Reject the Form</b>,
       });
       reject.then((data) => {
-        if (data.status) {
+        if (data?.status) {
           // toast.success("rejected successfully")
           setTimeout(() => {
             navigate("/admin/access-control");
@@ -44,7 +44,9 @@ const MyModal = ({ CloseModal, restaurantId }) => {
       <div className="modal-container flex ">
         <form onSubmit={formik.handleSubmit}>
           <div className="">
-            <h2 className="font-serif mb-10 font-bold ">Reson for Rejection</h2>
+            <h2 className="font-serif mb-10 font-bold ">
+              Reason for Rejection
+            </h2>
 
             <textarea
               type="text"

@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 function AddDish() {
   const [image, setImage] = useState("");
-  const data = useSelector((state) => state.owner.owner);
- 
+  const data = useSelector((state) => state?.owner?.owner);
+
   const { owner } = data;
   const navigate = useNavigate();
 
@@ -174,7 +174,6 @@ function AddDish() {
             {image && <img className="w-32" src={image} alt="preview" />}
           </div>
         </div>
-
         <button
           type="submit"
           className="bg-green-600 w-1/5 rounded-lg mt-8 py-2 text-white"

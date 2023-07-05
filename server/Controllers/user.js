@@ -5,6 +5,7 @@ import Dish from "../Models/DishModel.js";
 import Order from "../Models/Orders.js";
 import cloudinary from "../utils/cloudinary.js";
 import Rating from "../Models/Rating.js";
+import { isValidObjectId } from "mongoose";
 // import { token } from 'morgan'
 
 // SIGNUP USER
@@ -41,7 +42,7 @@ export const register = async (req, res) => {
         resolve();
       });
     });
-   
+
     Promise.all([UserName, UserEmail, UserPhone])
       .then(() => {
         if (password) {
@@ -75,25 +76,20 @@ export const register = async (req, res) => {
 
 export const LoginUser = async (req, res) => {
   try {
-  
     let { email, password } = req.body;
-  
 
     //checking if the email is exist or not
 
     let user = await User.findOne({ email: email });
-    
 
     if (user) {
       let validUser = await bcrypt.compare(password, user.password);
-      console.log(validUser, "af hash");
+
       if (validUser) {
         //   CREATING A TOKEN
         const token = jwt.sign({ user_id: user._id, email }, "my secret key", {
           expiresIn: "10d",
         });
-
-        console.log("GENERATED TOKENN=", token);
 
         //   checking if the cookis already has data then clear it
         // if(req.cookies[`${user._id}`])
@@ -124,9 +120,8 @@ export const LoginUser = async (req, res) => {
 // LOGIN USING GOOGLE
 
 export const googleSignup = async (req, res) => {
-  console.log(req.body._tokenResponse, "reqbody");
   const { email, fullName } = req.body._tokenResponse;
-  console.log(email, "maa");
+
   let user = await User.findOne({ email });
   if (user) {
     res.status(409).send("email already exist");
@@ -147,7 +142,6 @@ export const googleSignup = async (req, res) => {
 };
 
 export const googleLogin = async (req, res) => {
-  console.log(req.body._tokenResponse);
   const { email, fullName } = req.body._tokenResponse;
   let user = await User.findOne({ email });
   if (user) {
@@ -172,7 +166,7 @@ export const verifyToken = (req, res, next) => {
       if (err) {
         return res.status(400).json({ message: "invalid token" });
       }
-      console.log(user.user_id, "user id");
+
       req.id = user.user_id;
     });
     next();
@@ -204,7 +198,6 @@ export const refreshToken = (req, res, next) => {
     return res.status(400).json({ message: "token not found" });
   }
   jwt.verify(String(Prevtoken), "my secret key", (err, user) => {
-    console.log(user, "TOKEN VERIFY USER");
     if (err) {
       return res.status(403).json({ message: "Authentication failed" });
     }
@@ -220,14 +213,14 @@ export const refreshToken = (req, res, next) => {
         expiresIn: "35s",
       }
     );
-    console.log("REGENERATED TOKENN", token);
+
     res.cookie(String(user.user_id), token, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 30),
       httpOnly: true,
       samesiteL: "lax",
     });
-    console.log(user.user_id, "refresh user");
+
     req.id = user.user_id;
     next(); //it calls the vefiry fn
   });
@@ -240,7 +233,6 @@ export const Logout = (req, res, next) => {
     return res.status(400).json({ message: "token not found" });
   }
   jwt.verify(String(Prevtoken), "my secret key", (err, user) => {
-    console.log(user, "TOKEN VERIFY USER");
     if (err) {
       return res.status(403).json({ message: "Authentication failed" });
     }
@@ -252,14 +244,13 @@ export const Logout = (req, res, next) => {
 };
 
 export const getPhone = async (req, res) => {
-  console.log(req.body);
   const PhoneNumber = req.body.phoneNumber;
 
   // const { id } = req.params;
 
   try {
     const isFound = await User.findOne({ PhoneNumber });
-    console.log(isFound);
+
     if (!isFound)
       return res
         .status(403)
@@ -276,9 +267,9 @@ export const getOneUser = async (req, res) => {
   try {
     const phone = req.body.phoneNumber;
     const updatedPhone = phone.slice(3);
-    console.log(updatedPhone, "sliced num");
+
     const userData = await User.findOne({ PhoneNumber: updatedPhone });
-    console.log(userData, "datatata");
+
     return res.status(200).json({ message: "success", userId: userData._id });
   } catch (error) {
     console.log(error, "err");
@@ -288,7 +279,6 @@ export const getOneUser = async (req, res) => {
 
 export const updateForgotPass = async (req, res) => {
   try {
-    console.log(req.body);
     const { password, id } = req.body;
     const user = await User.findOne({ _id: id });
     if (!user) return res.status(200).json({ message: "password not changed" });
@@ -315,24 +305,39 @@ export const updateForgotPass = async (req, res) => {
 export const getRestaurantDishes = async (req, res) => {
   try {
     const { id } = req.params;
-    const dishDetails = await Dish.find({ restaurantId: id });
-    if (!dishDetails)
-      return res.status(404).json({ message: "data not found", status: false });
-    return res
-      .status(200)
-      .json({ message: "success", status: true, dishDetails });
+    const restaurantId = isValidObjectId(id);
+
+    if (restaurantId) {
+      const dishDetails = await Dish.find({ restaurantId: id }).sort({
+        _id: -1,
+      });
+      if (!dishDetails.length)
+        return res
+          .status(404)
+          .json({ message: "data not found", status: false });
+      return res
+        .status(200)
+        .json({ message: "success", status: true, dishDetails });
+    } else {
+      return res.status(400).json({ message: "Bad Request" });
+    }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Server Error" });
   }
 };
 
 export const checkOut = async (req, res) => {
   try {
-    const { userId,startDateString , time, button, selectedValue, filteredDishes } =req.body;
+    const {
+      userId,
+      startDateString,
+      time,
+      button,
+      selectedValue,
+      filteredDishes,
+    } = req.body;
 
-     
-   
-    console.log(startDateString, "date");
     const orderDetails = new Order({
       orderDetails: filteredDishes,
       tableNo: button,
@@ -343,7 +348,6 @@ export const checkOut = async (req, res) => {
     });
 
     orderDetails.save().then((response) => {
-      console.log(response, "response in  db");
       if (response) {
         return res.status(200).json({ message: "success", data: response });
       } else {
@@ -391,7 +395,6 @@ export const editUserProfile = async (req, res) => {
       );
     }
 
-    console.log(updatedValue, "here user updated values");
     if (updatedValue)
       return res.status(200).json({ message: "success", status: true });
     return res

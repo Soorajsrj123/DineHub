@@ -5,7 +5,7 @@ import { getUserDetailsById } from "../../helpers/commonHelper";
 export default function NavBar() {
   const [navbar, setNavbar] = useState(false);
 
-  const userInfo = useSelector((state) => state.user.user);
+  const userInfo = useSelector((state) => state?.user?.user);
   const [userData, setUserData] = useState("");
   const { user } = userInfo;
 
@@ -13,24 +13,25 @@ export default function NavBar() {
     getUserDetailsById(user)
       .then((res) => {
         if (res) {
-          setUserData(res.details);
+          setUserData(res?.details);
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err,"error in Navbar user");
       });
   }, [user]);
-  
-  console.log(userData, "dd");
 
- 
+
+
   return (
     <nav className="w-full bg-slate-200 shadow ">
       <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Link to="/home">
-              <h2 className="text-2xl font-bold text-black">DINE<b className="text-violet-700" >HUB</b></h2>
+              <h2 className="text-2xl font-bold text-black">
+                DINE<b className="text-violet-700">HUB</b>
+              </h2>
             </Link>
             <div className="md:hidden">
               <button
@@ -117,24 +118,44 @@ export default function NavBar() {
           </div>
         </div>
         <div className="hidden space-x-2 md:inline-block">
-          {/* <a
-                        href="/"
-                        className="px-4 py-2 text-white bg-gray-600 rounded-md shadow hover:bg-gray-800"
-                    >
-                        Sign in
-                    </a> */}
-          {/* <a
-                        href="/"
-                        className="px-4 py-2 text-gray-800 bg-white rounded-md shadow hover:bg-gray-100"
-                    >
-                        Sign up
-                    </a> */}
-          <Link to={`/profile/${userData._id}`}>
+          <div className="flex items-center">
+            <div className="px-4 py-2  text-white rounded-md  hover:bg-slate-300">
+              <Link to={`/profile/${userData?._id}`}>
+                <div className="flex items-center gap-x-2">
+                  <img
+                    className="object-cover w-8 h-8 rounded-full"
+                    src={
+                      userData?.imageURL?.url
+                        ? userData?.imageURL?.url
+                        : "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=faceare&facepad=3&w=688&h=688&q=100"
+                    }
+                    alt="profile"
+                  />
+
+                  <div>
+                    <h1 className=" mr-6 text-base font-semibold text-gray-700 capitalize dark:text-white">
+                      {userData?.name}
+                    </h1>
+
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {userData?.email}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+            <div
+              href="/"
+              className="px-4 py-2 ml-2  text-white bg-violet-600 rounded-md  hover:bg-violet-950 "
+            >
+              LOGOUT
+            </div>
+            {/* <Link to={`/profile/${userData._id}`}>
             <div className="flex items-center gap-x-2">
-              <img
-                className="object-cover w-8 h-8 rounded-full"
-                src={userData?.imageURL?.url?userData?.imageURL?.url:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=faceare&facepad=3&w=688&h=688&q=100"}
-                alt="profile"
+            <img
+            className="object-cover w-8 h-8 rounded-full"
+            src={userData?.imageURL?.url?userData?.imageURL?.url:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=faceare&facepad=3&w=688&h=688&q=100"}
+            alt="profile"
               />
 
               <div>
@@ -143,11 +164,13 @@ export default function NavBar() {
                 </h1>
 
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {userData?.email}
+                {userData?.email}
                 </p>
-              </div>
-            </div>
-          </Link>
+                </div>
+                </div>
+                
+          </Link> */}
+          </div>
         </div>
       </div>
     </nav>

@@ -1,97 +1,109 @@
-import React, { useEffect, useState } from 'react'
-import {useFormik} from 'formik'
+import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
 import { Toaster } from "react-hot-toast";
 
-import {singleResDetails} from '../../helpers/ownerHelpers'
-import { useNavigate, useParams } from 'react-router-dom';
+import { singleResDetails } from "../../helpers/ownerHelpers";
+import { useNavigate, useParams } from "react-router-dom";
 
-import {updateDetails} from '../../helpers/ownerHelpers'
+import { updateDetails } from "../../helpers/ownerHelpers";
 
 function EditRestaurant() {
+  const [resImage, setImage] = useState("");
+  const [resName, setName] = useState("");
+  const [resTime, setTime] = useState("");
+  const [resTables, setTable] = useState("");
+  const [resAddress, setAddress] = useState("");
+  const [resPhone, setPhone] = useState("");
+  const [resWifi, setWifi] = useState("");
+  const [resParking, setParking] = useState("");
+  const [resAircondition, setAirconditon] = useState("");
 
-  const [resImage,setImage]=useState('')
-  const [resName,setName]=useState('')
-  const [resTime,setTime]=useState('')
-  const [resTables,setTable]=useState('')
-  const [resAddress,setAddress]=useState('')
-  const [resPhone,setPhone]=useState('')
-  const [resWifi,setWifi]=useState('')
-  const [resParking,setParking]=useState('')
-  const [resAircondition,setAirconditon]=useState('')
- 
-const navigete=useNavigate()
+  const navigete = useNavigate();
 
   //to get each restaurant id
-  const {id}=useParams()
-  useEffect(()=>{
-   
-    singleResDetails(id).then((data)=>{
+  const { id } = useParams();
+  useEffect(() => {
+    singleResDetails(id).then((data) => {
+      const {
+        address,
+        image,
+        phone,
+        restaurantName,
+        tables,
+        time,
+        wifi,
+        parking,
+        aircondition,
+      } = data;
 
-      const {address,image,phone,restaurantName,tables,time,wifi,parking,aircondition}=data
-     
-      setName(restaurantName)
-      setImage(image)
-      setAddress(address)
-      setTable(tables)
-      setTime(time)
-      setPhone(phone)
-      setWifi(wifi)
-      setParking(parking)
-      setAirconditon(aircondition)
-    })
-    
-  },[id])
-  
-  const secureUrl =  resImage? resImage.url:""
-   
-  const handleResImage=(e)=>{
-    const file=e.target.files[0]
-    TransformFile(file)
-  }
+      setName(restaurantName);
+      setImage(image);
+      setAddress(address);
+      setTable(tables);
+      setTime(time);
+      setPhone(phone);
+      setWifi(wifi);
+      setParking(parking);
+      setAirconditon(aircondition);
+    });
+  }, [id]);
 
-  const TransformFile=(file)=>{
-    const reader=new FileReader()
-    if(file){
+  const secureUrl = resImage ? resImage?.url : "";
+
+  const handleResImage = (e) => {
+    const file = e.target.files[0];
+    TransformFile(file);
+  };
+
+  const TransformFile = (file) => {
+    const reader = new FileReader();
+    if (file) {
       reader.readAsDataURL(file);
-      reader.onloadend=()=>{
-        setImage(reader.result)
-      }
-    }else{
-      setImage("")
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+    } else {
+      setImage("");
     }
-  }
+  };
 
-   const formik =useFormik({
-    initialValues:{
-      restaurantName:"",
-      resAddress:"",
-      resTables:"",
-      resTime:"",
-      resPhone:"",
-      resImage:"",
-      resWifi:"",
-      resAircondition:"",
-      resParking:""
+  const formik = useFormik({
+    initialValues: {
+      restaurantName: "",
+      resAddress: "",
+      resTables: "",
+      resTime: "",
+      resPhone: "",
+      resImage: "",
+      resWifi: "",
+      resAircondition: "",
+      resParking: "",
     },
-    validateOnBlur:false,
-    validateOnChange:false,
-    onSubmit:async()=>{
-      let img={image:resImage}
-      const datas={
-        resName,resAddress,resPhone,resTables,resTime,resWifi,resParking,resAircondition,id
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: async () => {
+      let img = { image: resImage };
+      const datas = {
+        resName,
+        resAddress,
+        resPhone,
+        resTables,
+        resTime,
+        resWifi,
+        resParking,
+        resAircondition,
+        id,
+      };
+
+      const allDetails = Object.assign({}, datas, img);
+
+      const newDetails = await updateDetails(allDetails);
+
+      if (newDetails) {
+        navigete("/owner/restaurants");
       }
-   
-      const allDetails=Object.assign({},datas,img)
-
-      const newDetails= await updateDetails(allDetails)
-
-      if(newDetails)
-      {
-       navigete('/owner/restaurants')
-      }
-    }
-   })
-
+    },
+  });
 
   return (
     <div className="p-10">
@@ -105,7 +117,7 @@ const navigete=useNavigate()
           name="restaurantName"
           className="w-full border border-gray-400 p-2 rounded-md mb-4"
           type="text"
-          onChange={(e)=>setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           value={resName}
           id="restaurantName"
         />
@@ -117,7 +129,7 @@ const navigete=useNavigate()
           name="address"
           className="w-full border border-gray-400 p-2 rounded-md mb-4"
           type="text"
-          onChange={(e)=>setAddress(e.target.value)}
+          onChange={(e) => setAddress(e.target.value)}
           value={resAddress}
           id="address"
         />
@@ -128,17 +140,17 @@ const navigete=useNavigate()
           name="tables"
           className="w-full border border-gray-400 p-2 rounded-md mb-4"
           type="number"
-          onChange={(e)=>setTable(e.target.value)}
+          onChange={(e) => setTable(e.target.value)}
           value={resTables}
           id="tables"
         />
-         <label className="block font-medium text-gray-700 mb-2" htmlFor="name">
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="name">
           Working Hours
         </label>
         <input
           name="time"
           className="w-50 border border-gray-400 p-2 rounded-md mb-4"
-          onChange={(e)=>setTime(e.target.value)}
+          onChange={(e) => setTime(e.target.value)}
           value={resTime}
           type="text"
           id="time"
@@ -153,7 +165,7 @@ const navigete=useNavigate()
               <input
                 name="wifi"
                 id="vue-checkbox-list"
-                onChange={(e)=>setWifi(e.target.checked)}
+                onChange={(e) => setWifi(e.target.checked)}
                 checked={resWifi}
                 value={resWifi}
                 type="checkbox"
@@ -172,7 +184,7 @@ const navigete=useNavigate()
               <input
                 name="parking"
                 checked={resParking}
-                onChange={(e)=>setParking(e.target.checked)}
+                onChange={(e) => setParking(e.target.checked)}
                 value={formik.values.parking}
                 id="react-checkbox-list"
                 type="checkbox"
@@ -191,7 +203,7 @@ const navigete=useNavigate()
               <input
                 name="aircondition"
                 id="angular-checkbox-list"
-                onChange={(e)=>setAirconditon(e.target.checked)}
+                onChange={(e) => setAirconditon(e.target.checked)}
                 value={resAircondition}
                 type="checkbox"
                 checked={resAircondition}
@@ -212,7 +224,7 @@ const navigete=useNavigate()
         </label>
         <input
           name="phone"
-          onChange={(e)=>setPhone(e.target.value)}
+          onChange={(e) => setPhone(e.target.value)}
           value={resPhone}
           className="w-full border border-gray-400 p-2 rounded-md mb-4"
           type="text"
@@ -229,7 +241,13 @@ const navigete=useNavigate()
           />
           <p>err</p>
 
-          <img className="py-4" width="200px" src={resImage.url?resImage.url:secureUrl} height="200px" alt="ll"></img>
+          <img
+            className="py-4"
+            width="200px"
+            src={resImage?.url ? resImage?.url : secureUrl}
+            height="200px"
+            alt="ll"
+          ></img>
         </div>
 
         <div className="space-x-5">

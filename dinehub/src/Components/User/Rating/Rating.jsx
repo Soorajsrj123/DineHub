@@ -10,10 +10,10 @@ const StarRating = () => {
   const [rating, setRating] = useState(0);
   const [status, setStatus] = useState(true);
   const [userReview, setUserReview] = useState("");
-  const userData = useSelector((state) => state.user.user);
+  const userData = useSelector((state) => state?.user?.user);
 
   const restaurantId = useSelector(
-    (state) => state.dishes.dishes.dishDetails[0].restaurantId
+    (state) => state?.dishes?.dishes?.dishDetails[0]?.restaurantId
   );
 
   const { user } = userData;
@@ -35,7 +35,6 @@ const StarRating = () => {
       const userId = { user: user };
       const resId = { restaurantId: restaurantId };
       const allData = Object.assign({}, values, star, userId, resId);
-      console.log(allData, "all data");
       const ratingResponse = AddRating(allData);
       ratingResponse.then((res) => {
         if (res) {
@@ -46,7 +45,6 @@ const StarRating = () => {
   });
 
   const handleStarClick = (starValue) => {
-    console.log(starValue);
     setRating(starValue);
   };
 
@@ -63,7 +61,7 @@ const StarRating = () => {
   const renderStars = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
-      stars.push(
+      stars?.push(
         <span
           key={i}
           className={`star ${i <= rating ? "filled" : ""}`}
@@ -80,14 +78,13 @@ const StarRating = () => {
   useEffect(() => {
     getUserReview(restaurantId, user)
       .then((res) => {
-        console.log(res, "final mmmm");
         setUserReview(res.review);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err, "Eroor in User rating");
       });
   }, [status]);
-  console.log(!userReview, "final last rating");
+
   return (
     <>
       {!userReview && status ? (
@@ -142,7 +139,9 @@ const StarRating = () => {
                     </svg>
                   </button>
 
-                  <span class="text-slate-400 font-medium">{userReview?.rating}</span>
+                  <span class="text-slate-400 font-medium">
+                    {userReview?.rating}
+                  </span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center">

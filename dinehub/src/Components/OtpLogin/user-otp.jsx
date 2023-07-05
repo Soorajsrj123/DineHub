@@ -4,17 +4,16 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { auth } from "../../Config/config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import {toast,Toaster} from 'react-hot-toast'
+import { toast, Toaster } from "react-hot-toast";
 const OtpLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
- 
+
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [myotp, setMyOtp] = useState("");
   const [confirmObj, setConfirmObj] = useState("");
 
   const onCaptchaVerify = (phoneNumber) => {
-    console.log(phoneNumber);
     const recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
       {},
@@ -27,7 +26,7 @@ const OtpLogin = () => {
   const getOtp = async () => {
     try {
       const response = await onCaptchaVerify(phoneNumber);
-      console.log(response, "resss");
+
       setConfirmObj(response);
     } catch (error) {
       setError(error);
@@ -36,29 +35,26 @@ const OtpLogin = () => {
   };
 
   const verifyOtp = async () => {
-    console.log(myotp);
     console.log(confirmObj);
     try {
-      await confirmObj.confirm(myotp).then((result) => {
+      await confirmObj?.confirm(myotp).then((result) => {
         // User signed in successfully.
         // const user = result.user; the user variable conatailn some data
         navigate("/home");
       });
     } catch (error) {
-      // console.log(error,"kjhgf");
       // user signup failed
       console.log(error, "kjhg");
       if (error.code === "auth/invalid-verification-code") {
         // Handle invalid verification code error
-       toast.error("incorrect otp")
+        toast.error("incorrect otp");
         setError("INCORRECT  OTP");
       } else if (error.code === "auth/session-expired") {
         // Handle session expired error
         setError("opt expired");
         // Display an error message to the user or perform any necessary actions
       } else {
-
-        toast.error("incorrect otp")
+        toast.error("incorrect otp");
 
         setTimeout(() => {
           setError(false);
@@ -72,7 +68,7 @@ const OtpLogin = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-            <Toaster position="top-center" reverseOrder={false}></Toaster>
+      <Toaster position="top-center" reverseOrder={false}></Toaster>
 
       <div className="bg-white p-8 rounded shadow">
         <h2 className="text-xl font-bold mb-4">OTP Login</h2>

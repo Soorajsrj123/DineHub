@@ -17,16 +17,14 @@ import {deleteTable} from '../Controllers/ownerController.js'
 import {oneTableData} from '../Controllers/ownerController.js'
 import {editTable} from '../Controllers/ownerController.js'
 import {getPhone} from '../Controllers/ownerController.js'
-import {updatePassword} from '../Controllers/ownerController.js'
+import {updatePassword,getClassification} from '../Controllers/ownerController.js'
 import {addRestaurantBanner} from '../Controllers/banner-controller.js'
 import {getRestaurantBanner} from '../Controllers/banner-controller.js'
 import {getUserReview} from '../Controllers/rating-controller.js'
 import {getRestaurantYearlySales} from '../Controllers/order-controllers.js'
-import {getRestaurantMonthlySales} from '../Controllers/order-controllers.js'
 import {deleteRestaurantBanner} from '../Controllers/banner-controller.js'
 import {getAverageRating} from '../Controllers/rating-controller.js'
-import {getUserOrders} from '../Controllers/order-controllers.js'
-import {getRestaurantDailySales} from '../Controllers/order-controllers.js'
+import {getUserOrders,getRestaurantDailySales,getRestaurantMonthlySales} from '../Controllers/order-controllers.js'
 const router=Router()
 
 router.post('/signup',OwnerRegistration)
@@ -55,8 +53,10 @@ router.delete('/restaurant/delete-banner/:id',deleteRestaurantBanner)
 router.get('/restaurant/yearly-datas/:id',getRestaurantYearlySales)
 router.get('/restaurant/monthly-data/:id',getRestaurantMonthlySales)
 router.get('/restaurant/daily-data/:id',getRestaurantDailySales)
+router.get('/restaurant/classification-chart/:id',getClassification)
 router.get('/restaurant/average-rating/:id',getAverageRating)
 router.get('/users/all-orders/:id',getUserOrders)
+
 
 
 export default router

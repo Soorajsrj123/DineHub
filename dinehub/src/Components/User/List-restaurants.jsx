@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getRestaurants } from "../../helpers/userHelpers";
-import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { FiSearch } from "react-icons/fi";
+import {searchHotel} from '../../helpers/userHelpers'
+// import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { setDishes } from "../../Slices/dishSlice";
 import RestaurantListPagination from "../Pagination/RestaurantListPagination";
+import { Toaster, toast } from "react-hot-toast";
 function ListRestaurants() {
   const [records, setRecords] = useState([]);
-  const [postPerPage,setPostPerPage]=useState(2)
-  const [currentPage,setCurrentPage]=useState(1)
-  const navigate = useNavigate();
+  const [postPerPage, setPostPerPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [input, setInput] = useState("");
   const dispatch = useDispatch();
+  const restaurant = useSelector((state) => state?.restaurant?.searchHotels);
+ 
 
   useEffect(() => {
     dispatch(
@@ -22,28 +27,49 @@ function ListRestaurants() {
     const restaurantDataResponse = getRestaurants();
     restaurantDataResponse
       .then((data) => {
-        if (data.status) {
+        if (data?.status) {
           setRecords(data?.Details);
         }
       })
       .catch((err) => {
-        console.log(err, "eeeeeeeeeeeeee");
+        console.log(err, "err in List restaurat");
         // Token not availabel
-        if (err.response.status === 401) {
-          navigate("/login");
-        }
-        toast.error(err.response.data.message);
+
+        toast.error(err?.response?.data?.message);
       });
   }, []);
 
-  const lastPostIndex=currentPage * postPerPage
-  const firstPostIndex=lastPostIndex-postPerPage
-  const currentPost=records.slice(firstPostIndex,lastPostIndex)
-console.log(records,"records");
+  const lastPostIndex = currentPage * postPerPage;
+  const firstPostIndex = lastPostIndex - postPerPage;
+  const currentPost = records?.slice(firstPostIndex, lastPostIndex);
+ 
+
+
+  const searchHandler=async()=>{
+
+    const responseData=await searchHotel(input)
+ 
+     if(responseData?.results?.length<1){
+      toast.error("no restaurants found")
+     }else{
+       setRecords(responseData?.results)
+    }
+  }
   return (
     <div>
+      <div className="mt-4 ml-3 bg-white w-96 h-12 rounded-2xl relative flex ">
+        <input
+          type="text"
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Search Here . . . . ."
+          className="h-full w-11/12 outline-none rounded-2xl bg-white border-none text-black p-4 relative flex items-center"
+        />
+        <FiSearch onClick={searchHandler}  className="mt-3 " />
+      </div>
       <div>
         <div className="min-h-screen flex justify-center items-center py-2">
+        <Toaster position="top-center" reverseOrder={false}></Toaster>
+
           <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
             {currentPost?.map((restaurant, index) => {
               return (
@@ -54,15 +80,15 @@ console.log(records,"records");
                   <div className="relative">
                     <img
                       className="w-full h-64 rounded-xl"
-                      src={restaurant?.image.url}
+                      src={restaurant?.image?.url}
                       alt="Colors"
                     />
                   </div>
                   <h3 className="m-2 text-xl font-bold text-indigo-600">
-                    {restaurant?.restaurantName.toUpperCase()}
+                    {restaurant?.restaurantName?.toUpperCase()}
                   </h3>
                   <h5 className="m-2 text-gray-800 text-lg font-bold cursor-pointer">
-                    {restaurant?.address?.place_name}
+                 {restaurant?.address?.place_name}
                   </h5>
                   <div className="my-4">
                     <div className="flex space-x-1 items-center">
@@ -80,7 +106,7 @@ console.log(records,"records");
                           />
                         </svg>
                       </span>
-                      <b>{restaurant.tables}</b>
+                      <b>{restaurant?.tables}</b>
                     </div>
                     <div className="flex space-x-1 items-center">
                       <span>
@@ -98,7 +124,7 @@ console.log(records,"records");
                           />
                         </svg>
                       </span>
-                      <b>{restaurant.phone}</b>
+                      <b>{restaurant?.phone}</b>
                     </div>
                     <div className="flex space-x-1 items-center ml-1">
                       <svg
@@ -116,12 +142,11 @@ console.log(records,"records");
                       </svg>
                       <span className="font-medium">
                         {" "}
-                        {restaurant?.startTime.slice()} to{" "}
-                        {restaurant?.endTime}{" "}
+                        {restaurant?.startTime?.slice()} to {restaurant?.endTime}{" "}
                       </span>
                     </div>
 
-                    <Link to={`/restaurant/list-dishes/${restaurant._id}`}>
+                    <Link to={`/restaurant/list-dishes/${restaurant?._id}`}>
                       <button className="mt-4 text-xl w-full text-white bg-indigo-600 py-2 rounded-xl shadow-lg">
                         Book Now
                       </button>
@@ -132,10 +157,14 @@ console.log(records,"records");
             })}
           </div>
         </div>
-            <div className="m-3"> 
-
-            <RestaurantListPagination  currentPage={currentPage}  totalPosts={records.length} postPerPage={postPerPage}  setCurrentPage={setCurrentPage}    />
-            </div>
+        <div className="m-3">
+          <RestaurantListPagination
+            currentPage={currentPage}
+            totalPosts={records?.length}
+            postPerPage={postPerPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
       </div>
     </div>
   );

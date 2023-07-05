@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useFormik} from "formik";
+import { useFormik } from "formik";
 import { Toaster, toast } from "react-hot-toast";
 import { singleDishDetails } from "../../helpers/ownerHelpers";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,8 +8,6 @@ import { editDish } from "../../helpers/ownerHelpers";
 
 function EditDish() {
   const navigete = useNavigate();
-
-    
 
   const [dishName, setDishName] = useState("");
   const [description, setDescription] = useState("");
@@ -21,29 +19,23 @@ function EditDish() {
   const { id } = useParams();
   useEffect(() => {
     singleDishDetails(id).then((data) => {
-
-      setDishName(data.dishName);
-      setDescription(data.description);
-      setCategory(data.category);
-      setPrice(data.price);
-      setImage(data.image.url);    
-      
+      setDishName(data?.dishName);
+      setDescription(data?.description);
+      setCategory(data?.category);
+      setPrice(data?.price);
+      setImage(data?.image.url);
     });
   }, [id]);
 
+  const validate = () => {
+    const errors = {};
+    if (!dishName) errors.dishName = toast.error("res name is required");
+    else if (!description) errors.description = toast.error("des is req");
+    else if (!category) errors.category = toast.error("category is required");
+    else if (!price) errors.price = toast.error("price is required");
 
- const validate=()=>{
- 
-  const errors={}
-   if(!dishName) errors.dishName=toast.error("res name is required")
-   else if(!description) errors.description=toast.error("des is req")
-   else if(!category)errors.category=toast.error("category is required")
-   else if(!price)errors.price=toast.error("price is required")
-   
-   return errors
- }
-
-
+    return errors;
+  };
 
   const handleResImage = (e) => {
     const file = e.target.files[0];
@@ -69,17 +61,16 @@ function EditDish() {
       category: "",
       price: "",
     },
-   validate,
+    validate,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async () => {
-
       const img = { image: image };
       const datas = { dishName, price, category, description };
-     
+
       const allDetails = Object.assign({}, img, datas);
       const response = await editDish(allDetails, id);
-      if (response.message == "success") {
+      if (response?.message == "success") {
         navigete("/owner/dishes");
       } else {
         toast.error("somethig went wrong");
@@ -87,11 +78,10 @@ function EditDish() {
     },
   });
 
-
   return (
     <div className="p-10">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
-    
+
       <form onSubmit={formik.handleSubmit} className="mx-auto max-w-lg">
         <label className="block font-medium text-gray-700 mb-2" htmlFor="name">
           Dish Name
@@ -104,7 +94,7 @@ function EditDish() {
           onChange={(e) => setDishName(e.target.value)}
           id="dishName"
         />
-     
+
         <label className="block font-medium text-gray-700 mb-2" htmlFor="name">
           Description
         </label>
@@ -116,7 +106,7 @@ function EditDish() {
           onChange={(e) => setDescription(e.target.value)}
           id="description"
         />
-      
+
         <label className="block font-medium text-gray-700 mb-2" htmlFor="name">
           Category
         </label>
@@ -128,7 +118,7 @@ function EditDish() {
           value={category}
           id="category"
         />
-     
+
         <label className="block font-medium text-gray-700 mb-2" htmlFor="name">
           Price
         </label>
@@ -141,8 +131,7 @@ function EditDish() {
           min="1"
           id="price"
         />
-       
-      
+
         <div className="py-5">
           <input
             onChange={handleResImage}

@@ -1,14 +1,14 @@
-import React from 'react'
-import { NavbarOne } from '../../../Components/Owner/Navbar'
-import RestaurantBanner from '../../../Components/Owner/Banner/RestaurantBanner'
+import React from "react";
+import { NavbarOne } from "../../../Components/Owner/Navbar";
+import RestaurantBanner from "../../../Components/Owner/Banner/RestaurantBanner";
 
 function BannerPage() {
   return (
     <>
-    <NavbarOne/>
-<RestaurantBanner/>
+      <NavbarOne />
+      <RestaurantBanner />
     </>
-  )
+  );
 }
 
-export default BannerPage
+export default BannerPage;

@@ -6,7 +6,7 @@ export const AdminSignUp = async (req, res) => {
   try {
     const { email, password } = req.body;
     const admin = await Admin.findOne({ email });
-    console.log(admin);
+
     if (!admin)
       return res
         .status(400)
@@ -36,7 +36,7 @@ export const AdminSignUp = async (req, res) => {
       .status(200)
       .json({ message: "Logged in succesfully", token, admin, status: true });
   } catch (error) {
-    console.log(error, "errrrrrrr");
+    console.log(error, "errrrrrrr in Admin Login");
     res
       .status(400)
       .json({ message: "authentication err", error: error, status: false });

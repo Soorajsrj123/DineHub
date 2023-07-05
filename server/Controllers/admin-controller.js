@@ -3,7 +3,6 @@ import RejectedRestaurants from "../Models/RejectedRestaurants.js";
 import nodemailer from "nodemailer";
 
 export const selectRequest = async (req, res) => {
-
   try {
     const AllRestaurants = await Restaurant.find({ status: "pending" });
     if (!AllRestaurants)
@@ -19,11 +18,10 @@ export const selectRequest = async (req, res) => {
 export const selectedRestaurantDetails = async (req, res) => {
   try {
     const Id = req.params.id;
-    console.log(Id, "here res Id");
     const restaurantData = await Restaurant.findOne({ _id: Id });
     return res.status(200).json({ message: "success", restaurantData });
   } catch (error) {
-    console.log(error);
+    console.log(error, "error in select Restaurant");
     return res.status(500).json({ message: error });
   }
 };
@@ -66,16 +64,12 @@ export const ApproveRestaurant = async (req, res) => {
         html: link, // html body
       });
 
-      console.log("Message sent: %s", info.messageId);
-
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
       return res
         .status(200)
         .json({ success: "restaurant application approved successfully" });
     }
   } catch (error) {
-    console.log(error, "errrrr>>>>>>>>>>>>>");
+    console.log(error, "eoor in Aprove restaurant");
     return res.status(500).json({ message: "somethig went wrong" });
   }
 };
@@ -105,7 +99,6 @@ export const RejectRestaurant = async (req, res) => {
           pass: process.env.PASSWORD, // generated ethereal password
         },
       });
-      console.log(transporter, "node mailer res");
 
       const link = `${process.env.CLIENT_URL}/owner/add-restaurant`;
       const reason = `<P >${rejectionReason}</P> <a href=${link} >click here to reapply<a/>`;
@@ -120,10 +113,6 @@ export const RejectRestaurant = async (req, res) => {
           html: reason, // html body
         })
         .then((info) => {
-          console.log("Message sent: %s", info.messageId);
-
-          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-       
           //  here create a new RejectedRestaurant Details And save it in the seperate collections
           const RejectedData = new RejectedRestaurants({
             owner: updatedData.owner,
@@ -153,10 +142,10 @@ export const RejectRestaurant = async (req, res) => {
               });
             }
           });
-        })
+        });
     }
   } catch (error) {
-    console.log(error, "err");
+    console.log(error, "err in rejection restaurant");
     return res.status(500).json({ message: "somthing went wrong" });
   }
 };
@@ -174,13 +163,17 @@ export const getDeclinedRequest = async (req, res) => {
   }
 };
 
-export const getOneRestaurant=async(req,res)=>{
- try {
-  const {id}=req.params
-  const restaurantData=await Restaurant.findOne({_id:id})
-  if(!restaurantData) return res.status(404).json({message:"data not found",status:false})
-  else return res.status(200).json({message:"success",status:true,restaurantData})
- } catch (error) {
-   return res.status(500).json({message:error,status:false})
- }
-}
+export const getOneRestaurant = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const restaurantData = await Restaurant.findOne({ _id: id });
+    if (!restaurantData)
+      return res.status(404).json({ message: "data not found", status: false });
+    else
+      return res
+        .status(200)
+        .json({ message: "success", status: true, restaurantData });
+  } catch (error) {
+    return res.status(500).json({ message: error, status: false });
+  }
+};

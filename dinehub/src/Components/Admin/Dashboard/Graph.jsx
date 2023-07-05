@@ -31,26 +31,6 @@ function Graph() {
       .then((res) => {
         // console.log(res,"final response");
         if (res) {
-        //   // console.log(res);
-        //   const fetchedData = res?.data;
-        //   console.log(fetchedData, "fet");
-
-        //   const numericData = Number(fetchedData); // Convert string to number
-        //   console.log(numericData, "nuu");
-        //   setOptions((previosOptions) => ({
-        //     ...previosOptions,
-        //     xaxis: {
-        //       ...previosOptions.xaxis,
-        //       categories: [2023],
-        //     },
-        //   }));
-
-        //   setSeries((prevSeries) => [
-        //     {
-        //       ...prevSeries[0],
-        //       data: [numericData],
-        //     },
-        //   ]);
           setData(res.data);
         }
       })
@@ -59,10 +39,9 @@ function Graph() {
       });
   }, []);
 
-  const MonthlyDays=daily.map((item)=>item.day)
-  const DailySales=daily.map((item)=>item.totalSales)
-  console.log(MonthlyDays,"monthly days");
-  console.log(DailySales,"daily sales");
+  const MonthlyDays=daily?.map((item)=>item?.day)
+  const DailySales=daily?.map((item)=>item?.totalSales)
+
   const dailyChart = {
     options: {
       chart: {
@@ -91,7 +70,7 @@ function Graph() {
     })
   },[])
 
-  console.log(daily,"daily data");
+ 
 
   useEffect(()=>{
     adminMonthlyData().then((res)=>{
@@ -114,7 +93,7 @@ function Graph() {
     series: [
       {
         name: "series-1",
-        data: monthly?.map((item)=>item.totalSales),
+        data: monthly?.map((item)=>item?.totalSales),
       },
     ],
   };

@@ -15,7 +15,6 @@ export const addBanner = async (req, res) => {
     });
     newBanner.save().then((data) => {
       if (data) {
-        console.log(data, "dtata");
         return res.status(200).json({ message: "success", status: true });
       }
     });
@@ -39,9 +38,8 @@ export const getAllBanners = async (req, res) => {
 
 export const addRestaurantBanner = async (req, res) => {
   try {
-  
-    const { image, title, ownerId,subTitle } = req.body
-  
+    const { image, title, ownerId, subTitle } = req.body;
+
     const result = await cloudinary.uploader.upload(image, {
       folder: "RestaurantBanner",
     });
@@ -49,7 +47,7 @@ export const addRestaurantBanner = async (req, res) => {
       title,
       subTitle,
       imageURL: result.url,
-      restaurantId:ownerId
+      restaurantId: ownerId,
     });
     restaurantBanner.save().then((response) => {
       if (response) return res.status(200).json({ message: "success" });
@@ -61,36 +59,33 @@ export const addRestaurantBanner = async (req, res) => {
   }
 };
 
-export const getRestaurantBanner=async(req,res)=>{
-    try {
-        const {id}=req.params
-        
-        const result=await RestaurantBanner.findOne({restaurantId:id})
-   
-        if(result) return res.status(200).json({message:"success",result})
-        return res.status(404).json({message:"data not found"})
-        
-    } catch (error) {
-        console.log(error); //console for debug
-        return res.status(500).json({message:error})
-    }
-}
+export const getRestaurantBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-export const deleteRestaurantBanner=async(req,res)=>{
-    try {
-         const {id}=req.params
-       
-          
-         const details=await RestaurantBanner.findByIdAndDelete({_id:id})
-       
-         if(details){
-            const allbanner=await RestaurantBanner.findOne({_id:id})
-            return res.status(200).json({message:"success",allbanner})
-         }
-         return res.status(404).json({message:"data not deleted"})
+    const result = await RestaurantBanner.findOne({ restaurantId: id });
 
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:error})
+    if (result) return res.status(200).json({ message: "success", result });
+    return res.status(404).json({ message: "data not found" });
+  } catch (error) {
+    console.log(error); //console for debug
+    return res.status(500).json({ message: error });
+  }
+};
+
+export const deleteRestaurantBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const details = await RestaurantBanner.findByIdAndDelete({ _id: id });
+
+    if (details) {
+      const allbanner = await RestaurantBanner.findOne({ _id: id });
+      return res.status(200).json({ message: "success", allbanner });
     }
-}
+    return res.status(404).json({ message: "data not deleted" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error });
+  }
+};

@@ -1,85 +1,79 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { toast ,Toaster} from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import { RestaurantForm } from "../../helpers/ownerHelpers";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 function Sample() {
+  const searchInput = useRef(null);
+  const [starthour, setStartHour] = useState("09");
+  const [startminute, setStartMinute] = useState("00");
+  const [startmeridiem, setStartMeridiem] = useState("AM");
 
+  const [endhour, setEndtHour] = useState("06");
+  const [endminute, setEndMinute] = useState("00");
+  const [endmeridiem, setEndMeridiem] = useState("PM");
 
-  const searchInput=useRef(null)
-    const [starthour,setStartHour]=useState('09')
-    const [startminute,setStartMinute]=useState('00')
-    const[startmeridiem,setStartMeridiem]=useState('AM')
+  const [startTime, setStartTime] = useState("08:00 AM");
+  const [endTime, setEndTime] = useState("06:00 PM");
+  const [suggessions, setSuggessions] = useState(false);
+  const [place, setPlace] = useState([]);
+  const [address, setAddress] = useState({});
 
+  const getPlace = async (e) => {
+    // console.log(searchInput.current.value);
+    const places = await axios.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchInput.current.value}.json?proximity=ip&access_token=pk.eyJ1Ijoic29vcmFqc3VyZXNoIiwiYSI6ImNsamR0d3BpNDBhcGkzbGt5czVxdTBnNWIifQ.2I9XXAAd5ML7BcBl82ERbQ`
+    );
+    console.log(places, "the details from mapbox");
+    setPlace(places.data.features);
+    setSuggessions(true);
+  };
 
+  const assignValue = (index) => {
+    setAddress(place[index]);
+    searchInput.current.value = place[index]?.place_name;
+    setSuggessions(false);
+  };
 
-    const [endhour,setEndtHour]=useState('06')
-    const [endminute,setEndMinute]=useState('00')
-    const[endmeridiem,setEndMeridiem]=useState('PM')
+  const [image, setImage] = useState("");
+  const navigete = useNavigate();
 
+  useEffect(() => {
+    setStartTime(`${starthour}:${startminute}:${startmeridiem}`);
+  }, [starthour, startminute, startmeridiem]);
 
+  useEffect(() => {
+    setEndTime(`${endhour}:${endminute}:${endmeridiem}`);
+  }, [endhour, endminute, endmeridiem]);
 
-    const [startTime, setStartTime] = useState("08:00 AM");
-    const [endTime, setEndTime] = useState("06:00 PM");
-    const [suggessions,setSuggessions]=useState(false)
-    const [place,setPlace]=useState([])
-    const [address,setAddress]=useState({})
+  const handleImage = (e) => {
+    const file = e.target.files[0];
 
-    const getPlace = async (e) => {
-      console.log(searchInput.current.value);
-      const places = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${searchInput.current.value}.json?proximity=ip&access_token=pk.eyJ1Ijoic29vcmFqc3VyZXNoIiwiYSI6ImNsamR0d3BpNDBhcGkzbGt5czVxdTBnNWIifQ.2I9XXAAd5ML7BcBl82ERbQ`)
-      console.log(places);
-      setPlace(places.data.features)
-      setSuggessions(true)
+    if (!file) {
+      toast.error("please select a image");
     }
-  
-  
-    const assignValue = (index) => {
-      setAddress(place[index])
-      searchInput.current.value = place[index].place_name
-      setSuggessions(false)
+    TransformFile(file);
+  };
+  const TransformFile = (file) => {
+    const reader = new FileReader();
+    if (file) {
+      // the readAsDataURL return a url
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+    } else {
+      setImage("");
     }
-  
+  };
 
-    const[image,setImage]=useState('')
-    const navigete=useNavigate()
+  const data = useSelector((state) => state?.owner);
+  const { owner } = data;
 
-    useEffect(()=>{
-        setStartTime(`${starthour}:${startminute}:${startmeridiem}`)
-    },[starthour,startminute,startmeridiem])
-
-    useEffect(()=>{
-        setEndTime(`${endhour}:${endminute}:${endmeridiem}`)
-    },[endhour,endminute,endmeridiem])
-
-    const handleImage = (e) => {
-        const file = e.target.files[0];
-     
-        if (!file) {
-          toast.error("please select a image");
-        }
-        TransformFile(file);
-      };
-      const TransformFile = (file) => {
-        const reader = new FileReader();
-        if (file) {
-          // the readAsDataURL return a url
-          reader.readAsDataURL(file);
-          reader.onloadend = () => {
-            setImage(reader.result);
-          };
-        } else {
-          setImage("");
-        }
-      };
-
-      const data = useSelector((state) => state.owner);
-      const { owner } = data;
-
-    // console.log("here ",starthour,startminute,startmeridiem,startTime);
-    // console.log("end ",endhour,endminute,endmeridiem,endTime);
+  // console.log("here ",starthour,startminute,startmeridiem,startTime);
+  // console.log("end ",endhour,endminute,endmeridiem,endTime);
 
   const formik = useFormik({
     initialValues: {
@@ -89,42 +83,37 @@ function Sample() {
       phone: "",
       // address: "",
       tables: "",
-      fssc:"",
+      fssc: "",
       wifi: false,
       parking: false,
       aircondition: false,
-      description:""
-
+      description: "",
     },
-validateOnBlur:false,
-validateOnChange:false,
-onSubmit:(values)=>{
-        const img={image:image,startTime:startTime,endTime:endTime}
-        const restaurantAddress={address:address}
-        const allData=Object.assign({},img,restaurantAddress,values)
-console.log(allData);
-        const response= RestaurantForm(allData,owner)
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values) => {
+      const img = { image: image, startTime: startTime, endTime: endTime };
+      const restaurantAddress = { address: address };
+      const allData = Object.assign({}, img, restaurantAddress, values);
+      const response = RestaurantForm(allData, owner);
 
-        toast.loading("Creating")
-       response.then((data)=>{
-     
-         if(data.status){
-          toast.dismiss()
-            navigete("/owner/registration-success")
-         }
-       }).catch((err)=>{
-        toast.dismiss()
- 
-        toast.error(err.message)
-       })
-}
+      toast.loading("Creating");
+      response
+        .then((data) => {
+          if (data?.status) {
+            toast.dismiss();
+            navigete("/owner/registration-success");
+          }
+        })
+        .catch((err) => {
+          toast.dismiss();
+          toast.error(err.message);
+        });
+    },
   });
-  
-
- 
 
   return (
-    <div >
+    <div>
       <main className="py-14  ">
         <div className="max-w-screen-xl mx-auto py-5 text-gray-600 md:px-8 border border-gray-200 shadow-md rounded-lg ">
           <Toaster position="top-center" reverseOrder={false} />
@@ -167,7 +156,7 @@ console.log(allData);
                   type="email"
                   name="email"
                   onChange={formik.handleChange}
-                    value={formik.values.email}
+                  value={formik.values.email}
                   required
                   className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                 />
@@ -186,48 +175,45 @@ console.log(allData);
                 </div>
               </div>
 
+              <div className="xl:ml-8 xl:mt-8 flex flex-col xl:me-8 rounded-xl xl:flex justify-between items-center">
+                <div>
+                  <label htmlFor=""> Address</label>
+                </div>
 
-              <div className='xl:ml-8 xl:mt-8 flex flex-col xl:me-8 rounded-xl xl:flex justify-between items-center'>
-            <div>
-              <label htmlFor=""> Address</label>
-            </div>
-
-            <div className='xl:w-80 w-full bg-white text-black rounded-md border-black'>
-
-              <div className='mt-3 xl:mt-0 w-full xl:w-full h-11 border border-black rounded-lg flex justify-between items-center'>
-                <input ref={searchInput} onKeyUp={getPlace} type="text" name='address' className="w-11/12 outline-none h-full  p-2 bg-white text-black text-sm rounded-lg  dark:text-white" placeholder={`Type the address here......  `} required />
-                {/* <FontAwesomeIcon icon="location" className='w-4 h-4 me-3' /> */}
-              </div>
-
-            </div>
-          </div>
-
-
-          <div className='w-full justify-end flex mt-1'>
-            {
-              suggessions &&
-              <div className='xl:w-80 w-full h-auto bg-white text-black rounded-bl-md rounded-br-md border-2 border-gray-800 z-50  justify-center xl:me-8'>
-                <div className='space-y-3 w-auto h-auto m-3'>
-                  {
-                    place.map((value, index) => (
-                      <div key={index} onClick={() => assignValue(index)} className='flex items-center space-x-2 hover:bg-gray-100 cursor-pointer'>
-                        {/* <FontAwesomeIcon icon="location" className='w-3 h-3 pl-2' /> */}
-                        <p >{value?.place_name}</p>
-                      </div>
-                    ))
-                  }
+                <div className="xl:w-80 w-full bg-white text-black rounded-md border-black">
+                  <div className="mt-3 xl:mt-0 w-full xl:w-full h-11 border border-black rounded-lg flex justify-between items-center">
+                    <input
+                      ref={searchInput}
+                      onKeyUp={getPlace}
+                      type="text"
+                      name="address"
+                      className="w-11/12 outline-none h-full  p-2 bg-white text-black text-sm rounded-lg  dark:text-white"
+                      placeholder={`Type the address here......  `}
+                      required
+                    />
+                    {/* <FontAwesomeIcon icon="location" className='w-4 h-4 me-3' /> */}
+                  </div>
                 </div>
               </div>
-            }
-          </div>
 
-
-
-
-
-
-
-
+              <div className="w-full justify-end flex mt-1">
+                {suggessions && (
+                  <div className="xl:w-80 w-full h-auto bg-white text-black rounded-bl-md rounded-br-md border-2 border-gray-800 z-50  justify-center xl:me-8">
+                    <div className="space-y-3 w-auto h-auto m-3">
+                      {place?.map((value, index) => (
+                        <div
+                          key={index}
+                          onClick={() => assignValue(index)}
+                          className="flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {/* <FontAwesomeIcon icon="location" className='w-3 h-3 pl-2' /> */}
+                          <p>{value?.place_name}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* <div>
                 <label className="font-medium">Address</label>
@@ -249,7 +235,6 @@ console.log(allData);
                     required
                     onChange={formik.handleChange}
                     value={formik.values.tables}
-                    
                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                   />
                 </div>
@@ -265,7 +250,7 @@ console.log(allData);
                   />
                 </div>
               </div>
-              
+
               <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">
                 facilities
               </h3>
@@ -276,7 +261,7 @@ console.log(allData);
                       name="wifi"
                       id="vue-checkbox-list"
                       onChange={formik.handleChange}
-                    value={formik.values.wifi}
+                      value={formik.values.wifi}
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
@@ -294,7 +279,7 @@ console.log(allData);
                       name="parking"
                       id="react-checkbox-list"
                       onChange={formik.handleChange}
-                    value={formik.values.parking}
+                      value={formik.values.parking}
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
@@ -313,7 +298,7 @@ console.log(allData);
                       id="angular-checkbox-list"
                       type="checkbox"
                       onChange={formik.handleChange}
-                    value={formik.values.aircondition}
+                      value={formik.values.aircondition}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     />
                     <label
@@ -363,7 +348,7 @@ console.log(allData);
                           id=""
                           className="px-2 outline-none appearance-none bg-transparent"
                           value={startminute}
-                         onChange={(e) => setStartMinute(e.target.value)}
+                          onChange={(e) => setStartMinute(e.target.value)}
                         >
                           <option value="00">00</option>
                         </select>
@@ -438,15 +423,14 @@ console.log(allData);
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <label className="font-medium">Description</label>
                 <textarea
-                type="text"
-                 name="description"
-                 value={formik.values.description}
-                 onChange={formik.handleChange}
-                 
+                  type="text"
+                  name="description"
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
                   className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                 ></textarea>
               </div>
@@ -459,9 +443,12 @@ console.log(allData);
                   type="file"
                   className="file-input file-input-bordered file-input-accent w-full max-w-xs"
                 />
-              { image&& <img src={image} alt="Preview" className="w-48" />}
+                {image && <img src={image} alt="Preview" className="w-48" />}
               </div>
-              <button type="submit" className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150">
+              <button
+                type="submit"
+                className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+              >
                 Submit
               </button>
             </form>

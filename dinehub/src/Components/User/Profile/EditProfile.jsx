@@ -18,17 +18,16 @@ function EditProfile() {
   useEffect(() => {
     getUserDetailsById(id).then((res) => {
       if (res) {
-        setRecords(res.details);
-        setName(res.details.name);
-        setEmail(res.details.email);
-        setMobile(res.details.PhoneNumber);
-        setImage(res.details.imageURL.url ? res.details.imageURL.url : "");
+        setRecords(res?.details);
+        setName(res?.details.name);
+        setEmail(res?.details.email);
+        setMobile(res?.details.PhoneNumber);
+        setImage(res?.details.imageURL.url ? res?.details.imageURL?.url : "");
       }
     });
   }, []);
 
   const handleImage = (e) => {
-    console.log(e.target.files[0]);
     const file = e.target.files[0];
     TransformFile(file);
   };
@@ -57,13 +56,15 @@ function EditProfile() {
       const allDatas = { name, email, PhoneNumber, userId, image };
 
       const details = updateUserProfile(allDatas);
-      toast.promise(details,{
-        loading:"please wait",
-        success:"Profile Updated",
-        error:"profile not updated"
-      }).then(()=>{
-        navigate(`/profile/${id}`)
-      })
+      toast
+        .promise(details, {
+          loading: "please wait",
+          success: "Profile Updated",
+          error: "profile not updated",
+        })
+        .then(() => {
+          navigate(`/profile/${id}`);
+        });
     },
   });
 

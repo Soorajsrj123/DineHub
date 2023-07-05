@@ -1,0 +1,8 @@
+.react-confirm-alert-body{
+    color: #ffffff;
+    background: linear-gradient(#ec6f66 , #f3a183);
+}
+.react-confirm-alert-body h1{
+   font-size: larger;
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

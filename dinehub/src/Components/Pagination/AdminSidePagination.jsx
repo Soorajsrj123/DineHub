@@ -8,19 +8,19 @@ function OwnerList({ curretPage, totalPosts, postsPerPage, setCurrentPage }) {
     pages.push(i);
   }
 
-  console.log(pages, "pp");
+  
 
   const handlePreviousPage = () => {
-    console.log(curretPage, "kjn");
+
     // CHEKING IF THE PAGE IS NOT LESS THEN ZERO
     if (curretPage > 1) {
       setCurrentPage(curretPage - 1);
     }
   };
   const handleNextPage = () => {
-      console.log(curretPage, "kjn");
+    
       // CHEKING IT REACHES THE MAX PAGE
-    if (curretPage < pages.length) {
+    if (curretPage < pages?.length) {
       setCurrentPage(curretPage + 1);
     }
   };

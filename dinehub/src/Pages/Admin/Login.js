@@ -1,9 +1,7 @@
-import React from 'react'
-import Login  from '../../Components/Admin/adminLogin'
+import React from "react";
+import Login from "../../Components/Admin/adminLogin";
 function Loginpage() {
-  return (
-   <Login/>
-  )
+  return <Login />;
 }
 
-export default Loginpage
+export default Loginpage;

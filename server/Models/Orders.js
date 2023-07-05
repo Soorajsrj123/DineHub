@@ -33,7 +33,12 @@ const OrderShema=mongoose.Schema({
        isReserved:{
           type:Boolean,
           default:false
+       },
+       isCancelled:{
+         type:Boolean,
+         default:false
        }
+
     },
      { 
         timestamps: true

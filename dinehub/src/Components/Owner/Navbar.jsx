@@ -1,24 +1,23 @@
 import React from "react";
-import {Link,NavLink, useNavigate} from 'react-router-dom'
-import '../Owner/Navbar.css'
+import { NavLink, useNavigate } from "react-router-dom";
+import "../Owner/Navbar.css";
 import { useDispatch, useSelector } from "react-redux";
-import {ownerLogout} from '../../Slices/ownerSlice'
+import { ownerLogout } from "../../Slices/ownerSlice";
+
+
+
 export const NavbarOne = () => {
+  const user = useSelector((state) => state?.owner);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const hadleLogout = () => {
+    dispatch(ownerLogout());
+    navigate("/owner/login");
+  };
 
-    const user=useSelector((state)=>state.owner)
-    const dispatch=useDispatch()
- const navigate=useNavigate()
-    const hadleLogout=()=>{
-      console.log("here");
-      dispatch(ownerLogout())
-      navigate('/owner/login')
-
-    }
-   
   return (
     <div className="py-4">
       <nav className="relative px-4 py-4 flex justify-between items-center border-y border-gray-400 dark:border-gray-700">
-        
         <a className="text-3xl font-bold leading-none" href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,8 +48,8 @@ export const NavbarOne = () => {
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
           <li>
             <NavLink
-             to='/owner/dashboard'  className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
-          
+              to="/owner/dashboard"
+              className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
             >
               DashBoard
             </NavLink>
@@ -72,32 +71,12 @@ export const NavbarOne = () => {
             </svg>
           </li>
           <li>
-            <NavLink to='/owner/restaurants' className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300">
-             Restaurants
-            </NavLink>
-          </li>
-          <li className="text-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              className="w-4 h-4 current-fill"
-              viewBox="0 0 24 24"
+            <NavLink
+              to="/owner/restaurants"
+              className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-              />
-            </svg>
-          </li>
-          <li>
-          
-            <NavLink to='/owner/dishes' className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300">
-             Dishes
+              Restaurants
             </NavLink>
-         
           </li>
           <li className="text-gray-300">
             <svg
@@ -117,8 +96,32 @@ export const NavbarOne = () => {
           </li>
           <li>
             <NavLink
-             to='/owner/tables' className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
-             
+              to="/owner/dishes"
+              className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
+            >
+              Dishes
+            </NavLink>
+          </li>
+          <li className="text-gray-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              stroke="currentColor"
+              className="w-4 h-4 current-fill"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </li>
+          <li>
+            <NavLink
+              to="/owner/tables"
+              className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
             >
               Tables
             </NavLink>
@@ -140,11 +143,10 @@ export const NavbarOne = () => {
             </svg>
           </li>
 
-
           <li>
             <NavLink
-             to='/owner/user-orders' className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
-             
+              to="/owner/user-orders"
+              className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
             >
               Orders
             </NavLink>
@@ -169,19 +171,24 @@ export const NavbarOne = () => {
           <li>
             <NavLink
               className="text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300"
-               to='/owner/banner'
+              to="/owner/banner"
             >
               Banner
             </NavLink>
           </li>
         </ul>
         <div className="space-x-2 hidden lg:block">
-          <button onClick={()=>hadleLogout()} className="rounded-md border border-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-indigo-500 ">
-            {user?"Logout":"Login"}
+          <button
+            onClick={() => hadleLogout()}
+            className="rounded-md border border-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-indigo-500 "
+          >
+            {user ? "Logout" : "Login"}
           </button>
-       { !user&& <button className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500 ">
-            SignUp
-          </button>}
+          {!user && (
+            <button className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500 ">
+              SignUp
+            </button>
+          )}
         </div>
       </nav>
     </div>

@@ -25,7 +25,7 @@ function Banner() {
         })
   },[])
 
-  console.log(banners,"banners here");
+ 
 
   return (
     <>
@@ -38,18 +38,18 @@ function Banner() {
         <div>
           <div className="flex flex-wrap justify-center">
             {
-                banners.map((item,index)=>(
+                banners?.map((item,index)=>(
         
                     <Card key={index} className="mt-6 w-96 mr-4">
               <CardHeader color="blue-gray" className="relative h-56 mx-3">
                 <img
-                  src={item.imageURL?item.imageURL:""}
+                  src={item?.imageURL?item.imageURL:""}
                   alt="img-blur-shadow"
                   className="object-cover w-full h-full"
                 />
               </CardHeader>
               <CardBody>
-                <Typography variant="h6">Category: {item.title}</Typography>
+                <Typography variant="h6">Category: {item?.title}</Typography>
 
                 <div className="flex justify-evenly "></div>
               </CardBody>

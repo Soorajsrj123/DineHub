@@ -11,17 +11,19 @@ import {updateForgotPass} from '../Controllers/user.js'
 import {getRestaurantDishes} from '../Controllers/user.js'
 import {getOneRestaurant} from '../Controllers/ownerController.js'
 import {getTables} from '../Controllers/ownerController.js'
-// import { VerifyToken } from '../Middlewares/VerifyToken.js'
+import { VerifyToken } from '../Middlewares/VerifyToken.js'
 import { getAllRestaurants } from '../Controllers/common-Controller.js'
 import {getBookedOrders} from '../Controllers/order-controllers.js'
 import {checkOut } from '../Controllers/user.js'
 import {ConfirmPayment} from '../Controllers/order-controllers.js'
 import {UserOrderDetails} from '../Controllers/order-controllers.js'
-import {fetchRestaurantData} from '../Controllers/ownerController.js'
+import {fetchRestaurantData,getSearchedRestaurant} from '../Controllers/ownerController.js'
 import {addRating} from '../Controllers/rating-controller.js'
 import {getUserDataById} from '../Controllers/common-Controller.js'
 import {editUserProfile} from '../Controllers/user.js'
 import {deleteUserReview} from '../Controllers/rating-controller.js'
+import {cancelBooking} from '../Controllers/order-controllers.js'
+
 const router=express.Router()
 
 
@@ -29,11 +31,11 @@ const router=express.Router()
  router.post('/login',LoginUser)
  router.post('/googleSignup',googleSignup)
  router.post('/googleLogin',googleLogin)
- router.get('/home',getUser)
- router.get('/refresh',refreshToken,getUser)
  router.post('/logout',Logout)
  router.post('/get-phone',getPhone)
  router.post('/get-user',getOneUser)
+ router.get('/home',verifyToken,getUser)
+ router.get('/refresh',refreshToken,getUser)
  router.patch('/update-password',updateForgotPass)
  router.get('/restaurant/get-dishes/:id',getRestaurantDishes)
  router.get('/restaurant/get-one-restaurant/:id',getOneRestaurant)
@@ -48,4 +50,6 @@ const router=express.Router()
  router.get('/get-one-user/:id',getUserDataById)
  router.patch('/update-user-profile',editUserProfile)
  router.delete('/delete-user-review/:id',deleteUserReview)
+ router.patch('/restaurant/cancel-booking/:id/:userId',cancelBooking)
+ router.get('/restaurant/search-restaurant',getSearchedRestaurant)
 export default router

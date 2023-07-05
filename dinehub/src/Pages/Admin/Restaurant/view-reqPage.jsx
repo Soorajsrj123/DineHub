@@ -1,15 +1,12 @@
-import React from 'react'
-import ViewRequestComponent from '../../../Components/Admin/view-request'
-
-
-
+import React from "react";
+import ViewRequestComponent from "../../../Components/Admin/view-request";
 
 function ViewRequestPage() {
   return (
-   <>
-   <ViewRequestComponent/>
-   </>
-  )
+    <>
+      <ViewRequestComponent />
+    </>
+  );
 }
 
-export default ViewRequestPage
+export default ViewRequestPage;

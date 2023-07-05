@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ownerYearlyReport } from "../../../helpers/ownerHelpers";
 import { ownerMonthlyReport } from "../../../helpers/ownerHelpers";
-import {ownerDailyReport} from '../../../helpers/ownerHelpers'
+import { ownerDailyReport } from "../../../helpers/ownerHelpers";
 import { useSelector } from "react-redux";
 function Charts() {
   const [report, setReport] = useState([]);
   const [mothlyReport, setMonthlyReport] = useState([]);
- const [dailyReport,setDailyReport]=useState([])
+  const [dailyReport, setDailyReport] = useState([]);
   //   getting restaurantId from redux
   const restaurantData = useSelector((state) => state?.owner?.owner);
   const { owner } = restaurantData;
@@ -18,7 +18,7 @@ function Charts() {
       setReport(response?.data);
     };
     fetchData();
-  }, []);
+  }, [owner]);
 
   // taking years from the response
   const years = report?.map((obj) => obj?._id?.year);
@@ -46,7 +46,7 @@ function Charts() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await ownerMonthlyReport(owner);
-      console.log(response, "final response");
+
       setMonthlyReport(response?.data);
     };
     fetchData();
@@ -74,16 +74,13 @@ function Charts() {
     ],
   };
 
-
-
-  useEffect(()=>{
-
-    const fetchDailyData=async()=>{
-      const details=await ownerDailyReport(owner)
-      setDailyReport(details.formattedData)
-    }
-     fetchDailyData()
-  },[])
+  useEffect(() => {
+    const fetchDailyData = async () => {
+      const details = await ownerDailyReport(owner);
+      setDailyReport(details?.formattedData);
+    };
+    fetchDailyData();
+  }, [owner]);
 
   const days = dailyReport?.map((obj) => obj?.day);
 
@@ -139,7 +136,7 @@ function Charts() {
         </div>
 
         <div className="app mt-4">
-          <h2 className="text-2xl font-bold text-black">MONTHLY DATA</h2>
+          <h2 className="text-2xl font-bold text-black">DAILY DATA</h2>
           <div className="row">
             <div className="mixed-chart">
               <Chart
@@ -147,7 +144,7 @@ function Charts() {
                 series={dailyChart?.series}
                 type="bar"
                 width="500"
-                />
+              />
             </div>
           </div>
         </div>

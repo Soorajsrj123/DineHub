@@ -2,16 +2,15 @@ import React, { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {useFormik} from 'formik'
-import {updatePassword} from '../../../helpers/ownerHelpers'
+import { useFormik } from "formik";
+import { updatePassword } from "../../../helpers/ownerHelpers";
 
 function NewPasswordPage() {
-
-    // for SHOW/HIDE PASSWORD
+  // for SHOW/HIDE PASSWORD
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(true);
-  const [confirmPassword,setConfirmPassword]=useState('')
-  const navigate=useNavigate()
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -20,60 +19,54 @@ function NewPasswordPage() {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
-  const validate=(values)=>{
+  const validate = (values) => {
+    let errors = {};
+    if (!values?.password)
+      errors.password = toast.error("Please enter a password to proceed");
+    else if (values?.password.length < 6)
+      errors.password = toast.error("Password must be atleast 6 characters");
+    else if (!confirmPassword)
+      errors.confirmPassword = toast.error("Confirm Password Required");
+    else if (values?.password !== confirmPassword)
+      errors.confirmPassword = toast.error("Passwords not match");
+    return errors;
+  };
 
-    let errors={}
-    if(!values.password) errors.password=toast.error('Please enter a password to proceed')
-    else if(values.password.length<6) errors.password=toast.error('Password must be atleast 6 characters')
-    else if(!confirmPassword)errors.confirmPassword=toast.error('Confirm Password Required')
-    else if(values.password!==confirmPassword)errors.confirmPassword=toast.error("Passwords not match")
-    return errors
-  }
+  const { id } = useParams();
 
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+    },
+    validate,
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: (values) => {
+      try {
+        const ownerId = { id: id };
+        const allData = Object.assign({}, values, ownerId);
 
-    const {id}=useParams()
+        const details = updatePassword(allData);
 
-
-     const formik=useFormik({
-        initialValues:{
-            password:"",
-        },
-      validate,
-      validateOnChange:false,
-      validateOnBlur:false,
-      onSubmit:(values)=>{
-           
-        try {
-          console.log(id,values,"owner id and values");
-          const ownerId={id:id}
-            const allData=Object.assign({},values,ownerId)
-              console.log(allData,"all data");
-            const details=updatePassword(allData)
-            console.log(details,"updated details");
-            toast.promise(details,{
-                loading:"proccessing",
-                success:"password updated successfully",
-                error:"password not updated"
-            })
-            details.then((data)=>{
-         if(data){
-            navigate('/owner/login')
-         }
-            }).catch((err)=>{
-              console.log(err);
-            })
-
-
-        } catch (error) {
-            console.log(error);
-        }
-
+        toast.promise(details, {
+          loading: "proccessing",
+          success: "password updated successfully",
+          error: "password not updated",
+        });
+        details
+          .then((data) => {
+            if (data) {
+              navigate("/owner/login");
+            }
+          })
+          .catch((err) => {
+            console.log(err, "err in owner forgot new password");
+          });
+      } catch (error) {
+        console.log(error, "error in owner forgot new Password");
       }
-      
-     })
-
-
-
+    },
+  });
 
   return (
     <div>
@@ -84,21 +77,21 @@ function NewPasswordPage() {
           <h5 className="text-2xl font-semibold text-center text-gray-700 uppercase">
             Enter Your New Password
           </h5>
-          <form  onSubmit={formik.handleSubmit} className="mt-6">
+          <form onSubmit={formik.handleSubmit} className="mt-6">
             <div className="mb-2 relative">
               <label
                 htmlFor="password"
                 className="block text-sm font-semibold text-gray-800"
               >
-                 Password
+                Password
               </label>
               <input
                 name="password"
                 type={confirmPasswordVisible ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
-                  onChange={formik.handleChange}
-                  value={formik.password}
+                onChange={formik.handleChange}
+                value={formik.password}
                 className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
               <span className="absolute inset-y-0 right-0 pr-3 pt-7 flex items-center text-sm leading-5">
@@ -123,12 +116,11 @@ function NewPasswordPage() {
                 Confirm Password
               </label>
               <input
-               name="password" autocomplete="current-password"
+                name="password"
+                autocomplete="current-password"
                 type={passwordVisible ? "text" : "password"}
-                id='current-password'
-             
-                  onChange={(e)=>setConfirmPassword(e.target.value)}
-             
+                id="current-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
               <span className="absolute inset-y-0 right-0 pr-3 pt-7 flex items-center text-sm leading-5">

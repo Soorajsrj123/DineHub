@@ -26,6 +26,9 @@ const UserShema = mongoose.Schema({
       type: String,
     },
   },
+  wallet:{
+    type:Array
+  }
 });
 
 export default mongoose.model("User", UserShema);

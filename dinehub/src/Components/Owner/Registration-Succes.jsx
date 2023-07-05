@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 function RegistrationSuccess() {
+  
   return (
   <>
  <div className="min-h-screen  bg-gradient-to-r from-purple-500 to-green-400 animate-gradient">

@@ -1,7 +1,7 @@
-import React from 'react'
-import AccessPermisionComponent from '../../../Components/Admin/Access-Permision'
-import Sidebar from '../../../Components/Admin/Sidebar'
-import styled from 'styled-components';
+import React from "react";
+import AccessPermisionComponent from "../../../Components/Admin/Access-Permision";
+import Sidebar from "../../../Components/Admin/Sidebar";
+import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
@@ -17,20 +17,16 @@ const Wrapper = styled.div`
 `;
 
 function PermisionControlPage() {
-
-
-  
   return (
-   <>
-   <Container>
-
-   <Sidebar/>
-<Wrapper>
-<AccessPermisionComponent/>
-</Wrapper>
-   </Container>
-   </>
-  )
+    <>
+      <Container>
+        <Sidebar />
+        <Wrapper>
+          <AccessPermisionComponent />
+        </Wrapper>
+      </Container>
+    </>
+  );
 }
 
-export default PermisionControlPage
+export default PermisionControlPage;

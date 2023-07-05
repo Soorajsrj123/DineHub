@@ -8,8 +8,8 @@ function UserList() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllUsers();
-      if (data.status) {
-        setUsers(data.AllUsers);
+      if (data?.status) {
+        setUsers(data?.AllUsers);
       }
     };
     fetchData();
@@ -22,13 +22,13 @@ function UserList() {
 
      const lastPostIndex=curretPage*postPerPage
      const firstPostIndex=lastPostIndex-postPerPage
-     const currentPost=Users.slice(firstPostIndex,lastPostIndex)
+     const currentPost=Users?.slice(firstPostIndex,lastPostIndex)
 
   return (
     <div className="rounded-sm border border-gray-400 border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className=" py-6 px-4 md:px-6 xl:px-7.5">
         <h4 className="text-xl font-semibold text-black dark:text-white">
-          USERS LISTS
+          USERS LIST
         </h4>
       </div>
 
@@ -49,7 +49,7 @@ function UserList() {
           <button className="font-medium">Status</button>
         </div>
       </div>
-      {currentPost.map((user, index) => {
+      {currentPost?.map((user, index) => {
         return (
           <div
             key={index}
@@ -65,17 +65,17 @@ function UserList() {
                   />
                 </div>
                 <p className="text-sm text-black dark:text-white">
-                  {user.name}
+                  {user?.name}
                 </p>
               </div>
             </div>
             <div className="col-span-2 hidden items-center sm:flex">
-              <p className="text-sm text-black dark:text-white">{user.email}</p>
+              <p className="text-sm text-black dark:text-white">{user?.email}</p>
             </div>
             <div className="col-span-1 flex items-center">
-              {user.PhoneNumber ? (
+              {user?.PhoneNumber ? (
                 <p className="text-sm text-black dark:text-white">
-                  {user.PhoneNumber}
+                  {user?.PhoneNumber}
                 </p>
               ) : (
                 <p className="text-red-500">Not Available</p>
@@ -92,7 +92,7 @@ function UserList() {
           </div>
         );
       })}
-      <UserListPagination  curretPage={curretPage}  totalPosts={Users.length}  postsPerPage={postPerPage} setCurrentPage={setCurrentPage}   />
+      <UserListPagination  curretPage={curretPage}  totalPosts={Users?.length}  postsPerPage={postPerPage} setCurrentPage={setCurrentPage}   />
     </div>
   );
 }

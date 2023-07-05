@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function SignUpOtp() {
-  return (
-    <>
-    
-    </>
-  )
+  return <></>;
 }
 
-export default SignUpOtp
+export default SignUpOtp;

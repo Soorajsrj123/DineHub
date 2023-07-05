@@ -1,8 +1,8 @@
-import React from 'react'
-import DeclinedRequestComponent from '../../../Components/Admin/Declined-List'
+import React from "react";
+import DeclinedRequestComponent from "../../../Components/Admin/Declined-List";
 
-import Sidebar from '../../../Components/Admin/Sidebar'
-import styled from 'styled-components';
+import Sidebar from "../../../Components/Admin/Sidebar";
+import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
@@ -20,15 +20,14 @@ const Wrapper = styled.div`
 function DeclinedRequestsPage() {
   return (
     <div>
-        <Container>
-
-        <Sidebar/>
+      <Container>
+        <Sidebar />
         <Wrapper>
-       <DeclinedRequestComponent/>
+          <DeclinedRequestComponent />
         </Wrapper>
-        </Container>
+      </Container>
     </div>
-  )
+  );
 }
 
-export default DeclinedRequestsPage
+export default DeclinedRequestsPage;

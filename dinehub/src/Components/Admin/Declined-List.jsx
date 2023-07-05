@@ -14,7 +14,7 @@ function DeclinedList() {
     response
       .then((data) => {
       
-        if (data.status) {
+        if (data?.status) {
           setRecords(data.DeclinedRestaurant);
         }
       })
@@ -44,36 +44,36 @@ function DeclinedList() {
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
-            {records.map((res, index) => {
+            {records?.map((res, index) => {
               return (
                 <tr key={index}>
                   <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
                     <img
                       className="w-10 h-10 rounded-full"
-                      src={res.image.url}
+                      src={res?.image?.url}
                       alt="restaurant"
                     />
                     <div>
                       <span className="block text-gray-700 text-sm font-medium">
-                        {res.restaurantName}
+                        {res?.restaurantName}
                       </span>
                       {/* <span className="block text-gray-700 text-xs">{res.email}ijuh</span> */}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{res.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{res.fssc}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{res?.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{res?.fssc}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {" "}
                     <span
                       className={`px-3 py-2 rounded-full font-semibold text-xs ${
-                        res.rejectedReason&& "text-red-600 bg-red-100"
+                        res?.rejectedReason&& "text-red-600 bg-red-100"
                       }`}
                     >
-                      {res.status ==="approved"? "Active" :res.status==="pending" ? "pending":"Rejected"}
+                      {res?.status ==="approved"? "Active" :res?.status==="pending" ? "pending":"Rejected"}
                     </span>
                   </td>
                   <td className="text-right px-6 whitespace-nowrap">
-                 <Link to={`/admin/view-request/${res._id}`} ><button
+                 <Link to={`/admin/view-request/${res?._id}`} ><button
                       href=""
                       className="py-2 leading-none px-3 bg-green-200 font-medium text-green-600 hover:text-green-500 duration-150 hover:bg-gray-50 rounded-lg"
                     >

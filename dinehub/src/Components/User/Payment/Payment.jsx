@@ -2,46 +2,36 @@ import React, { useEffect, useState } from "react";
 import { PaymentFormValidation } from "../../../YupSchema/PaymentFormSchema";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
-import {paymentDetails} from '../../../helpers/userHelpers'
+import { paymentDetails } from "../../../helpers/userHelpers";
 import { useNavigate } from "react-router-dom";
 function Payment() {
   const [orderDishes, setOrderDishes] = useState([]);
 
-
-  
-
-const navigate=useNavigate()
+  const navigate = useNavigate();
   // Getting order details from localstorage
-  const data = localStorage.getItem('OrderDetails');
-  const orders = JSON.parse(data)
-  console.log(orders,"orders in payment");
-  const userData=useSelector((state)=>state.user.user)
+  const data = localStorage.getItem("OrderDetails");
+  const orders = JSON.parse(data);
+
+  const userData = useSelector((state) => state?.user?.user);
 
   // RESTAURANT ID FROM ORDERD DETAILS
-  const restaurantId=orders.orderDetails[0].restaurantId
-        // USER ID
-           const {user}=userData
+  const restaurantId = orders?.orderDetails[0]?.restaurantId;
+  // USER ID
+  const { user } = userData;
 
-           let userId={userId:user}
-           let ownerId={ownerId:restaurantId}
-           let id={id:orders._id}
-          
-           let datas=Object.assign({},userId,ownerId,id)
+  let userId = { userId: user };
+  let ownerId = { ownerId: restaurantId };
+  let id = { id: orders?._id };
 
+  let datas = Object.assign({}, userId, ownerId, id);
 
-           const payment=(datas,bookingAddress)=>{
-
-            paymentDetails(datas,bookingAddress).then((response)=>{
-
-              if(response){
-                navigate('/orders')
-              }
-
-            })
-
-           }
-
-
+  const payment = (datas, bookingAddress) => {
+    paymentDetails(datas, bookingAddress).then((response) => {
+      if (response) {
+        navigate("/orders");
+      }
+    });
+  };
 
   // for storing the total value
   let sum = 0;
@@ -56,7 +46,6 @@ const navigate=useNavigate()
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => {
-      console.log(values, "this formik values");
       let options = {
         key: "rzp_test_M18IaPXgq2W1BS",
         key_secret: "2YFjY38KdPIM4GfALjiAdnSv",
@@ -68,10 +57,10 @@ const navigate=useNavigate()
           // Gives the respose after the payment finish
           console.log(response, "razorpay resoponse");
           if (response) {
-            payment(datas,values)
+            payment(datas, values);
             console.log(response, "raz response");
           } else {
-            console.log(error, "error inda");
+            console.log(error, "error in Payment");
           }
         },
         prefill: {
@@ -96,10 +85,10 @@ const navigate=useNavigate()
 
   // const dishes = useSelector((state) => state?.dishes?.dishes.dishDetails);
 
-  const dishdata= localStorage.getItem("OrderDetails")
-  const parsedData=JSON.parse(dishdata)
-  console.log(parsedData,"paarse data");
-  const dishes=parsedData.orderDetails
+  const dishdata = localStorage.getItem("OrderDetails");
+  const parsedData = JSON.parse(dishdata);
+  console.log(parsedData, "paarse data");
+  const dishes = parsedData?.orderDetails;
 
   useEffect(() => {
     setOrderDishes(dishes);
@@ -113,7 +102,6 @@ const navigate=useNavigate()
   //   }
   // };
 
-  console.log(orderDishes, "<<>><<>><<>>");
   return (
     <>
       <div className="mt-20">
@@ -132,7 +120,6 @@ const navigate=useNavigate()
               onSubmit={formik.handleSubmit}
             >
               <div className="">
-
                 <div className="space-x-0 lg:flex lg:space-x-4 mt-2">
                   <div className="w-full lg:w-1/2">
                     <label
@@ -155,13 +142,12 @@ const navigate=useNavigate()
                     )}
                   </div>
 
-
                   <div className="w-full lg:w-1/2">
                     <label
                       htmlFor="firstName"
                       className="block mb-3 text-sm font-semibold text-gray-500"
                     >
-                       Name
+                      Name
                     </label>
                     <input
                       name="name"
@@ -172,15 +158,12 @@ const navigate=useNavigate()
                       value={formik.values.name}
                       className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-blue-600"
                     />
-                    {formik.touched.name && formik.errors.name && (
+                    {formik?.touched?.name && formik?.errors?.name && (
                       <p className="text-red-500 my-2">
-                        {formik.errors.name}
+                        {formik?.errors?.name}
                       </p>
                     )}
                   </div>
-                  
-
-
                 </div>
                 {/* <div className="mt-4">
                                 <div className="w-full">
@@ -216,9 +199,7 @@ const navigate=useNavigate()
                   </div>
                 </div> */}
                 <div className="space-x-0 flex justify-center lg:flex lg:space-x-4">
-                  
-
-                <div className="w-full lg:w-1/2 mt-4 ">
+                  <div className="w-full lg:w-1/2 mt-4 ">
                     <label
                       htmlFor="mobile"
                       className="block mb-3 text-sm font-semibold text-gray-500"
@@ -238,12 +219,10 @@ const navigate=useNavigate()
                     />
                     {formik.touched.mobile && formik.errors.mobile && (
                       <p className="text-red-500 my-2">
-                        {formik.errors.mobile}
+                        {formik?.errors?.mobile}
                       </p>
                     )}
                   </div>
-
-
                 </div>
 
                 {/* <div className="relative pt-3 xl:pt-6">
@@ -282,24 +261,24 @@ const navigate=useNavigate()
                 <div className="flex flex-col space-y-4">
                   {/* CARD OPEN */}
                   {orderDishes?.map((dish, index) => {
-                    sum += dish.total;
-                    console.log(sum, "sum");
+                    sum += dish?.total;
+
                     return (
                       <div key={index} className="flex space-x-4">
                         <div>
                           <img
-                            src={dish ? dish.image.url : ""}
+                            src={dish ? dish?.image?.url : ""}
                             alt="dish"
                             className="w-60"
                           />
                         </div>
                         <div>
-                          <h2 className="text-xl font-bold">{dish.dishName}</h2>
-                      
-                          <p className="text-sm">Qty: {dish.count}</p>
+                          <h2 className="text-xl font-bold">
+                            {dish?.dishName}
+                          </h2>
+                          <p className="text-sm">Qty: {dish?.count}</p>
                           <span className="text-red-600">PRICE</span> Rs:
-                          {dish.price}
-                          
+                          {dish?.price}
                         </div>
                       </div>
                     );

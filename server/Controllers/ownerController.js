@@ -4,9 +4,9 @@ import Dish from "../Models/DishModel.js";
 import Table from "../Models/TableModel.js";
 import Owner from "../Models/OwnerModel.js";
 import bcrypt from "bcrypt";
+import { getOrderedDishClassification } from "../helpers/orderHelpers.js";
 export const AddRestaurant = async (req, res) => {
   try {
-    console.log(req.body,"this is req body of add res");
     const {
       restaurantName,
       ownerName,
@@ -208,9 +208,9 @@ export const getAllDishes = async (req, res) => {
 export const deleteDish = async (req, res) => {
   try {
     const { id, resId } = req.params;
-    console.log(id, resId, "id>>>>>>>");
+
     const dbresponse = await Dish.findByIdAndDelete({ _id: id });
-    console.log(dbresponse);
+
     if (!dbresponse)
       return res.status(200).json({ message: "data is not deleted" });
     else {
@@ -260,8 +260,8 @@ export const updateDish = async (req, res) => {
 export const AddTable = async (req, res) => {
   try {
     const { tableNumber, isAvailable, owner } = req.body;
-    console.log(tableNumber, "tt");
-    const oldTable = await Table.findOne({restaurantId:owner, tableNumber });
+
+    const oldTable = await Table.findOne({ restaurantId: owner, tableNumber });
     if (oldTable)
       return res
         .status(409)
@@ -298,7 +298,7 @@ export const deleteTable = async (req, res) => {
     const { id, ownerid } = req.params;
 
     const dbresponse = await Table.findByIdAndDelete({ _id: id });
-    console.log(dbresponse, ">>>>>>>>>>>>>>>>>>>>>>");
+
     if (!dbresponse)
       return res.status(201).json({ message: "data is not deleted" });
     else {
@@ -347,12 +347,10 @@ export const editTable = async (req, res) => {
 
 export const getOneRestaurant = async (req, res) => {
   try {
-
-   
     const restaurantId = req.params.id;
-            console.log(restaurantId,"kk");
+
     const restaurant = await Restaurant.findOne({ _id: restaurantId });
-    console.log(restaurant, "dd gggd ");
+
     if (!restaurant)
       return res.status(404).json({ message: "data not found", status: false });
     return res
@@ -366,9 +364,8 @@ export const getOneRestaurant = async (req, res) => {
 
 export const getTables = async (req, res) => {
   try {
-    console.log("called bbb");
     const { id } = req.params;
-    console.log(id,"id");
+
     const dbresponse = await Table.find({ restaurantId: id });
     // console.log(dbresponse,"res >>>>>>");
     if (!dbresponse)
@@ -384,10 +381,9 @@ export const getTables = async (req, res) => {
 
 export const getPhone = async (req, res) => {
   try {
-    console.log(req.body, "body phone");
     const phone = req.body.phoneNumber;
     const owner = await Owner.findOne({ phone });
-    console.log(owner, "owner>>>");
+
     if (!owner)
       return res
         .status(404)
@@ -428,17 +424,52 @@ export const updatePassword = async (req, res) => {
   }
 };
 
-export const fetchRestaurantData=async(req,res)=>{
+export const fetchRestaurantData = async (req, res) => {
   try {
-    console.log("here");
-    const restaurantId=req.params.id
+    const restaurantId = req.params.id;
 
-    const data=await Restaurant.findOne({_id:restaurantId})
-        console.log(data,"finded data from order");
-    if(data) return res.status(200).json({message:"success",restaurantDetails:data})
-    return res.status(404).json({message:"data not found"})
+    const data = await Restaurant.findOne({ _id: restaurantId });
+
+    if (data)
+      return res
+        .status(200)
+        .json({ message: "success", restaurantDetails: data });
+    return res.status(404).json({ message: "data not found" });
   } catch (error) {
-    return res.status(500).json({message:error})
+    return res.status(500).json({ message: error });
   }
-}
+};
 
+export const getSearchedRestaurant = async (req, res) => {
+  try {
+    const { location } = req.query;
+
+    const results = await Restaurant.find({
+      "address.place_name": { $regex: location, $options: "i" },
+    });
+    // console.log(results);
+
+    if (results) {
+      return res.status(200).json({ message: "success", results });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "internal server error" });
+  }
+};
+
+export const getClassification = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const orderedDishClassification = await getOrderedDishClassification(id);
+    if (orderedDishClassification) {
+      return res
+        .status(200)
+        .json({ message: "success", orderedDishClassification });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Cant fetch data server error" });
+  }
+};

@@ -1,6 +1,6 @@
 import Owner from "../Models/OwnerModel.js";
 import Restaurant from "../Models/RestaurantSchema.js";
-
+import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt";
 
 export const OwnerRegistration = async (req, res, next) => {
@@ -16,7 +16,7 @@ export const OwnerRegistration = async (req, res, next) => {
       if (!password) reject(new Error("enter a valid Password"));
       resolve();
     });
-    console.log(OwnerPassword, OwnerEmail);
+  
     return Promise.all([OwnerPassword, OwnerEmail])
       .then(async () => {
         const owner = await Owner.findOne({ email });
@@ -59,7 +59,7 @@ export const OwnerRegistration = async (req, res, next) => {
         res.status(400).json({ message: err.message });
       });
   } catch (error) {
-    console.log(error, "rtyuiuytr");
+    console.log(error, "owner conrollers");
     res.status(500).json({ message: error });
   }
 };
@@ -76,8 +76,10 @@ export const OwnerLogin = async (req, res) => {
       let validOwner = await bcrypt.compare(password, owner.password);
 
       if (validOwner) {
+        const token=jwt.sign({owner_id:owner._id,email},"owner secret key",{expiresIn:"3d"})
+       
         if (!owner.isBlocked) {
-          return res.status(200).json({ message: "login success", owner });
+          return res.status(200).json({ message: "login success", owner,token});
         } else {
           return res.status(403).json({
             message:
