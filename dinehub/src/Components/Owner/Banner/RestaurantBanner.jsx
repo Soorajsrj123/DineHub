@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getAllRestaurantBanners } from "../../../helpers/ownerHelpers";
 import { deleteRestaurantBanner } from "../../../helpers/ownerHelpers";
 import { useSelector } from "react-redux";
-import { ToastBar, Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
 
 function RestaurantBanner() {
@@ -19,7 +19,7 @@ function RestaurantBanner() {
         setBanner(res?.result);
       }
     });
-  }, []);
+  }, [owner]);
 
   const handleDelete = (bannerId) => {
     Swal.fire({

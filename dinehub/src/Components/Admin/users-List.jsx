@@ -17,7 +17,7 @@ function UserList() {
 
 
   const [curretPage,setCurrentPage]=useState(1)
-     const [postPerPage,setPostPerPage]=useState(1)
+     const [postPerPage]=useState(1)
    
 
      const lastPostIndex=curretPage*postPerPage

@@ -87,12 +87,11 @@ function Payment() {
 
   const dishdata = localStorage.getItem("OrderDetails");
   const parsedData = JSON.parse(dishdata);
-  console.log(parsedData, "paarse data");
   const dishes = parsedData?.orderDetails;
 
   useEffect(() => {
     setOrderDishes(dishes);
-  }, []);
+  }, [dishes]);
 
   // const handlePayment = (sum) => {
   //   if (sum) {

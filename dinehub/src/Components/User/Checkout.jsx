@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getRestaurant } from "../../helpers/userHelpers";
 import { getRestaurantTables } from "../../helpers/userHelpers";
 import { toast } from "react-hot-toast";
 import DatePicker from "react-datepicker";
-import {averageRating} from '../../helpers/ownerHelpers'
 import { bookedOrders } from "../../helpers/userHelpers";
 import { checkOutData } from "../../helpers/userHelpers";
 import {MapComponent} from '../../Components/User/Map/Map'
@@ -92,7 +91,7 @@ function CheckOutComponent() {
     });
 
   
-  }, []);
+  }, [resId]);
 
   // FOR GETTING THE USER SELECTED DATE
   const selectedDay = (selectedDay) => {
@@ -165,7 +164,7 @@ function CheckOutComponent() {
       setPreOrder(data?.data);
     });
     // IT CALLS ONLY WHEN DATE OR TIME CHANGES SO THEN IF FETCH ORDER DATA .FROM THAT DATA I AM DISPLAYING THE TABLE WHICH IS NOT BOOKED
-  }, [date, time]);
+  }, [date, time,userId]);
 
   const tableNumbers = preOrder?.map((obj) => obj?.tableNo);
 

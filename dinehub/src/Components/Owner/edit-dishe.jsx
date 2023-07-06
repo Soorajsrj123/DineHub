@@ -70,7 +70,7 @@ function EditDish() {
 
       const allDetails = Object.assign({}, img, datas);
       const response = await editDish(allDetails, id);
-      if (response?.message == "success") {
+      if (response?.message === "success") {
         navigete("/owner/dishes");
       } else {
         toast.error("somethig went wrong");

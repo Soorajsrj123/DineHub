@@ -38,7 +38,7 @@ const TableTwo = () => {
 
   // PAGINATION
   const [curretPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(2);
+  const [postPerPage] = useState(2);
 
   const lastPostIndex = curretPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;

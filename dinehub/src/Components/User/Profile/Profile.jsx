@@ -12,6 +12,7 @@ function Profile() {
         setRecords(res?.details);
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

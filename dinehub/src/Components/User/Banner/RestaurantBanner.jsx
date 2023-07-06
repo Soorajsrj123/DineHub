@@ -17,7 +17,7 @@ function RestaurantBanner() {
           }
     })
 
-  },[])
+  },[resId])
 
 
   return (

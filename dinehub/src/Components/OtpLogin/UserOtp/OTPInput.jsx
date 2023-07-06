@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import PhoneInput from "react-phone-number-input";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { isExistingNumber } from "../../../helpers/userHelpers";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -29,9 +28,6 @@ function OTPInputComponent() {
     recaptchaVerifier.render();
     return signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
   };
-
-  const userId = useSelector((state) => state.user.user);
-  const { user } = userId;
 
   useEffect(() => {
     const timerfn = () => {
@@ -63,7 +59,6 @@ function OTPInputComponent() {
       setConfirmObj(response);
       setReSendOtpBtn(false);
     } else {
-      console.log("outside getotp else");
       try {
         const extractedNumber = phoneNumber.slice(3);
         //    phoneNumber validation

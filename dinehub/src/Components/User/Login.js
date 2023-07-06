@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { UserLogin } from "../../helpers/userHelpers";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logIn } from "../../Slices/userSlice";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../Config/config";
@@ -20,9 +20,6 @@ export default function Login() {
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => {
-    return state?.user?.user;
-  });
 
   const googleLogin = async () => {
     let firebasedata = await signInWithPopup(auth, provider);

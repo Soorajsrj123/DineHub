@@ -18,7 +18,7 @@ function PichartComponent() {
       }
     };
     fetchData();
-  }, []);
+  }, [owner]);
 
   const counts = dishClassification?.map((obj) => obj?.count);
   const classification = dishClassification?.map((obj) => obj?._id);

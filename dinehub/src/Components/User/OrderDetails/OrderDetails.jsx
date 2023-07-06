@@ -37,7 +37,7 @@ function OrderDetails() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [user]);
 
   const bookingCancelConfirm = (orderId, userId) => {
     confirmAlert({

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getRestaurantDishes } from "../../helpers/userHelpers";
 import { useDispatch, useSelector } from "react-redux";
 import { Minus } from "lucide-react";
@@ -12,10 +12,9 @@ import { Toaster, toast } from "react-hot-toast";
 import RestaurantListPagination from "../Pagination/RestaurantListPagination";
 function DishLists() {
   const [dishDatas, setDishDatas] = useState([]);
-  const [postPerPage, setPostPerPage] = useState(3);
+  const [postPerPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState(false);
-  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -56,7 +55,7 @@ function DishLists() {
     }
 
     // console.log(owner,"owww");
-  }, [id, storedDishData, dishDatas, selected]);
+  }, [id, storedDishData, dishDatas, selected, dispatch]);
 
   //   FUNCTION FOR HANDLING COUNT PLUS
   const handleIncrement = (dishId) => {

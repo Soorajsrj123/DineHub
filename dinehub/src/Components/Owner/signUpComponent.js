@@ -15,14 +15,6 @@ export default function SignUp() {
   };
 
   const { id } = useParams();
-
-  useEffect(() => {
-    getRestaurantDetails(id).then((data) => {
-      setEmail(data?.restaurantData?.email);
-      formik.setFieldValue("email", email);
-    });
-  }, [email, id]);
-
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -58,6 +50,15 @@ export default function SignUp() {
       }
     },
   });
+
+  useEffect(() => {
+    getRestaurantDetails(id).then((data) => {
+      setEmail(data?.restaurantData?.email);
+      formik.setFieldValue("email", email);
+    });
+  }, [email, id,formik]);
+
+  
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center bg-gray-50 sm:px-4">

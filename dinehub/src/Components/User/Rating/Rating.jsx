@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Rating.css";
 import { useFormik } from "formik";
 import { AddRating } from "../../../helpers/userHelpers";
@@ -83,7 +83,7 @@ const StarRating = () => {
       .catch((err) => {
         console.log(err, "Eroor in User rating");
       });
-  }, [status]);
+  }, [status, user, restaurantId]);
 
   return (
     <>

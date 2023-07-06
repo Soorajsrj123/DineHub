@@ -25,7 +25,7 @@ function EditProfile() {
         setImage(res?.details.imageURL.url ? res?.details.imageURL?.url : "");
       }
     });
-  }, []);
+  }, [id]);
 
   const handleImage = (e) => {
     const file = e.target.files[0];

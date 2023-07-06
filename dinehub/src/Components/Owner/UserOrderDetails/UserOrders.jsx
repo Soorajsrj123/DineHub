@@ -17,7 +17,7 @@ function UserOrders() {
       .catch((err) => {
         console.log(err, "error in User Orders detaisl");
       });
-  }, []);
+  }, [owner]);
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 md:px-8">

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { getdata } from "../../helpers/ownerHelpers";
-import { deleteRes } from "../../helpers/ownerHelpers";
+// import { deleteRes } from "../../helpers/ownerHelpers";
 import { RotatingLines } from "react-loader-spinner";
 function RestaurantCard() {
   const [restaurant, setRestaurant] = useState("");
@@ -10,25 +9,25 @@ function RestaurantCard() {
   const data = useSelector((state) => state.owner.owner);
   const RestaurantId = data.owner;
 
-  const handledelete = async (restaurantId) => {
-    try {
-      const confirmdelete = window.confirm("are you sure ");
-      if (confirmdelete) {
-        const response = deleteRes(restaurantId);
-        response
-          .then((data) => {
-            if (data) {
-              window.location.reload();
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handledelete = async (restaurantId) => {
+  //   try {
+  //     const confirmdelete = window.confirm("are you sure ");
+  //     if (confirmdelete) {
+  //       const response = deleteRes(restaurantId);
+  //       response
+  //         .then((data) => {
+  //           if (data) {
+  //             window.location.reload();
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     try {
