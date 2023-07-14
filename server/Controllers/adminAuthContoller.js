@@ -6,7 +6,6 @@ export const AdminSignUp = async (req, res) => {
   try {
     const { email, password } = req.body;
     const admin = await Admin.findOne({ email });
-
     if (!admin)
       return res
         .status(400)
