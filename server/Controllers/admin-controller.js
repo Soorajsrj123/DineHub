@@ -53,7 +53,7 @@ export const ApproveRestaurant = async (req, res) => {
       console.log(process.env.PASSWORD, "OO");
       console.log(transporter, "node mailer res");
 
-      const link = `<a href="${process.env.CLIENT_URL}/owner/signup/${Id}">Click here to create account</a>`;
+      const link = `<a href="https://server.sooraj.site/owner/signup/${Id}">Click here to create account</a>`;
       // send mail with defined transport object
       let info = await transporter.sendMail({
         from: process.env.EMAIL, // sender address
