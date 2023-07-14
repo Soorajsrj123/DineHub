@@ -9,10 +9,12 @@ import {
   getRestaurantDetails,
   cancelBooking,
 } from "../../../helpers/userHelpers";
+import { useNavigate } from "react-router-dom";
 // import './OrderDetails.css'
 function OrderDetails() {
   // STORING ORDER DETAILS
   const [orders, setOrders] = useState([]);
+  const navigate=useNavigate()
   // STORING RESTAURANT ID
   const [resId, setResId] = useState("");
   // STORING RESTAUTANT DATA
@@ -36,8 +38,12 @@ function OrderDetails() {
           toast.error("sorry page not found");
         }
       })
-      .catch((err) => console.log(err));
-  }, [user]);
+      .catch((err) => {
+             if(err.response.status===401){
+              navigate('/login')
+             }
+      });
+  }, [user,navigate]);
 
   const bookingCancelConfirm = (orderId, userId) => {
     confirmAlert({
@@ -58,7 +64,10 @@ function OrderDetails() {
                 }
               })
               .catch((err) => {
-                toast.error(err.message);
+                console.log(err,"err");
+                 if(err.response.status===401){
+                  navigate('/login')
+                 }
               });
           },
         },

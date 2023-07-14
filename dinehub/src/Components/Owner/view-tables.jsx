@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getAllTables } from "../../helpers/ownerHelpers";
 import Swal from "sweetalert2";
 import { deleteTable } from "../../helpers/ownerHelpers";
 const DiningTable = () => {
   const [allTables, setTables] = useState([]);
+  const navigate = useNavigate();
   const data = useSelector((state) => state?.owner?.owner);
   const { owner } = data;
 
   useEffect(() => {
     const fetchTables = async () => {
       const allData = await getAllTables(owner);
-      setTables(allData?.allDatas);
+      console.log(allData, "data in tables");
+      if (allData?.response?.status === 401) {
+        navigate("/owner/login");
+      }
+      setTables(allData?.data?.allDatas);
     };
     fetchTables();
-  }, [owner]);
+  }, [owner, navigate]);
 
   const handleDelete = (tableId) => {
     Swal.fire({
@@ -55,7 +60,7 @@ const DiningTable = () => {
               Table {table?.tableNumber}
             </h3>
             {/* <p className="mb-1">Capacity: {table.capacity}</p> */}
-            <p
+            {/* <p
               className={
                 table?.isAvailable
                   ? "text-sm text-green-600"
@@ -63,7 +68,7 @@ const DiningTable = () => {
               }
             >
               {table?.isAvailable ? "Available" : "Reserved"}
-            </p>
+            </p> */}
             <div className="flex justify-evenly mt-8">
               <Link to={`/owner/edit-table/${table?._id}`}>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">

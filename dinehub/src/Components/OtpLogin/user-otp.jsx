@@ -40,7 +40,7 @@ const OtpLogin = () => {
       await confirmObj?.confirm(myotp).then((result) => {
         // User signed in successfully.
         // const user = result.user; the user variable conatailn some data
-        navigate("/home");
+        navigate("/");
       });
     } catch (error) {
       // user signup failed

@@ -7,7 +7,7 @@ import { ownerLogout } from "../../Slices/ownerSlice";
 
 
 export const NavbarOne = () => {
-  const user = useSelector((state) => state?.owner);
+  const owner = useSelector((state) => state?.owner);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const hadleLogout = () => {
@@ -182,9 +182,9 @@ export const NavbarOne = () => {
             onClick={() => hadleLogout()}
             className="rounded-md border border-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-indigo-500 "
           >
-            {user ? "Logout" : "Login"}
+            {owner ? "Logout" : "Login"}
           </button>
-          {!user && (
+          {!owner && (
             <button className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white hover:bg-indigo-500 ">
               SignUp
             </button>

@@ -14,10 +14,10 @@ function Profile() {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+ const walletAmmount=records?.wallet?.reduce((acc, obj) => acc + obj,0)
   return (
     <div className="flex flex-col justify-center items-center mt-48">
-      <div class=" bg-white shadow-lg  rounded-2xl w-80 dark:bg-gray-800  ">
+      <div className=" bg-white shadow-lg  rounded-2xl w-80 dark:bg-gray-800  ">
         <img
           alt="profil"
           src={
@@ -25,42 +25,42 @@ function Profile() {
               ? records?.imageURL?.url
               : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzHQv_th9wq3ivQ1CVk7UZRxhbPq64oQrg5Q&usqp=CAU"
           }
-          class="w-80  object-fill mb-4 rounded-t-lg h-56"
+          className="w-80  object-fill mb-4 rounded-t-lg h-56"
         />
-        <div class="flex flex-col items-center justify-center p-4 -mt-16">
-          <a href="/" class="relative block">
+        <div className="flex flex-col items-center justify-center p-4 -mt-16">
+          <a href="/" className="relative block">
             <img
               alt="profil"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoq0f1tSU2b8opZaApGh5tl2FreFb52dyo6Q&usqp=CAU"
-              class="mx-auto object-cover rounded-full h-16 w-16  border-2 border-white dark:border-gray-800"
+              className="mx-auto object-cover rounded-full h-16 w-16  border-2 border-white dark:border-gray-800"
             />
           </a>
-          <p class="mt-2 text-xl font-medium text-gray-800 dark:text-white">
+          <p className="mt-2 text-xl font-medium text-gray-800 dark:text-white">
             {records?.name}
           </p>
-          <p class="mb-4 text-xs text-gray-60000">{records?.email}</p>
-          <p class="mb-4 text-lg  text-gray-95000">{records?.PhoneNumber}</p>
+          <p className="mb-4 text-xs text-gray-60000">{records?.email}</p>
+          <p className="mb-4 text-lg  text-gray-95000">{records?.PhoneNumber}</p>
           <Link
             to={`/edit-profile/${records?._id}`}
-            class="p-2 px-4 text-xs text-white bg-pink-500 rounded-full"
+            className="p-2 px-4 text-xs text-white bg-pink-500 rounded-full"
           >
             Edit Profile
           </Link>
-          <div class="w-full p-2 mt-4 rounded-lg">
-            <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-200">
-              <p class="flex flex-col">
+          <div className="w-full p-2 mt-4 rounded-lg">
+            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-200">
+              <p className="flex flex-col">
                 No of Orders
-                <span class="font-bold text-black dark:text-white">3</span>
+                <span className="font-bold text-black dark:text-white">3</span>
               </p>
-              <p class="flex flex-col">
+              <p className="flex flex-col">
                 My Wallet
-                <span class="font-bold text-black dark:text-white">
-                  {records?.wallet?.reduce((acc, obj) => acc + obj)}
+                <span className="font-bold text-black dark:text-white">
+                  {walletAmmount??0}
                 </span>
               </p>
-              <p class="flex flex-col">
+              <p className="flex flex-col">
                 Rating
-                <span class="font-bold text-black dark:text-white">9.3</span>
+                <span className="font-bold text-black dark:text-white">9.3</span>
               </p>
             </div>
           </div>

@@ -70,7 +70,7 @@ function EditTable() {
             />
             <p className="text-red-600 mt-1 md:ml-20"></p>
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="capacity" className="text-sm pr-4 font-medium">
               Capacity:
             </label>
@@ -84,7 +84,7 @@ function EditTable() {
               className="w-full md:w-64 bg-slate-200 border-gray-300 rounded-md p-2"
             />
             <p className="text-red-600 mt-1 md:ml-20"></p>
-          </div>
+          </div> */}
 
           <button
             type="submit"

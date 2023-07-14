@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userOrderDetails } from "../../../helpers/ownerHelpers";
 function UserOrders() {
   const [orders, setOrders] = useState([]);
+  const navigate=useNavigate()
   const { owner } = useSelector((state) => state?.owner?.owner);
 
   useEffect(() => {
@@ -16,8 +17,11 @@ function UserOrders() {
       })
       .catch((err) => {
         console.log(err, "error in User Orders detaisl");
+        if(err.response.status===401){
+          navigate('/owner/login')
+        }
       });
-  }, [owner]);
+  }, [owner,navigate]);
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 md:px-8">
@@ -63,7 +67,7 @@ function UserOrders() {
                     </span>
                   </td>
                   <td className="text-right px-6 whitespace-nowrap">
-                    <Link to={`/`}>
+                    <Link to={`/owner/user-order/view-details`}>
                       <button className="py-2 leading-none px-3 bg-green-200 font-medium text-green-600 hover:text-green-500 duration-150 hover:bg-gray-50 rounded-lg">
                         View-Details
                       </button>

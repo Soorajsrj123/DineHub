@@ -1,10 +1,9 @@
-import axios from "axios";
+import jwt_Interceptor from "./axiosInterseptors";
 
-export const Auth = axios.create({
-  baseURL: "https://server.sooraj.site",
-  withCredentials: true,
-});
 
-export const cloudinaryUpload= axios.create({
-  baseURL:"cloudinra"
-})
+
+// export const cloudinaryUpload = axios.create({
+//   baseURL: "cloudinra",
+// });
+
+export const Auth = jwt_Interceptor

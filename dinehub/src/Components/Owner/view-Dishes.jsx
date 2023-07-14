@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -14,6 +14,7 @@ import { getDishes } from "../../helpers/ownerHelpers";
 import { deleteDish } from "../../helpers/ownerHelpers";
 import Swal from "sweetalert2";
 function ViewDishes() {
+  const navigate=useNavigate()
   const data = useSelector((state) => state?.owner?.owner);
   const { owner } = data;
   const [allDishes, setDishes] = useState([]);
@@ -30,8 +31,11 @@ function ViewDishes() {
     }).then(async (result) => {
       if (result?.isConfirmed) {
         const response = await deleteDish(itemId, owner);
-
-        setDishes(response?.allDishes);
+           console.log(response,"response in delete dish");
+           if(response.status===401){
+            navigate('/owner/login')
+           }
+        setDishes(response?.data?.allDishes);
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
@@ -41,8 +45,13 @@ function ViewDishes() {
     const details = getDishes(owner);
     details.then((data) => {
       setDishes(data?.allDishes);
-    });
-  }, [owner]);
+    }).catch((err)=>{
+      console.log(err,"err in owner list dish");
+      if(err.response.status===401){
+        navigate('/owner/login')
+      }
+    })
+  }, [owner,navigate]);
 
   return (
     <div>

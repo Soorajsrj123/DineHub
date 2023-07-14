@@ -90,8 +90,10 @@ function Payment() {
   const dishes = parsedData?.orderDetails;
 
   useEffect(() => {
+    console.log("called use");
     setOrderDishes(dishes);
-  }, [dishes]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const handlePayment = (sum) => {
   //   if (sum) {

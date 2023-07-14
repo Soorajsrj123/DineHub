@@ -26,11 +26,11 @@ export default function Login() {
     loginGoogle(firebasedata)
       .then((data) => {
         if (data) {
-          navigate("/home");
+          navigate("/");
         }
       })
       .catch((err) => {
-        console.log(err, "error in user Login");
+        console.log(err.response.status, "error in google login");
       });
   };
 
@@ -53,14 +53,15 @@ export default function Login() {
       Loginuser.then((data) => {
         if (data) {
           // storing token in localstorage
-          localStorage.setItem("UserToken", data.data.token);
+          localStorage.setItem("UserToken", data.data.accesstoken);
+          localStorage.setItem("UserRefreshToken",data.data.refreshtoken)
           const userId = data?.data?.user?._id;
           dispatch(
             logIn({
               user: userId,
             })
           );
-          navigate("/home");
+          navigate("/");
         }
       }).catch((error) => {
         console.log(error?.response?.data, "err in Login user ");

@@ -11,6 +11,7 @@ import {getAllDishes} from '../Controllers/ownerController.js'
 import {deleteDish} from '../Controllers/ownerController.js'
 import {singleDish} from '../helpers/ownerHelpers.js'
 import {updateDish} from '../Controllers/ownerController.js'
+import {vefifyOwner,refreshTokenOwner} from '../Controllers/ownerAuthController.js'
 import {AddTable} from '../Controllers/ownerController.js'
 import {getAllTables} from '../Controllers/ownerController.js'
 import {deleteTable} from '../Controllers/ownerController.js'
@@ -29,33 +30,34 @@ const router=Router()
 
 router.post('/signup',OwnerRegistration)
 router.post('/login',OwnerLogin)
+router.post('/refreshowner',refreshTokenOwner)
 router.post('/add-restaurant',AddRestaurant)
 router.get('/restaurants/:id',getOwnerRestaurant)
 router.get('/delete-restaurant/:id',deleteRestaurant)
 router.get('/get-one-res/:id',singleRes)
 router.patch('/edit-restaurant',editRestaurant)
 router.post('/add-dish-details',AddDishDetails)
-router.get('/dishes/:id',getAllDishes)
-router.delete('/delete-dish/:id/:resId',deleteDish)
+router.get('/dishes/:id',vefifyOwner,getAllDishes)
+router.delete('/delete-dish/:id/:resId',vefifyOwner,deleteDish)
 router.get('/get-one-dish/:id',singleDish)
 router.patch('/edit-dish/:id',updateDish)
 router.post('/add-table',AddTable)
-router.get('/tables/:id',getAllTables)
+router.get('/tables/:id',vefifyOwner,getAllTables)
 router.delete('/delete-table/:id/:ownerid',deleteTable)
 router.get('/get-one-table/:id',oneTableData)
 router.patch('/edit-table:id',editTable)
 router.post('/get-phone',getPhone)
 router.patch('/update-password',updatePassword)
 router.post('/restaurant/add-banner',addRestaurantBanner)
-router.get('/restaurant/banner/:id',getRestaurantBanner)
+router.get('/restaurant/banner/:id',vefifyOwner,getRestaurantBanner)
 router.get('/restaurant',getUserReview)
 router.delete('/restaurant/delete-banner/:id',deleteRestaurantBanner)
 router.get('/restaurant/yearly-datas/:id',getRestaurantYearlySales)
 router.get('/restaurant/monthly-data/:id',getRestaurantMonthlySales)
 router.get('/restaurant/daily-data/:id',getRestaurantDailySales)
-router.get('/restaurant/classification-chart/:id',getClassification)
+router.get('/restaurant/classification-chart/:id',vefifyOwner,getClassification)
 router.get('/restaurant/average-rating/:id',getAverageRating)
-router.get('/users/all-orders/:id',getUserOrders)
+router.get('/users/all-orders/:id',vefifyOwner,getUserOrders)
 
 
 

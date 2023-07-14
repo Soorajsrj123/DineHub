@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import { bookedOrders } from "../../helpers/userHelpers";
 import { checkOutData } from "../../helpers/userHelpers";
-import {MapComponent} from '../../Components/User/Map/Map'
+// import {MapComponent} from '../../Components/User/Map/Map'
 import "react-datepicker/dist/react-datepicker.css";
 
 function CheckOutComponent() {
@@ -26,7 +26,7 @@ function CheckOutComponent() {
   const [time, setTime] = useState(new Date());
   const [button, setButton] = useState(false);
   const [preOrder, setPreOrder] = useState([]);
-  const [coordinate,setCordinates]=useState('')
+  // const [coordinate,setCordinates]=useState('')
 
   const allDishData = useSelector((state) => state?.dishes?.dishes?.dishDetails);
 
@@ -45,7 +45,7 @@ function CheckOutComponent() {
 
   // console.log(startDate, endDate, "start date and endDate");
   const timeList = [];
-
+ 
   let currentTime = startDate;
   // console.log(currentTime, "curent time");
   while (currentTime <= endDate) {
@@ -75,7 +75,7 @@ function CheckOutComponent() {
       .then((data) => {
         // console.log(data);
         if (data?.status) {
-          setCordinates(data?.restaurant?.address)
+          // setCordinates(data?.restaurant?.address)
           setRestaurantData(data?.restaurant);
         }
       })
@@ -137,7 +137,10 @@ function CheckOutComponent() {
         navigate("/payment");
       })
       .catch((err) => {
-        console.log(err, "errr in Checkout Data");
+        toast.error(err.response.data.message)
+       if(err.response.status===401){
+        navigate('/login')
+       }
       });
   };
 
@@ -259,12 +262,12 @@ function CheckOutComponent() {
 
           {/*  */}
 
-          {coordinate?.geometry?.coordinates[1] && coordinate?.geometry?.coordinates[0] && (
+          {/* {coordinate?.geometry?.coordinates[1] && coordinate?.geometry?.coordinates[0] && (
   <MapComponent
     latitude={coordinate?.geometry?.coordinates[1]}
     longitude={coordinate?.geometry?.coordinates[0]}
   />
-)}
+)} */}
 
           {/*  */}
 

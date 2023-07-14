@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { getUserDetailsById } from "../../helpers/commonHelper";
+import { logOut } from "../../Slices/userSlice";
 export default function NavBar() {
   const [navbar, setNavbar] = useState(false);
-
+  const dispantch=useDispatch()
+ const navigate=useNavigate()
   const userInfo = useSelector((state) => state?.user?.user);
   const [userData, setUserData] = useState("");
   const { user } = userInfo;
@@ -17,10 +19,18 @@ export default function NavBar() {
         }
       })
       .catch((err) => {
-        console.log(err,"error in Navbar user");
-      });
-  }, [user]);
 
+        console.log(err.response.data.message,"error in Navbar user");
+        navigate('/login')
+      });
+  }, [user,navigate]);
+
+  const handleLogout=()=>{
+      dispantch(logOut())
+      localStorage.removeItem('UserToken')
+      localStorage.removeItem('UserRefreshToken')
+      navigate('/login')
+  }
 
 
   return (
@@ -28,7 +38,7 @@ export default function NavBar() {
       <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
-            <Link to="/home">
+            <Link to="/">
               <h2 className="text-2xl font-bold text-black">
                 DINE<b className="text-violet-700">HUB</b>
               </h2>
@@ -79,13 +89,13 @@ export default function NavBar() {
           >
             <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
               <li className="text-black font-serif  hover:text-violet-800">
-                <Link to="/home">Home</Link>
-              </li>
-              <li className="text-black hover:text-violet-800">
-                <Link to="/">Blog</Link>
+                <Link to="/">Home</Link>
               </li>
               <li className="text-black hover:text-violet-800">
                 <Link to="/orders">Orders</Link>
+              </li>
+              <li className="text-black hover:text-violet-800">
+                <Link to={`/profile/${user}`}>Profile</Link>
               </li>
               <li className="text-black hover:text-violet-800">
                 <Link to="/">Contact US</Link>
@@ -145,7 +155,7 @@ export default function NavBar() {
               </Link>
             </div>
             <div
-              href="/"
+              onClick={handleLogout}
               className="px-4 py-2 ml-2  text-white bg-violet-600 rounded-md  hover:bg-violet-950 "
             >
               LOGOUT

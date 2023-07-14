@@ -1,8 +1,9 @@
 import { Auth } from "../Api/axiosAuthinstance";
+import { baseUrl } from "../Api/axiosInterseptors";
 
 export const getPendingRequests = async () => {
   try {
-    const dbresponse = await Auth.get("/admin/restaurant/pending-request");
+    const dbresponse = await baseUrl.get("/admin/restaurant/pending-request");
     return dbresponse.data;
   } catch (error) {
     throw error;
@@ -11,7 +12,7 @@ export const getPendingRequests = async () => {
 
 export const getRestaurants = async () => {
   try {
-    const response = await Auth.get("/admin/restaurants");
+    const response = await baseUrl.get("/admin/restaurants");
     return response.data;
   } catch (error) {
     throw error;

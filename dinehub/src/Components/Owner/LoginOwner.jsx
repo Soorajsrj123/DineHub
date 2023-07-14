@@ -36,7 +36,8 @@ export default function LoginOwner() {
       data
         .then((data) => {
           if (data) {
-            localStorage.setItem("OwnerToken", data?.token);
+            localStorage.setItem("ownerToken", data?.accessToken);
+            localStorage.setItem("ownerRefreshToken",data?.refreshToken)
             dispatch(
               setOwner({
                 owner: data?.owner?.RestaurantId,

@@ -44,15 +44,17 @@ import EditProfile from "./Components/User/Profile/EditProfile";
 import AddRestaurantBanner from "./Components/Owner/Banner/AddBanner";
 import NotFoundPage from "./Pages/404Page";
 import UserOrderDetails from "./Pages/Owner/OrderDetails/OrderDetails";
+import ViewUserOrder from './Pages/Owner/View-Orders/ViewOrders'
 // import Map from './Components/User/Map/Map'
 function App() {
+  
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           {/* USER */}
           {/* <Route path='/' element={<Map/>}  /> */}
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/otp/forgot-password" element={<UserOtpPage />} />
@@ -133,6 +135,7 @@ function App() {
             element={<AddRestaurantBanner />}
           />
           <Route path="/owner/user-orders" element={<UserOrderDetails />} />
+          <Route path="/owner/user-order/view-details" element={<ViewUserOrder/>} />
         </Routes>
       </BrowserRouter>
     </div>

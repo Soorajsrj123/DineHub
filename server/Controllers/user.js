@@ -87,9 +87,20 @@ export const LoginUser = async (req, res) => {
 
       if (validUser) {
         //   CREATING A TOKEN
-        const token = jwt.sign({ user_id: user._id, email }, "my secret key", {
-          expiresIn: "10d",
-        });
+        const accesstoken = jwt.sign(
+          { user_id: user._id, email },
+          "my secret key",
+          {
+            expiresIn: "20d",
+          }
+        );
+        const refreshtoken = jwt.sign(
+          { user_id: user._id, email },
+          "my secret key",
+          {
+            expiresIn: "365d",
+          }
+        );
 
         //   checking if the cookis already has data then clear it
         // if(req.cookies[`${user._id}`])
@@ -98,13 +109,15 @@ export const LoginUser = async (req, res) => {
         // }
 
         //   SAVING THE TOKEN IN COOKIE
-        res.cookie(String(user._id), token, {
-          path: "/",
-          expires: new Date(Date.now() + 1000 * 30),
-          httpOnly: true,
-          samesiteL: "lax",
-        });
-        res.status(200).json({ message: "login Success", token, user });
+        // res.cookie(String(user._id), token, {
+        //   path: "/",
+        //   expires: new Date(Date.now() + 1000 * 30),
+        //   httpOnly: true,
+        //   samesiteL: "lax",
+        // });
+        res
+          .status(200)
+          .json({ message: "login Success", refreshtoken, accesstoken, user });
       } else {
         res.status(400).send("wrong password");
       }
@@ -155,23 +168,33 @@ export const googleLogin = async (req, res) => {
 
 export const verifyToken = (req, res, next) => {
   try {
-    let cookies = req.headers.cookie;
-    let token = cookies.split("=")[1];
+    console.log(req.headers, "hd");
+    let authorization = req.headers.authorization;
+    console.log(authorization, "token in header");
+    if (authorization) {
+      console.log("autherization exist");
+      const accesstoken = authorization.split(" ")[1];
 
-    if (!token) {
-      res.status(404).json({ message: "no token found" });
-    }
-
-    jwt.verify(token, "my secret key", (err, user) => {
-      if (err) {
-        return res.status(400).json({ message: "invalid token" });
+      if (!accesstoken) {
+        console.log("inside no !accesstoken");
+        return res.status(401).json({ message: "no token found" });
       }
-
-      req.id = user.user_id;
-    });
-    next();
+      jwt.verify(accesstoken, "my secret key", (err, user) => {
+        if (err) {
+          console.log(err, "err in verify jwt");
+          return res.status(401).json({ message: "token expired" });
+        }
+        console.log(user, "user in verify token");
+        req.id = user.user_id;
+        next();
+      });
+    } else {
+      console.log("outer  else");
+      return res.status(401).send("token not found");
+    }
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ message: "something went wrong" });
   }
 };
 
@@ -192,55 +215,45 @@ export const getUser = async (req, res, next) => {
 // REFRESH TOKEN
 
 export const refreshToken = (req, res, next) => {
-  let cookies = req.headers.cookie;
-  let Prevtoken = cookies.split("=")[1];
-  if (!Prevtoken) {
-    return res.status(400).json({ message: "token not found" });
-  }
-  jwt.verify(String(Prevtoken), "my secret key", (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: "Authentication failed" });
+  try {
+    let { refreshtoken } = req.body;
+    console.log(refreshtoken, "token in refresh token");
+    // let Prevtoken = authorization.split(" ")[1];
+    if (!refreshtoken) {
+      return res.status(401).json({ message: "refresh token not found" });
     }
-    // CLEARING THE PREVIOUS COOKIE
-    res.clearCookie(`${user.user_id}`);
-    req.cookies[`${user.user_id}`] = "";
-    // CREATING THE NEW COOKIE
-
-    let token = jwt.sign(
-      { user_id: user.user_id, email: user.email },
-      "my secret key",
-      {
-        expiresIn: "35s",
+    jwt.verify(refreshtoken, "my secret key", (err, user) => {
+      if (err) {
+        console.log(err, "err in refresh vr");
+        return res.status(401).json({ message: "Authentication failed" });
       }
-    );
+      // CLEARING THE PREVIOUS COOKIE
+      req.headers.authorization = "";
+      // req.cookies[`${user.user_id}`] = "";
+      // CREATING THE NEW COOKIE
 
-    res.cookie(String(user.user_id), token, {
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 30),
-      httpOnly: true,
-      samesiteL: "lax",
+      let token = jwt.sign(
+        { user_id: user.user_id, email: user.email },
+        "my secret key",
+        {
+          expiresIn: "20d",
+        }
+      );
+
+      req.id = user.user_id;
+      console.log(token, "a new token created");
+      return res.status(200).send(token);
+      // next(); //it calls the vefiry fn
     });
-
-    req.id = user.user_id;
-    next(); //it calls the vefiry fn
-  });
+  } catch (error) {
+    console.log(error, "err in refreh token ");
+  }
 };
 
 export const Logout = (req, res, next) => {
-  let cookies = req.headers.cookie;
-  let Prevtoken = cookies.split("=")[1];
-  if (!Prevtoken) {
-    return res.status(400).json({ message: "token not found" });
-  }
-  jwt.verify(String(Prevtoken), "my secret key", (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: "Authentication failed" });
-    }
-    // CLEARING THE PREVIOUS COOKIE
-    res.clearCookie(`${user.user_id}`);
-    req.cookies[`${user.user_id}`] = "";
-    return res.status(200).json({ message: "successfully Logged out" });
-  });
+  console.log("Logout called");
+  req.headers.authorization = "";
+  res.status(200).json({ message: "successfully logout" });
 };
 
 export const getPhone = async (req, res) => {

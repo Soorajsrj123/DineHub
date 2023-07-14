@@ -76,10 +76,11 @@ export const OwnerLogin = async (req, res) => {
       let validOwner = await bcrypt.compare(password, owner.password);
 
       if (validOwner) {
-        const token=jwt.sign({owner_id:owner._id,email},"owner secret key",{expiresIn:"3d"})
-       
+        const accessToken=jwt.sign({owner_id:owner._id,email},"owner secret key",{expiresIn:"1m"})
+        const refreshToken=jwt.sign({owner_id:owner._id,email},"owner secret key",{expiresIn:"35d"})
+       console.log(refreshToken,"refresh token");
         if (!owner.isBlocked) {
-          return res.status(200).json({ message: "login success", owner,token});
+          return res.status(200).json({ message: "login success", owner,accessToken,refreshToken});
         } else {
           return res.status(403).json({
             message:
@@ -95,5 +96,74 @@ export const OwnerLogin = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.json({ message: error.message });
+  }
+};
+
+
+export const vefifyOwner = (req, res, next) => {
+  try {
+    console.log(req.headers, "hd");
+    let authorization = req.headers.authorization;
+    console.log(authorization, "token  in owner header");
+    if (authorization) {
+      console.log("owner autherization exist");
+      const accesstoken = authorization.split(" ")[1];
+
+      if (!accesstoken) {
+        console.log("inside no !accesstoken");
+        return res.status(401).json({ message: "no token found" });
+      }
+      jwt.verify(accesstoken, "owner secret key", (err, owner) => {
+        if (err) {
+          console.log(err, "err in verify jwt");
+          return res.status(401).json({ message: "token expired" });
+        }
+        console.log(owner, "owner in verify token");
+        req.id = owner.owner_id;
+        next();
+      });
+    } else {
+      console.log("outer  else");
+      return res.status(401).send("token not found");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "something went wrong" });
+  }
+};
+
+export const refreshTokenOwner = (req, res, next) => {
+  try {
+    let { refreshtoken } = req.body;
+    console.log(refreshtoken, "token  in refresh token owner");
+    // let Prevtoken = authorization.split(" ")[1];
+    if (!refreshtoken) {
+      return res.status(401).json({ message: "refresh token not found in owner" });
+    }
+    jwt.verify(refreshtoken, "owner secret key", (err, owner) => {
+      if (err) {
+        console.log(err, "err in refresh owner");
+        return res.status(401).json({ message: "Authentication failed in owner" });
+      }
+      // CLEARING THE PREVIOUS headers
+      req.headers.authorization = "";
+      // req.cookies[`${user.user_id}`] = "";
+      // CREATING THE NEW token
+
+      let token = jwt.sign(
+        { owner_id: owner.owner_id, email: owner.email },
+        "owner secret key",
+        {
+          expiresIn: "20d",
+        }
+      );
+
+      req.id = owner.owner_id;
+      console.log(token, "a new token created on owner side");
+      return res.status(200).send(token);
+      // next(); //it calls the vefiry fn
+    });
+  } catch (error) {
+    console.log(error, "err in refreh token owner");
   }
 };
